@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from "$app/paths";
 	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button/index.js";
 </script>
@@ -14,7 +15,7 @@
 		The page you're looking for doesn't exist or an unexpected error occurred.
 	</p>
 	<div class="flex items-center gap-4">
-		<Button href="/">Go Home</Button>
-		<Button variant="outline" href="/docs">Browse Docs</Button>
+		<Button href={base || "/"}>Go Home</Button>
+		<Button variant="outline" href={`${base}/docs`}>Browse Docs</Button>
 	</div>
 </div>

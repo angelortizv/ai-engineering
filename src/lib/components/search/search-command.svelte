@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import { base } from "$app/paths";
 	import SearchIcon from "@lucide/svelte/icons/search";
 	import FileTextIcon from "@lucide/svelte/icons/file-text";
 	import { Button } from "$lib/components/ui/button/index.js";
@@ -22,7 +23,10 @@
 
 	function getCurrentLocale(): string | undefined {
 		if (typeof window === 'undefined') return undefined;
-		const pathParts = window.location.pathname.split('/').filter(Boolean);
+		const pathname = window.location.pathname.startsWith(base)
+			? window.location.pathname.slice(base.length) || '/'
+			: window.location.pathname;
+		const pathParts = pathname.split('/').filter(Boolean);
 		if (pathParts[0] === 'docs' && pathParts[1] && /^[a-z]{2}(?:-[a-z]{2})?$/.test(pathParts[1])) {
 			return pathParts[1];
 		}
@@ -46,7 +50,7 @@
 		try {
 			// Pagefind is generated at build time into the static dir.
 			// We must use dynamic import with a full URL to avoid Vite's static analysis.
-			const pagefindUrl = `${window.location.origin}/pagefind/pagefind.js`;
+			const pagefindUrl = `${window.location.origin}${base}/pagefind/pagefind.js`;
 			const res = await fetch(pagefindUrl, { method: 'HEAD' });
 			if (!res.ok) {
 				pagefindUnavailable = true;

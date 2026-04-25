@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import { mdsvex } from 'mdsvex';
 import { createHighlighter } from 'shiki';
 import { transformerNotationHighlight, transformerMetaHighlight } from '@shikijs/transformers';
@@ -58,7 +58,14 @@ const config = {
 		})
 	],
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: undefined
+		}),
+		paths: {
+			base: '/ai-engineering'
+		},
 		prerender: {
 			handleHttpError: 'warn',
 			handleUnseenRoutes: 'warn'

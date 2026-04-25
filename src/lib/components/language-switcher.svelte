@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { goto, afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -11,11 +12,18 @@
 	const LOCALE_STORAGE_KEY = 'docs-locale';
 	let i18n = docsConfig.i18n;
 
+	function stripBase(pathname: string): string {
+		if (!base) return pathname;
+		if (!pathname.startsWith(base)) return pathname;
+		return pathname.slice(base.length) || '/';
+	}
+
 	function buildPathForLocale(pathname: string, targetLocale: string): string {
 		if (!i18n) return pathname;
 
+		const localPath = stripBase(pathname);
 		const defaultLocale = i18n.defaultLocale;
-		const pathParts = pathname.split('/').filter(Boolean);
+		const pathParts = localPath.split('/').filter(Boolean);
 		const first = pathParts[0];
 		const second = pathParts[1];
 
@@ -26,15 +34,15 @@
 		const restPath = rest.length ? `/${rest.join('/')}` : '';
 
 		if (targetLocale === defaultLocale) {
-			return `/docs${restPath}`;
+			return `${base}/docs${restPath}`;
 		}
 
-		return `/docs/${targetLocale}${restPath}`;
+		return `${base}/docs/${targetLocale}${restPath}`;
 	}
 
 	function getCurrentLocale(): string {
 		if (!i18n) return 'en';
-		const pathParts = page.url.pathname.split('/').filter(Boolean);
+		const pathParts = stripBase(page.url.pathname).split('/').filter(Boolean);
 		// Check if first segment after /docs is a locale code
 		if (pathParts[0] === 'docs' && pathParts[1]) {
 			const match = i18n.locales.find((l) => l.code === pathParts[1]);
@@ -53,7 +61,7 @@
 	function syncLocaleWithStorage(replaceState = true) {
 		if (!i18n) return;
 		const pathname = page.url.pathname;
-		if (!pathname.startsWith('/docs')) return;
+		if (!stripBase(pathname).startsWith('/docs')) return;
 
 		const currentLocale = getCurrentLocale();
 		const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);

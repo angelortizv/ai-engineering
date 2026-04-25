@@ -1,5 +1,6 @@
 import { docsConfig } from './config.js';
 import type { DocFile, DocMeta, DocPage } from './types.js';
+import { base } from '$app/paths';
 
 const contentModules = import.meta.glob<DocFile>('/src/content/docs/**/*.{md,svx}', {
 	eager: true
@@ -24,6 +25,7 @@ function slugFromPath(path: string, prefix: string): string {
 
 function buildDocs(modules: Record<string, DocFile>, prefix: string, hrefPrefix: string): DocPage[] {
 	const docs: DocPage[] = [];
+	const prefixedHref = `${base}${hrefPrefix}`;
 
 	for (const [path, mod] of Object.entries(modules)) {
 		const meta = mod.metadata as DocMeta;
@@ -32,7 +34,7 @@ function buildDocs(modules: Record<string, DocFile>, prefix: string, hrefPrefix:
 		const slug = slugFromPath(path, prefix);
 		docs.push({
 			slug,
-			href: slug ? `${hrefPrefix}/${slug}` : hrefPrefix,
+			href: slug ? `${prefixedHref}/${slug}` : prefixedHref,
 			meta: {
 				title: meta?.title ?? slug.split('/').pop() ?? '',
 				description: meta?.description ?? '',

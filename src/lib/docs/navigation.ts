@@ -1,13 +1,15 @@
 import { docsConfig } from './config.js';
 import { getDocsByDirectory, getAllDocs } from './content.js';
 import type { NavItem } from './types.js';
+import { base } from '$app/paths';
 
 function localizeHref(href: string, locale?: string): string {
-	if (!locale) return href;
+	const normalized = href.startsWith(base) ? href : `${base}${href}`;
+	if (!locale) return normalized;
 	const defaultLocale = docsConfig.i18n?.defaultLocale ?? 'en';
-	if (locale === defaultLocale) return href;
-	if (!href.startsWith('/docs')) return href;
-	return href.replace('/docs', `/docs/${locale}`);
+	if (locale === defaultLocale) return normalized;
+	if (!normalized.startsWith(`${base}/docs`)) return normalized;
+	return normalized.replace(`${base}/docs`, `${base}/docs/${locale}`);
 }
 
 export function generateNavigation(locale?: string): NavItem[] {
