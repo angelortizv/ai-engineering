@@ -10,6 +10,8 @@ import GaugeIcon from '@lucide/svelte/icons/gauge';
 import Building2Icon from '@lucide/svelte/icons/building-2';
 import BookOpenIcon from '@lucide/svelte/icons/book-open';
 import BookMarkedIcon from '@lucide/svelte/icons/book-marked';
+import MapIcon from '@lucide/svelte/icons/map';
+import LibraryIcon from '@lucide/svelte/icons/library';
 import type { DocsConfig } from './types.js';
 
 export const docsConfig: DocsConfig = {
@@ -21,6 +23,7 @@ export const docsConfig: DocsConfig = {
 		}
 	},
 	sidebar: [
+		{ label: 'Book map', icon: MapIcon, href: '/docs/book-map' },
 		{
 			label: 'Introduction to Building AI Applications with Foundation Models',
 			icon: RocketIcon,
@@ -39,6 +42,7 @@ export const docsConfig: DocsConfig = {
 			icon: Building2Icon,
 			href: '/docs/ai-engineering-architecture-and-user-feedback'
 		},
+		{ label: 'Bibliography', icon: LibraryIcon, href: '/docs/bibliography' },
 		{ label: 'Glossary', icon: BookOpenIcon, href: '/docs/glossary' },
 		{ label: 'Epilogue', icon: BookMarkedIcon, href: '/docs/epilogue' }
 	],

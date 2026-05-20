@@ -16,6 +16,18 @@ The goal is a single place to revisit ideas from the book in reading order: what
 
 I’m **getting started in AI engineering**. This book is how I’m grounding myself: it connects language models and multimodal systems to the practical stack—prompting, retrieval, finetuning, data, inference, and architecture—without skipping **evaluation** or **user feedback**. Writing these notes helps me learn and keeps the material searchable alongside experiments I run in code.
 
+> **Important note:** This site is only a **reading guide** and a **short summary** of the book—not a substitute for it. Figures, proofs, nuance, and the full argument live in Huyen’s text. **Nothing here replaces reading the book itself**; use these pages to orient yourself, revisit ideas, and link experiments back to the source.
+
+---
+
+## Navigation
+
+| Resource | Description |
+| --- | --- |
+| [**Book map**](/ai-engineering/docs/book-map) | Chapter → themes → tools → prerequisites and suggested reading paths. |
+| [**Bibliography**](/ai-engineering/docs/bibliography) | All chapter `## References` sections in one page. |
+| [**Glossary**](/ai-engineering/docs/glossary) | Searchable definitions (filter box on the glossary page). |
+
 ---
 
 ## Chapters (English)

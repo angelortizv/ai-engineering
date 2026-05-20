@@ -8,6 +8,8 @@ order: 11
 
 Quick definitions for terms used across the [chapter notes](/ai-engineering/docs). Wording follows *AI Engineering* (Huyen, 2025) unless noted.
 
+Use the **search box** above the list to filter by term or definition (also indexed by site search via Pagefind).
+
 ---
 
 ## A–C

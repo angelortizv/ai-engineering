@@ -8,6 +8,8 @@ order: 11
 
 Definiciones breves de términos usados en las [notas por capítulo](/ai-engineering/docs/es). La redacción sigue *AI Engineering* (Huyen, 2025) salvo que se indique lo contrario.
 
+Usa la **caja de búsqueda** sobre la lista para filtrar por término o definición (también indexado por la búsqueda del sitio con Pagefind).
+
 ---
 
 ## A–C

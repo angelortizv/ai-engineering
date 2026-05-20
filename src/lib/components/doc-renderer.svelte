@@ -12,6 +12,7 @@
 	import { calculateReadingTime } from '$lib/docs/reading-time.js';
 	import { renderMermaidIn, rerenderMermaidIn } from '$lib/docs/mermaid.js';
 	import { mode } from 'mode-watcher';
+	import GlossaryFilter from '$lib/components/glossary-filter.svelte';
 
 	let {
 		meta,
@@ -26,6 +27,8 @@
 		rawContent?: string;
 		locale?: string;
 	} = $props();
+
+	const isGlossary = $derived(slug === 'glossary');
 
 	let readingTime = $derived(rawContent ? calculateReadingTime(rawContent) : '');
 
@@ -177,6 +180,10 @@
 	</header>
 
 	<MobileToc />
+
+	{#if isGlossary}
+		<GlossaryFilter {locale} container={contentEl} />
+	{/if}
 
 	<div class="prose dark:prose-invert max-w-none" bind:this={contentEl}>
 		<Content></Content>

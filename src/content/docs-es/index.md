@@ -16,6 +16,18 @@ El objetivo es tener un solo lugar para repasar el libro en orden de lectura: qu
 
 **Estoy empezando en el mundo del AI engineering.** Este libro es mi base: enlaza modelos de lenguaje (y multimodales) con la práctica—*prompts*, recuperación, *finetuning*, datos, inferencia y arquitectura—sin eludir la **evaluación** ni la **retroalimentación de usuarios**. Escribir estas notas me ayuda a aprender y deja el material a mano junto a los experimentos que voy haciendo.
 
+> **Nota importante:** Este sitio es solo una **guía de lectura** y un **resumen breve** del libro—no sustituye la obra. Las figuras, el detalle, los matices y el argumento completo están en el texto de Huyen. **Nada aquí reemplaza leer el libro**; usa estas páginas para orientarte, repasar ideas y enlazar experimentos con la fuente.
+
+---
+
+## Navegación
+
+| Recurso | Descripción |
+| --- | --- |
+| [**Mapa del libro**](/ai-engineering/docs/es/book-map) | Capítulo → temas → herramientas → prerequisitos y rutas sugeridas. |
+| [**Bibliografía**](/ai-engineering/docs/es/bibliography) | Todas las secciones `## References` / `## Referencias` en una página. |
+| [**Glosario**](/ai-engineering/docs/es/glossary) | Definiciones con **caja de búsqueda** en la página del glosario. |
+
 ---
 
 ## Capítulos (español)
