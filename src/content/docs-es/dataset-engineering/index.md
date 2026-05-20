@@ -6,6 +6,8 @@ order: 8
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 8**, aprox. **pp. 363–404**. Contrasta figuras y tablas con tu PDF.
+
 El mejor equipo ML con cómputo infinito no puede hacer un buen finetuning sin **datos de calidad**. La **ingeniería de datasets** crea conjuntos que entrenan el mejor modelo posible dentro del presupuesto de anotación, cómputo y cumplimiento normativo.
 
 Como menos organizaciones entrenan desde cero, los **datos diferencian** productos de IA. GPT-3 acreditó a dos personas en datos; GPT-4 a **ochenta**—más anotadores externos (OpenAI, 2020 vs 2023). Las operaciones de datos pasaron de tareas laterales a roles dedicados: etiquetadores, creadores de datasets, ingenieros de calidad de datos.
@@ -15,6 +17,16 @@ Este capítulo se centra en **datos de post-training** (más relevantes para des
 > There are best practices you can follow and tools that you can use to automate parts of the process. However, data will mostly just be toil, tears, and sweat.
 >
 > — Huyen (2025, cap. 8)
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Aplicar **calidad, cobertura y cantidad** al plan de datos de finetuning.
+- Comparar adquisición **humana, sintética y por destilación**.
+- Interpretar cambios de **mezcla por dominio** entre fases (p. ej. Llama 3).
+- Diseñar inspección, **deduplicación** y filtrado.
+- Definir cómo **evaluarás datos sintéticos** antes de entrenar.
 
 ---
 
@@ -89,7 +101,18 @@ Hace falta datos que reflejen **cómo preguntan los usuarios**—typos, prompts 
 
 **Nemotron** (Adler et al., 2024): diversidad de tarea, tema e instrucción. **Shen et al. (2024):** más heterogeneidad a veces **empeora** el rendimiento.
 
-Las ganancias de **Llama 3** vienen sobre todo de **calidad y diversidad de datos**, no de cambios de arquitectura. Las mezclas por dominio difieren por fase (tabla 8-1 del libro): pre-training ~50% conocimiento general en inglés; SFT añade exam-like y long-context; preference finetuning se inclina a conocimiento general (~82%). **Annealing** con poco código/matemáticas de alta calidad mejora benchmarks de razonamiento.
+Las ganancias de **Llama 3** vienen sobre todo de **calidad y diversidad de datos**, no de cambios de arquitectura. Las mezclas por dominio difieren por fase (**tabla 8-1**, libro p. 370):
+
+| Dominio | Pre-training | SFT | Preference finetuning |
+| --- | ---: | ---: | ---: |
+| Conocimiento general (inglés) | 50% | 52,66% | 81,99% |
+| Matemáticas y razonamiento | 25% | 21,19% | 5,89% |
+| Código | 17% | 14,89% | 6,93% |
+| Multilingüe | 8% | 3,01% | 5,19% |
+| Tipo examen | — | 8,14% | — |
+| Contexto largo | — | 0,11% | — |
+
+Código + matemáticas suman ~la mitad de tokens en pre-training/SFT, muy por encima de su peso en la web típica. **Annealing** con poco código/matemáticas de alta calidad mejora razonamiento; preference finetuning vuelve hacia conocimiento general (~82%).
 
 **Experimento Zhou et al.:** 2.000 ejemplos—solo calidad, solo diversidad, o ambos—gana el conjunto **con ambos**.
 
@@ -245,6 +268,25 @@ El diseño de datasets parte de **comportamientos deseados**, luego calidad, cob
 El capítulo 9 trata **optimización de inferencia** cuando ya tienes un modelo que merece servirse.
 
 ---
+
+## Preguntas de discusión
+
+- Define dimensiones de **calidad** que importen en tus guías de anotación.
+- ¿Qué ejes de **cobertura** (idioma, tema, longitud) están infrarrepresentados?
+- ¿Cuándo compensa el coste de verificación de **datos sintéticos**?
+- ¿Qué regla de **deduplicación** aplicarías antes del SFT?
+- ¿Cómo difiere tu mezcla entre fases **pretrain / SFT / preferencias**?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Finetuning](/ai-engineering/docs/es/finetuning) — para qué sirven los datos.
+- **Siguiente:** [Optimización de inferencia](/ai-engineering/docs/es/inference-optimization) — servir el modelo que entrenaste.
+- **Evaluación:** [Evaluar sistemas de IA modernos](/ai-engineering/docs/es/evaluating-modern-ai-systems) — slices y rúbricas para calidad de datos.
+- **Feedback:** [Arquitectura de IA y feedback de usuario](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) — logs → *data flywheel* de entrenamiento.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

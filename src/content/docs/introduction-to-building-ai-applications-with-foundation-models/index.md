@@ -6,6 +6,8 @@ order: 1
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 1**, approximately **pp. 1–48**. Cross-check figures and tables in your PDF.
+
 Chip Huyen sums up the post-2020 era in one word: **scale**. The models behind ChatGPT, Gemini, or Midjourney consume a meaningful share of global electricity, and the public internet corpus available for training is a finite resource.
 
 Two main consequences:
@@ -166,10 +168,54 @@ The community contributes energy and tools at a pace that is hard to match; the 
 
 ---
 
+## Discussion questions
+
+- Where does your team sit on **build vs. buy** for the base model—and what would change that in 12 months?
+- For one internal use case, map **critical vs. complementary**, **reactive vs. proactive**, and **dynamic vs. static**. What latency/quality bar follows?
+- What **business metric** would you refuse to ship without, beyond “the demo looks good”?
+- Which layer of the **three-layer stack** is the bottleneck today?
+- What **moat** survives if the API provider ships your feature tomorrow?
+
+---
+
+## Related
+
+- **Next:** [Understanding Foundation Models](/ai-engineering/docs/understanding-foundation-models) — how LMs are trained, sampled, and steered.
+- **Evaluation:** [Evaluation Methodology](/ai-engineering/docs/evaluation-methodology) — why open-ended outputs need new metrics.
+- **Systems:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — operational eval before you scale.
+- **Adaptation:** [Prompt Engineering](/ai-engineering/docs/prompt-engineering) — first lever after choosing a model.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
+
 ## Closing notes
 
 What sticks with me from this chapter is less jargon than a **shift in default**: I’m not training models from scratch—I’m **adapting** general-purpose ones that someone else scaled. **Self-supervision** is the technical reason that became possible: text (and later multimodal data) carries its own supervision signal, so models could grow without a labeling bottleneck. Practically, adaptation stacks **prompting**, **RAG** when facts live outside the weights, and **finetuning** only when that tier is justified. That stacks cleanly with an **inverted workflow**: start from the **product** and user loop, then deepen data and model investment once something proves worth scaling—the opposite of the classical “data → model → product” habit. The breadth of **use cases** (coding, writing, bots, aggregation, etc.) also reminds me that organizations often **ship internal tools first** to learn safely before exposing customers to open-ended failure modes.
 
 Day to day, **my role** tilts toward the **application layer**—interfaces, context construction, and iteration—not toward designing transformers. The hardest part isn’t wiring an API; it’s **evaluation**: generative outputs don’t reduce to a single accuracy score, so “good enough” has to be defined and guarded continuously. That forces explicit **tradeoffs** among performance, latency, and cost across providers and adaptation strategies. **Planning** rounds out the craft: clarify *why* the project exists (risk, opportunity, or exploration), stage automation with something like **crawl–walk–run**, and set **metrics and usefulness thresholds** early—because a weekend demo is nothing like the long slog from “works in the demo” to “survives production.”
 
-**Reference:** Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media.
+---
+
+## References
+
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 1: Introduction to Building AI Applications with Foundation Models.
+
+### Book and author resources
+
+- [AI Engineering — GitHub (aie-book)](https://github.com/chiphuyen/aie-book) — Companion repo for the O’Reilly edition.
+- [Chip Huyen — Designing Machine Learning Systems](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/) — Prior book on ML systems (many principles still apply).
+- [O’Reilly — AI Engineering product page](https://www.oreilly.com/library/view/ai-engineering/9781098166304/)
+
+### Scaling and foundation models
+
+- [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) — Kaplan et al. (2020).
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) — Brown et al., GPT-3 (2020).
+- [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) — Hoffmann et al., Chinchilla (2022).
+
+### Industry framing
+
+- [OpenAI — Models documentation](https://platform.openai.com/docs/models) — Model-as-a-service APIs (evolving catalog).
+- [McKinsey — The state of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) — Enterprise adoption surveys (periodic).
+
+### Courses
+
+- [UPM — Taller 6: Programación de software con IA (PDF)](https://innovacioneducativa.upm.es/sites/default/files/saga/presentacion-taller6-programacion-software-ia.pdf) — Workshop slides (Spanish) on AI-assisted development.

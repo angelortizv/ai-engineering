@@ -6,6 +6,8 @@ order: 7
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 7**, aprox. **pp. 307–362**. Contrasta figuras y tablas con tu PDF.
+
 Los capítulos 5–6 adaptan modelos con **instrucciones, contexto y herramientas** sin cambiar pesos. El **finetuning** adapta **entrenando de nuevo** todo el modelo o parte de él—ajustando los pesos.
 
 > Finetuning is the process of adapting a model to a specific task by further training the whole model or part of the model… by adjusting its weights.
@@ -15,6 +17,16 @@ Los capítulos 5–6 adaptan modelos con **instrucciones, contexto y herramienta
 Puede mejorar capacidades de **dominio**, **seguridad** y sobre todo **seguimiento de instrucciones** (formatos, estilos). Exige más **inversión inicial** que el prompting: datos, hardware, talento ML, serving y mantenimiento.
 
 Es el capítulo más denso técnicamente del libro. Omite secciones que no apliquen a tu rol; el repositorio GitHub del libro enlaza recursos para repasar ML.
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Decidir **cuándo hacer finetuning** frente a prompt/RAG con los criterios del libro.
+- Estimar **memoria** en inferencia vs. finetuning completo vs. **PEFT**.
+- Contrastar **PTQ** y **QAT** para despliegue.
+- Explicar usos y riesgos de **model merging**.
+- Planificar hiperparámetros y datos evitando **sobreajuste** en conjuntos pequeños.
 
 ---
 
@@ -134,6 +146,20 @@ Ejemplo — **7B full finetune, FP16:**
 
 **PEFT** reduce parámetros entrenables → mucha menos memoria de gradiente/optimizador.
 
+```mermaid
+flowchart TB
+  subgraph infer["Memoria en inferencia"]
+    W[Pesos del modelo]
+    KV[Activaciones / KV cache]
+  end
+  subgraph train["Finetuning completo añade"]
+    G[Gradientes]
+    O[Estados del optimizador Adam]
+  end
+  W --> G
+  G --> O
+```
+
 ### Cuantización
 
 > Reducing precision, also known as quantization, is a cheap and extremely effective way to reduce a model's memory footprint.
@@ -234,6 +260,25 @@ El finetuning intercambia **actualización de pesos** por **memoria, datos y com
 El **model merging** experimental combina checkpoints especializados para multi-tarea y edge. El capítulo 8 aborda el cuello de botella de **datos**—especialmente datos de instrucción.
 
 ---
+
+## Preguntas de discusión
+
+- Enumera **motivos para no hacer finetuning** en tu producto actual.
+- Estima **parámetros entrenables** y memoria con el cálculo rápido del capítulo.
+- ¿Cuándo basta finetuning de **forma** (tono/formato) sin hechos nuevos?
+- ¿Cambiaría tu historia de **cumplimiento** entre **LoRA y full**?
+- ¿Cómo detectarás **olvido catastrófico** en tareas generales?
+
+---
+
+## Relacionado
+
+- **Anterior:** [RAG y agentes](/ai-engineering/docs/es/rag-and-agents) — adaptación basada en prompt primero.
+- **Siguiente:** [Ingeniería de datos](/ai-engineering/docs/es/dataset-engineering) — calidad de datos para SFT y preferencias.
+- **Inferencia:** [Optimización de inferencia](/ai-engineering/docs/es/inference-optimization) — coste de serving tras adaptar pesos.
+- **Evaluación:** [Evaluar sistemas de IA modernos](/ai-engineering/docs/es/evaluating-modern-ai-systems) — demostrar que el finetuning supera prompts/RAG.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

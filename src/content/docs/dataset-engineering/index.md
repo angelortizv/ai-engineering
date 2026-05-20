@@ -6,6 +6,8 @@ order: 8
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 8**, approximately **pp. 363–404**. Cross-check figures and tables in your PDF.
+
 The best ML team with infinite compute cannot finetune a strong model without **good data**. **Dataset engineering** creates datasets that train the best model you can afford—within budget for annotation, compute, and compliance.
 
 As fewer organizations train from scratch, **data differentiates** AI products. GPT-3 credited two people for data work; GPT-4 credited **eighty**—plus external annotators (OpenAI, 2020 vs 2023). Data ops moved from side tasks to dedicated roles: labelers, dataset creators, data quality engineers.
@@ -15,6 +17,16 @@ This chapter focuses on **post-training data** (most relevant to application dev
 > There are best practices you can follow and tools that you can use to automate parts of the process. However, data will mostly just be toil, tears, and sweat.
 >
 > — Huyen (2025, Ch. 8)
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Apply **quality, coverage, quantity** to a finetuning dataset plan.
+- Compare **human, synthetic, and distillation** sourcing.
+- Interpret **domain mix** shifts across training phases (e.g. Llama 3).
+- Design inspection, **dedup**, and filtering steps.
+- State how you will **evaluate synthetic data** before training.
 
 ---
 
@@ -89,7 +101,18 @@ Models need data that matches **how users actually ask**—typos, short vs long 
 
 **Nemotron** (Adler et al., 2024): task, topic, and instruction diversity (formats, lengths, open vs yes/no). **Shen et al. (2024):** more heterogeneous data can sometimes **hurt** performance.
 
-**Llama 3** gains came mainly from **data quality and diversity**, not architecture changes. Domain mixes differ by phase (Table 8-1 in book): pre-training ~50% general English; SFT adds exam-like and long-context slices; preference finetuning shifts toward general knowledge (~82%). **Annealing** on small high-quality code/math boosts reasoning benchmarks.
+**Llama 3** gains came mainly from **data quality and diversity**, not architecture changes. Domain mixes differ by phase (**Table 8-1**, book p. 370):
+
+| Domain | Pre-training | Supervised finetuning | Preference finetuning |
+| --- | ---: | ---: | ---: |
+| General knowledge (English) | 50% | 52.66% | 81.99% |
+| Math and reasoning | 25% | 21.19% | 5.89% |
+| Coding | 17% | 14.89% | 6.93% |
+| Multilingual | 8% | 3.01% | 5.19% |
+| Exam-like | — | 8.14% | — |
+| Long context | — | 0.11% | — |
+
+Math + code account for ~half of pre-training/SFT tokens—far above their share of typical web text. **Annealing** on small high-quality code/math boosts reasoning benchmarks; preference finetuning shifts back toward general knowledge (~82% English general).
 
 **Zhou et al. experiment:** 2,000 examples each—high-quality only, diverse only, or both—models trained on **both** win on generation quality.
 
@@ -245,6 +268,25 @@ Dataset design starts from **behaviors you want**, then quality, coverage, and q
 Chapter 9 covers **inference optimization** once you have a model worth serving.
 
 ---
+
+## Discussion questions
+
+- Define **quality** dimensions that matter for your annotation guidelines.
+- Which **coverage** axes (language, topic, length) are underrepresented?
+- When is **synthetic data** worth the verification cost?
+- What **dedup** rule would you apply before SFT?
+- How does your mix differ across **pretrain / SFT / preference** phases?
+
+---
+
+## Related
+
+- **Back:** [Finetuning](/ai-engineering/docs/finetuning) — what the data is for.
+- **Next:** [Inference Optimization](/ai-engineering/docs/inference-optimization) — serving the model you trained.
+- **Eval:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — slices and rubrics for data quality.
+- **Feedback:** [AI Engineering Architecture and User Feedback](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) — logs → training data flywheel.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

@@ -8,6 +8,8 @@ import SlidersHorizontalIcon from '@lucide/svelte/icons/sliders-horizontal';
 import DatabaseIcon from '@lucide/svelte/icons/database';
 import GaugeIcon from '@lucide/svelte/icons/gauge';
 import Building2Icon from '@lucide/svelte/icons/building-2';
+import BookOpenIcon from '@lucide/svelte/icons/book-open';
+import BookMarkedIcon from '@lucide/svelte/icons/book-marked';
 import type { DocsConfig } from './types.js';
 
 export const docsConfig: DocsConfig = {
@@ -36,7 +38,9 @@ export const docsConfig: DocsConfig = {
 			label: 'AI Engineering Architecture and User Feedback',
 			icon: Building2Icon,
 			href: '/docs/ai-engineering-architecture-and-user-feedback'
-		}
+		},
+		{ label: 'Glossary', icon: BookOpenIcon, href: '/docs/glossary' },
+		{ label: 'Epilogue', icon: BookMarkedIcon, href: '/docs/epilogue' }
 	],
 	toc: {
 		minDepth: 2,

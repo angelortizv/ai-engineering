@@ -1,5 +1,6 @@
 <script lang="ts">
 	import DocRenderer from '$lib/components/doc-renderer.svelte';
+	import DocsFooter from '$lib/components/layout/docs-footer.svelte';
 	import SeoHead from '$lib/components/seo-head.svelte';
 	import { getDoc } from '$lib/docs/index.js';
 
@@ -10,5 +11,11 @@
 <SeoHead title={data.meta.title} description={data.meta.description} />
 
 {#if doc}
-	<DocRenderer meta={doc.meta} component={doc.component} slug={data.slug} />
+	<DocRenderer
+		meta={doc.meta}
+		component={doc.component}
+		slug={data.slug}
+		locale={data.locale}
+	/>
 {/if}
+<DocsFooter prev={data.prev} next={data.next} locale={data.locale} />

@@ -68,6 +68,33 @@ html.dark .code-block-title {
 	color: oklch(0.65 0 0);
 }
 
+/* Mermaid diagrams in docs */
+.doc-content .mermaid-chart {
+	margin: 1.25rem 0;
+	padding: 1rem;
+	border-radius: var(--radius);
+	border: 1px solid var(--border);
+	background: var(--muted);
+	overflow-x: auto;
+}
+
+.doc-content .mermaid-chart svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+}
+
+/* Hide raw source until Mermaid renders */
+.doc-content pre.mermaid:not([data-processed]) {
+	margin: 1.25rem 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	min-height: 2rem;
+	opacity: 0;
+}
+
 :root {
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);

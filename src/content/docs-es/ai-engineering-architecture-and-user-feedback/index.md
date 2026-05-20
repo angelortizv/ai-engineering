@@ -6,15 +6,38 @@ order: 10
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 10**, aprox. **pp. 449–494**. Contrasta figuras y tablas con tu PDF.
+
 Los capítulos anteriores cubrieron técnicas para **adaptar** modelos fundacionales. Este capítulo muestra cómo **ensamblarlos** en aplicaciones de producción—y cómo el **feedback de usuario** se convierte en fuente de datos de primer nivel para mejorar.
 
 La sección de arquitectura sigue una **construcción gradual**: camino mínimo primero, componentes según necesidad. El feedback conversacional es más difícil de **extraer** que de solicitar—el diseño importa para UX y el volante de datos (capítulo 8).
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Recorrer la **arquitectura progresiva en cinco pasos** con sus tradeoffs.
+- Ubicar **guardrails** en entrada vs. salida según tu modelo de riesgo.
+- Explicar responsabilidades de **router vs. gateway**.
+- Diseñar captura de **feedback** que alimente el data flywheel con seguridad.
+- Conectar observabilidad con **nuevos modos de fallo** de modelos fundacionales.
 
 ---
 
 ## Arquitectura de AI engineering
 
 Patrón validado en muchas empresas—tu app puede diferir, pero los componentes se repiten.
+
+```mermaid
+flowchart TB
+  S0["Base: consulta → modelo → respuesta"]
+  S1["Paso 1: Enriquecer contexto (RAG, herramientas)"]
+  S2["Paso 2: Guardrails (entrada / salida)"]
+  S3["Paso 3: Router y gateway"]
+  S4["Paso 4: Cachés (KV, prompt, semántica)"]
+  S5["Paso 5: Patrones de agente"]
+  S0 --> S1 --> S2 --> S3 --> S4 --> S5
+```
 
 ### Línea base: consulta → modelo → respuesta
 
@@ -220,6 +243,25 @@ Los ingenieros asumen más el feedback porque alimenta el bucle de mejora—AI e
 Muchos retos requieren visión **del sistema completo**.
 
 ---
+
+## Preguntas de discusión
+
+- ¿Qué **paso de arquitectura** (contexto, guardrails, router, caché, agentes) falta hoy?
+- ¿Dónde podría una **caché semántica** filtrar respuestas personalizadas a otro usuario?
+- ¿Qué señal de **observabilidad** habría detectado tu último incidente?
+- ¿Cómo evitas un **bucle de feedback degenerado**?
+- ¿Qué feedback recoges sin dañar la UX?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Optimización de inferencia](/ai-engineering/docs/es/inference-optimization) — latencia y coste bajo carga.
+- **Cierre:** [Introducción a aplicaciones de IA](/ai-engineering/docs/es/introduction-to-building-ai-applications-with-foundation-models) — stack y planificación del capítulo 1.
+- **Datos de feedback:** [Ingeniería de datos](/ai-engineering/docs/es/dataset-engineering) — convertir logs en conjuntos de entrenamiento.
+- **Epílogo:** [Epílogo](/ai-engineering/docs/es/epilogue) — perspectiva de cierre y repositorio del libro.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

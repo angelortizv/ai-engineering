@@ -4,7 +4,12 @@
 	import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
 	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
 
-	let { prev, next }: { prev?: NavItem; next?: NavItem } = $props();
+	let { prev, next, locale = 'en' }: { prev?: NavItem; next?: NavItem; locale?: string } =
+		$props();
+
+	const labels = $derived(
+		locale === 'es' ? { prev: 'Anterior', next: 'Siguiente' } : { prev: 'Previous', next: 'Next' }
+	);
 
 	let scrollProgress = $state(0);
 
@@ -26,7 +31,7 @@
 				>
 					<ChevronLeftIcon class="size-4" />
 					<span class="hidden sm:inline">{prev.title}</span>
-					<span class="sm:hidden">Previous</span>
+					<span class="sm:hidden">{labels.prev}</span>
 				</a>
 			{/if}
 		</div>
@@ -40,7 +45,7 @@
 					class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
 				>
 					<span class="hidden sm:inline">{next.title}</span>
-					<span class="sm:hidden">Next</span>
+					<span class="sm:hidden">{labels.next}</span>
 					<ChevronRightIcon class="size-4" />
 				</a>
 			{/if}

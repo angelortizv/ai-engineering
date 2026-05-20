@@ -10,5 +10,5 @@
 <SeoHead title={data.meta.title} description={data.meta.description} />
 
 {#if doc}
-	<DocRenderer meta={doc.meta} component={doc.component} slug={data.slug} />
+	<DocRenderer meta={doc.meta} component={doc.component} slug={data.slug} locale={data.locale} />
 {/if}

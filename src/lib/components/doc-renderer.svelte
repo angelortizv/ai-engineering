@@ -10,27 +10,51 @@
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import ClockIcon from '@lucide/svelte/icons/clock';
 	import { calculateReadingTime } from '$lib/docs/reading-time.js';
+	import { renderMermaidIn, rerenderMermaidIn } from '$lib/docs/mermaid.js';
+	import { mode } from 'mode-watcher';
 
 	let {
 		meta,
 		component: Content,
 		slug = '',
-		rawContent = ''
+		rawContent = '',
+		locale = 'en'
 	}: {
 		meta: DocMeta;
 		component: Component;
 		slug?: string;
 		rawContent?: string;
+		locale?: string;
 	} = $props();
 
 	let readingTime = $derived(rawContent ? calculateReadingTime(rawContent) : '');
 
+	let ui = $derived(
+		locale === 'es'
+			? {
+					editOnGitHub: 'Editar esta página en GitHub',
+					lastUpdated: 'Última actualización:',
+					dateLocale: 'es'
+				}
+			: {
+					editOnGitHub: 'Edit this page on GitHub',
+					lastUpdated: 'Last updated:',
+					dateLocale: 'en-US'
+				}
+	);
+
 	let contentEl: HTMLDivElement | undefined = $state();
+	let lastMermaidTheme = $state<string | undefined>(undefined);
 
 	let editUrl = $derived.by(() => {
 		const github = docsConfig.site.social?.github;
 		if (!github) return '';
-		const filePath = slug ? `src/content/docs/${slug}.md` : 'src/content/docs/index.md';
+		const defaultLocale = docsConfig.i18n?.defaultLocale ?? 'en';
+		const contentDir =
+			locale && locale !== defaultLocale ? `docs-${locale}` : 'docs';
+		const filePath = slug
+			? `src/content/${contentDir}/${slug}/index.md`
+			: `src/content/${contentDir}/index.md`;
 		return `${github}/edit/main/${filePath}`;
 	});
 
@@ -57,7 +81,10 @@
 			}
 		}
 
-		const codeBlocks = container.querySelectorAll<HTMLElement>('pre');
+		// Mermaid before copy buttons — injected HTML breaks the parser.
+		void renderMermaidIn(container);
+
+		const codeBlocks = container.querySelectorAll<HTMLElement>('pre:not(.mermaid)');
 		for (const pre of codeBlocks) {
 			if (pre.querySelector('.copy-btn')) continue;
 			pre.classList.add('relative', 'group/code');
@@ -112,6 +139,27 @@
 			toc.clear();
 		};
 	});
+
+	// Re-render Mermaid when toggling light/dark (skip first run — initial render handles it).
+	$effect(() => {
+		const theme = mode.current;
+		if (!contentEl) return;
+
+		if (lastMermaidTheme === undefined) {
+			lastMermaidTheme = theme;
+			return;
+		}
+		if (lastMermaidTheme === theme) return;
+		lastMermaidTheme = theme;
+
+		const timer = setTimeout(() => {
+			if (contentEl?.querySelector('.mermaid-chart')) {
+				void rerenderMermaidIn(contentEl);
+			}
+		}, 50);
+
+		return () => clearTimeout(timer);
+	});
 </script>
 
 <article id="doc-content" class="doc-content mx-auto w-full max-w-4xl" data-pagefind-body>
@@ -139,7 +187,7 @@
 			<div class="mb-4">
 				<span class="text-muted-foreground inline-flex items-center gap-1.5 text-sm">
 					<CalendarIcon class="size-3.5" />
-					Last updated: {new Date(meta.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+					{ui.lastUpdated} {new Date(meta.lastUpdated).toLocaleDateString(ui.dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
 				</span>
 			</div>
 		{/if}
@@ -153,7 +201,7 @@
 						class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-sm"
 					>
 						<PencilIcon class="size-3.5" />
-						Edit this page on GitHub
+						{ui.editOnGitHub}
 					</a>
 				{/if}
 			</div>

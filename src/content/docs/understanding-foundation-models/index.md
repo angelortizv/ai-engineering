@@ -134,6 +134,25 @@ Chapter 2 connects **training data → architecture & scale → post-training �
 
 ---
 
+## Discussion questions
+
+- For your primary language/locale, does the model’s **training mix** match user traffic?
+- Which failure mode do you see more: **sampling noise** or **structural overconfidence**?
+- When would you raise **test-time compute** (best-of-N) vs. change the base model?
+- How do you validate **structured JSON**—syntax only or semantic tests?
+- What post-training artifact (SFT vs. preference) best explains a bad behavior you’ve seen?
+
+---
+
+## Related
+
+- **Back:** [Introduction to Building AI Applications](/ai-engineering/docs/introduction-to-building-ai-applications-with-foundation-models) — why AI engineering exists.
+- **Next:** [Evaluation Methodology](/ai-engineering/docs/evaluation-methodology) — metrics for what you just learned models can do.
+- **Sampling:** [Prompt Engineering](/ai-engineering/docs/prompt-engineering) — temperature, top-p, and structured outputs in practice.
+- **Adaptation:** [Finetuning](/ai-engineering/docs/finetuning) — when weights must change, not just prompts.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
+
 ## Closing notes
 
 I read this chapter as a reminder that a “model pick” is really a **bundle of decisions**: the **crawl mix** behind multilingual fairness, the **Chinchilla-ish** (or not) compute trade that set its knowledge cutoff and loss, the **SFT/RLHF** layer that made it *chatty*, and the **sampler** I turn on at runtime. None of those are visible in a leaderboard cell, but they explain why two models with similar scores behave differently on *my* prompts.

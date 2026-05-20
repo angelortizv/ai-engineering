@@ -6,11 +6,23 @@ order: 9
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 9**, approximately **pp. 405–448**. Cross-check figures and tables in your PDF.
+
 Better models matter—but if inference is **too slow** or **too expensive**, users leave and ROI collapses. This chapter focuses on making models **faster and cheaper** at the **model**, **hardware**, and **service** levels.
 
 Optimization is interdisciplinary: model researchers, application developers, systems engineers, compiler writers, hardware architects, and data center operators.
 
 Even when you use hosted APIs (OpenAI, Google), understanding these techniques helps you **evaluate providers**, diagnose latency/cost pain, and choose online vs batch modes wisely.
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Classify bottlenecks as **compute-bound** vs. **bandwidth-bound**.
+- Relate **TTFT, TPOT, throughput**, MFU/MBU to product SLAs.
+- Explain **prefill vs. decode** and why fleets decouple them.
+- Choose among **quantization, KV cache, batching, speculative decoding**.
+- Negotiate provider features (**prompt cache**, routing) with eval data.
 
 ---
 
@@ -40,6 +52,23 @@ From **Roofline** (Williams et al., 2009)—classify workloads by **arithmetic i
 2. **Decode** — one output token per step; reload large weight matrices; typically **memory bandwidth-bound**.
 
 Long context, output length, and batching shift the bottleneck. **Disaggregating prefill and decode** onto different machines is common in production (DistServe, Zhong et al., 2024).
+
+| Phase | What happens | Typical bottleneck (book) |
+| --- | --- | --- |
+| **Prefill** | Process all prompt tokens in parallel; fill KV cache | **Compute-bound** |
+| **Decode** | Generate one token at a time; reload weights each step | **Memory bandwidth-bound** |
+
+```mermaid
+sequenceDiagram
+  participant P as Prompt tokens
+  participant F as Prefill
+  participant D as Decode loop
+  P->>F: Parallel forward pass
+  F->>D: KV cache ready
+  loop Each output token
+    D->>D: Load weights, sample next token
+  end
+```
 
 **Stable Diffusion** inference tends compute-bound; **autoregressive LLMs** tend bandwidth-bound today—hardware/software may shift this over time.
 
@@ -202,6 +231,25 @@ Model-level changes may alter quality (different providers serve same Llama with
 Chapter 10 integrates adaptation techniques into a full system.
 
 ---
+
+## Discussion questions
+
+- Is your workload **prefill-** or **decode-heavy**? What does that imply for hardware?
+- Which metric matters more to users: **TTFT** or **TPOT**?
+- Would **speculative decoding** help if MFU is already high?
+- When is **prompt caching** safe vs. a privacy bug?
+- What is your **goodput** target per dollar?
+
+---
+
+## Related
+
+- **Back:** [Dataset Engineering](/ai-engineering/docs/dataset-engineering) — models you will serve.
+- **Next:** [AI Engineering Architecture and User Feedback](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) — caches, gateways, production UX.
+- **Models:** [Understanding Foundation Models](/ai-engineering/docs/understanding-foundation-models) — autoregressive decode basics.
+- **Finetuning:** [Finetuning](/ai-engineering/docs/finetuning) — memory footprint of adapted weights.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

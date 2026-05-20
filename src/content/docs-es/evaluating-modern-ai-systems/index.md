@@ -6,6 +6,8 @@ order: 4
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 4**, aprox. **pp. 159–210**. Contrasta figuras y tablas con tu PDF.
+
 Un modelo solo sirve si funciona para **tu** aplicación. El capítulo 3 repasó **cómo** evaluar (métricas exactas, jueces IA, ranking comparativo). Este capítulo cubre **qué** medir, **cómo elegir modelos** y **cómo montar un pipeline** confiable en el tiempo.
 
 Tres partes:
@@ -15,6 +17,16 @@ Tres partes:
 3. **Pipeline de evaluación** — guías, métodos, *slices* de datos e iteración en producción.
 
 La evaluación debe verse en el **sistema**: saber dónde falla, medir en torno a eso y, a veces, rediseñar para ganar visibilidad.
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Aplicar los **cuatro criterios de evaluación** a un caso real.
+- Esbozar un **flujo de selección de modelo** (filtro → benchmarks públicos → eval propia → producción).
+- Argumentar **construir vs. comprar** con privacidad, latencia y capacidad.
+- Diseñar un **pipeline de evaluación** en tres pasos con revisión humana.
+- Mapear benchmarks a **umbrales de negocio**, no solo al ranking.
 
 ---
 
@@ -183,6 +195,25 @@ Ninguna puntuación resume un sistema de alta dimensión; **combinar métodos** 
 
 ---
 
+## Preguntas de discusión
+
+- Redacta cuatro **pilares de evaluación** (dominio, generación, instrucciones, coste/latencia) para tu producto.
+- ¿Qué hay en tu **eval privado** que MMLU nunca verá?
+- ¿Dónde podrían **benchmarks públicos contaminados** rankear mal un modelo para ti?
+- Escribe un párrafo de **guía de evaluación** como el ejemplo de «helpfulness» de LinkedIn.
+- ¿Qué **umbral de utilidad** separa automatización de revisión humana?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Metodología de evaluación](/ai-engineering/docs/es/evaluation-methodology) — métodos que este capítulo operacionaliza.
+- **Siguiente:** [Ingeniería de prompts](/ai-engineering/docs/es/prompt-engineering) — primera capa de adaptación tras elegir modelo.
+- **Datos:** [Ingeniería de datos](/ai-engineering/docs/es/dataset-engineering) — construir slices que reflejen producción.
+- **Agentes:** [RAG y agentes](/ai-engineering/docs/es/rag-and-agents) — evaluar recuperación y bucles de herramientas.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
+
 ## Notas finales
 
 Lo que me llevo es un cambio de hábito: **definir el éxito antes de construir**. Los cuatro pilares evitan optimizar solo accuracy en un leaderboard—dominio, calidad de salida, instrucciones y economía condicionan el ship.
@@ -195,4 +226,28 @@ El ejemplo de LinkedIn (“terrible encaje”) fija que la guía debe codificar 
 >
 > — Huyen (2025, p. 208)
 
-**Referencia:** Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Capítulo 4: Evaluate AI Systems.
+---
+
+## Referencias
+
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Capítulo 4: Evaluate AI Systems.
+
+### Evaluación holística
+
+- [HELM](https://crfm.stanford.edu/helm/latest/) — Liang et al., Stanford.
+- [OpenAI — Guía de evals](https://platform.openai.com/docs/guides/evals)
+
+### Selección de modelo
+
+- [MMLU](https://arxiv.org/abs/2009.03300) — Hendrycks et al. (2020).
+- [Chatbot Arena](https://chat.lmsys.org/)
+- [Data Contamination in LLMs](https://arxiv.org/abs/2310.17589) — Sainz et al. (2023).
+
+### Producción
+
+- [Hugging Face — Model Hub](https://huggingface.co/models)
+- [vLLM](https://github.com/vllm-project/vllm)
+
+### Cursos
+
+- [UPM — Taller 6 PDF](https://innovacioneducativa.upm.es/sites/default/files/saga/presentacion-taller6-programacion-software-ia.pdf)

@@ -6,11 +6,23 @@ order: 9
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 9**, aprox. **pp. 405–448**. Contrasta figuras y tablas con tu PDF.
+
 Los mejores modelos importan—pero si la inferencia es **demasiado lenta** o **cara**, los usuarios se van y el ROI se desploma. Este capítulo trata de hacer modelos **más rápidos y baratos** a nivel de **modelo**, **hardware** y **servicio**.
 
 La optimización es interdisciplinaria: investigadores de modelos, desarrolladores de aplicaciones, ingeniería de sistemas, compiladores, arquitectura de hardware y operadores de datacenters.
 
 Aunque uses APIs alojadas (OpenAI, Google), entender estas técnicas ayuda a **evaluar proveedores**, diagnosticar latencia/coste y elegir modos online vs batch.
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Clasificar cuellos de botella **compute-bound** vs. **bandwidth-bound**.
+- Relacionar **TTFT, TPOT, throughput**, MFU/MBU con SLAs de producto.
+- Explicar **prefill vs. decode** y por qué se desacoplan en producción.
+- Elegir entre **cuantización, KV cache, batching, decodificación especulativa**.
+- Negociar funciones del proveedor (**prompt cache**, enrutado) con datos de eval.
 
 ---
 
@@ -40,6 +52,23 @@ De **Roofline** (Williams et al., 2009)—clasificar cargas por **intensidad ari
 2. **Decode** — un token de salida por paso; recarga matrices de pesos; suele ser **memory bandwidth-bound**.
 
 Contexto largo, longitud de salida y batching cambian el cuello de botella. **Desacoplar prefill y decode** en máquinas distintas es habitual (DistServe, Zhong et al., 2024).
+
+| Fase | Qué ocurre | Cuello de botella típico (libro) |
+| --- | --- | --- |
+| **Prefill** | Procesar todos los tokens del prompt en paralelo; llenar KV cache | **Compute-bound** |
+| **Decode** | Generar un token cada vez; recargar pesos en cada paso | **Memory bandwidth-bound** |
+
+```mermaid
+sequenceDiagram
+  participant P as Tokens del prompt
+  participant F as Prefill
+  participant D as Bucle decode
+  P->>F: Forward en paralelo
+  F->>D: KV cache listo
+  loop Cada token de salida
+    D->>D: Cargar pesos, muestrear
+  end
+```
 
 **Stable Diffusion** suele ser compute-bound; **LLMs autoregresivos** bandwidth-bound hoy—el hardware/software puede cambiar esto.
 
@@ -201,6 +230,25 @@ Cambios a nivel modelo pueden alterar calidad (distintos proveedores sirven el m
 El capítulo 10 integra las técnicas de adaptación en un sistema completo.
 
 ---
+
+## Preguntas de discusión
+
+- ¿Tu carga es más **prefill** o **decode**? ¿Qué implica para el hardware?
+- ¿Qué métrica importa más al usuario: **TTFT** o **TPOT**?
+- ¿Ayudaría la **decodificación especulativa** si el MFU ya es alto?
+- ¿Cuándo es seguro el **prompt caching** frente a un fallo de privacidad?
+- ¿Cuál es tu objetivo de **goodput** por dólar?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Ingeniería de datos](/ai-engineering/docs/es/dataset-engineering) — modelos que vas a servir.
+- **Siguiente:** [Arquitectura de IA y feedback de usuario](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) — cachés, gateways y UX en producción.
+- **Modelos:** [Entender modelos fundacionales](/ai-engineering/docs/es/understanding-foundation-models) — bases de la decodificación autoregresiva.
+- **Finetuning:** [Finetuning](/ai-engineering/docs/es/finetuning) — huella de memoria de pesos adaptados.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

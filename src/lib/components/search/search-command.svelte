@@ -33,7 +33,28 @@
 		return undefined;
 	}
 
-	const navigation = $derived(getNavigation(getCurrentLocale()));
+	const locale = $derived(getCurrentLocale());
+	const navigation = $derived(getNavigation(locale));
+
+	const ui = $derived(
+		locale === 'es'
+			? {
+					search: 'Buscar en la documentación…',
+					button: 'Buscar…',
+					searching: 'Buscando…',
+					empty: 'Sin resultados.',
+					pages: 'Páginas',
+					results: 'Resultados'
+				}
+			: {
+					search: 'Search documentation...',
+					button: 'Search docs...',
+					searching: 'Searching...',
+					empty: 'No results found.',
+					pages: 'Pages',
+					results: 'Results'
+				}
+	);
 	const quickLinks = $derived.by(() => {
 		const links: { title: string; href: string }[] = [];
 		for (const section of navigation) {
@@ -128,7 +149,7 @@
 	onclick={() => { open = true; loadPagefind(); }}
 >
 	<SearchIcon class="mr-2 size-4" />
-	<span class="inline-flex">Search docs...</span>
+	<span class="inline-flex">{ui.button}</span>
 	<kbd
 		class="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium sm:flex"
 	>
@@ -137,20 +158,20 @@
 </Button>
 
 <Command.Dialog bind:open onOpenChange={handleOpenChange}>
-	<Command.Input placeholder="Search documentation..." bind:value={query} />
+	<Command.Input placeholder={ui.search} bind:value={query} />
 	<Command.List>
 		<Command.Empty>
 			{#if searching}
-				Searching...
+				{ui.searching}
 			{:else if query.length > 0}
-				No results found.
+				{ui.empty}
 			{:else}
-				Type to search...
+				{locale === 'es' ? 'Escribe para buscar…' : 'Type to search...'}
 			{/if}
 		</Command.Empty>
 
 		{#if searchResults.length > 0}
-			<Command.Group heading="Results">
+			<Command.Group heading={ui.results}>
 				{#each searchResults as result (result.url)}
 					<Command.Item onSelect={() => navigate(result.url)}>
 						<FileTextIcon class="shrink-0" />
@@ -166,7 +187,7 @@
 				{/each}
 			</Command.Group>
 		{:else if !query}
-			<Command.Group heading="Pages">
+			<Command.Group heading={ui.pages}>
 				{#each quickLinks as link (link.href)}
 					<Command.Item onSelect={() => navigate(link.href)}>
 						<FileTextIcon />

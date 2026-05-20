@@ -6,6 +6,8 @@ order: 5
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 5**, approximately **pp. 211–252**. Cross-check figures and tables in your PDF.
+
 **Prompt engineering** is the easiest and most common way to adapt foundation models: craft an instruction that elicits the desired behavior **without changing weights**. Many applications ship on prompting alone—but ease of use hides real difficulty.
 
 > Prompt engineering refers to the process of crafting an instruction that gets a model to generate the desired outcome… You can think of prompt engineering as human-to-AI communication.
@@ -180,6 +182,25 @@ Chapter 5 frames prompting as **human–AI communication**: prompt anatomy, ICL,
 Instructions alone are not enough for many tasks—you also need the right **context** (Chapter 6). Finetuning remains the escalation path when prompting plateaus (Chapter 7).
 
 ---
+
+## Discussion questions
+
+- Which tasks stay **zero-shot** vs. need **few-shot** examples—and why?
+- How do you **version** prompts and tie them to eval runs?
+- What is your policy for **untrusted text** inside context (indirect injection)?
+- When do you reach for **structured outputs** vs. free text + parsing?
+- What would make you stop prompt tuning and try **RAG** or **finetuning**?
+
+---
+
+## Related
+
+- **Back:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — know what “good” means before iterating prompts.
+- **Next:** [RAG and Agents](/ai-engineering/docs/rag-and-agents) — context beyond the prompt window.
+- **Security:** [Evaluation Methodology](/ai-engineering/docs/evaluation-methodology) — judge and metric choices for safety tests.
+- **Architecture:** [AI Engineering Architecture and User Feedback](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) — guardrails around prompts.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

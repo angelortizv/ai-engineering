@@ -134,6 +134,25 @@ El capítulo 2 conecta **datos de entrenamiento → arquitectura y escala → po
 
 ---
 
+## Preguntas de discusión
+
+- Para tu idioma/región principal, ¿la **mezcla de entrenamiento** del modelo coincide con el tráfico real?
+- ¿Qué modo de fallo ves más: **ruido de muestreo** o **sobreconfianza estructural**?
+- ¿Cuándo subirías **cómputo en inferencia** (best-of-N) frente a cambiar el modelo base?
+- ¿Cómo validas **JSON estructurado**—solo sintaxis o también pruebas semánticas?
+- ¿Qué artefacto de post-entrenamiento (SFT vs. preferencias) explica mejor un mal comportamiento que hayas visto?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Introducción a aplicaciones de IA](/ai-engineering/docs/es/introduction-to-building-ai-applications-with-foundation-models) — por qué existe la ingeniería de IA.
+- **Siguiente:** [Metodología de evaluación](/ai-engineering/docs/es/evaluation-methodology) — métricas para lo que acabas de aprender sobre el modelo.
+- **Muestreo:** [Ingeniería de prompts](/ai-engineering/docs/es/prompt-engineering) — temperatura, top-p y salidas estructuradas en la práctica.
+- **Adaptación:** [Finetuning](/ai-engineering/docs/es/finetuning) — cuándo hay que cambiar pesos, no solo prompts.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
+
 ## Notas finales
 
 Leo este capítulo como recordatorio de que “elegir modelo” es en realidad un **paquete de decisiones**: la **mezcla del rastreo** detrás del multilingüe justo, el trade **tipo Chinchilla** (o no) que fijó el *cutoff* y la pérdida, la capa **SFT/RLHF** que lo volvió *conversable*, y el **muestreador** que activo en tiempo de inferencia. Nada de eso cabe en una celda de *leaderboard*, pero explica por qué dos modelos con puntuaciones parecidas se comportan distinto con *mis* prompts.

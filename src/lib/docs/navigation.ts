@@ -1,7 +1,19 @@
 import { docsConfig } from './config.js';
-import { getDocsByDirectory, getAllDocs } from './content.js';
+import { getDocsByDirectory, getAllDocs, getDoc } from './content.js';
 import type { NavItem } from './types.js';
 import { base } from '$app/paths';
+
+function localizedSidebarLabel(
+	label: string,
+	href: string | undefined,
+	locale?: string
+): string {
+	const defaultLocale = docsConfig.i18n?.defaultLocale ?? 'en';
+	if (!href || !locale || locale === defaultLocale) return label;
+	const slug = href.replace(/^\/docs\//, '').replace(/\/$/, '');
+	const doc = getDoc(slug, locale);
+	return doc?.meta.title ?? label;
+}
 
 function localizeHref(href: string, locale?: string): string {
 	const normalized = href.startsWith(base) ? href : `${base}${href}`;
@@ -42,7 +54,7 @@ export function generateNavigation(locale?: string): NavItem[] {
 			});
 		} else if (section.href) {
 			nav.push({
-				title: section.label,
+				title: localizedSidebarLabel(section.label, section.href, locale),
 				icon: section.icon,
 				href: localizeHref(section.href, locale)
 			});

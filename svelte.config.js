@@ -25,6 +25,12 @@ const highlighter = await createHighlighter({
  * @param {string | undefined} meta
  */
 function codeHighlighter(code, lang, meta) {
+	// Mermaid: render client-side (see doc-renderer.svelte)
+	if (lang === 'mermaid') {
+		const safe = code.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+		return `{@html \`<pre class="mermaid">${safe}</pre>\`}`;
+	}
+
 	// Parse title from meta: title="filename.ts"
 	const titleMatch = meta?.match(/title="([^"]+)"/);
 	const title = titleMatch?.[1];

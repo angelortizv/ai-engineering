@@ -6,6 +6,8 @@ order: 6
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 6**, aprox. **pp. 253–306**. Contrasta figuras y tablas con tu PDF.
+
 Un modelo necesita **instrucciones** (capítulo 5) y **contexto** por consulta. El capítulo 5 cubrió cómo escribir instrucciones; este capítulo cubre **cómo construir contexto**—los dos patrones dominantes son **RAG** (*retrieval-augmented generation*) y **agentes** (planificadores con herramientas).
 
 - **RAG** recupera de memoria externa (bases de datos, chats previos, web) e inyecta resultados en el generador.
@@ -138,6 +140,15 @@ Bucle: planificar → reflexionar → ejecutar → reflexionar de nuevo.
 
 **ReAct** (Yao et al., 2022): **Pensamiento → Acto → Observación**.
 
+```mermaid
+flowchart LR
+  Q[Consulta] --> T[Pensamiento]
+  T --> A[Acción / herramienta]
+  A --> O[Observación]
+  O --> T
+  O -->|tarea lista| R[Respuesta final]
+```
+
 **Reflexion** (Shinn et al., 2023): evaluador + autocrítica.
 
 ### Patrones avanzados de agentes (Anthropic, 2024)
@@ -191,6 +202,25 @@ El capítulo 6 empareja **RAG** (recuperar → generar; disperso vs denso vs hí
 Los agentes requieren **ingeniería defensiva** del capítulo 5 cuando las herramientas tocan datos, código e internet—sobre todo **inyección indirecta** vía contenido recuperado o navegado.
 
 ---
+
+## Preguntas de discusión
+
+- ¿Dónde gana la **recuperación híbrida** frente a solo denso en tu dominio?
+- ¿Cuál es el modo de fallo de tu estrategia de **chunking** hoy?
+- Esboza un bucle **ReAct** para un flujo—¿qué valida un humano?
+- ¿Qué **fallos de agente** (planificación vs. herramientas) dominan tus logs?
+- ¿Cuándo basta RAG sin agente?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Ingeniería de prompts](/ai-engineering/docs/es/prompt-engineering) — diseño de instrucciones y contexto.
+- **Siguiente:** [Finetuning](/ai-engineering/docs/es/finetuning) — cuando recuperación y herramientas no bastan.
+- **Datos:** [Ingeniería de datos](/ai-engineering/docs/es/dataset-engineering) — corpus y calidad de chunks para recuperación.
+- **Evaluación:** [Evaluar sistemas de IA modernos](/ai-engineering/docs/es/evaluating-modern-ai-systems) — evaluación end-to-end y por componente.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

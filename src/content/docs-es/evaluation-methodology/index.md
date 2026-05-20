@@ -6,11 +6,23 @@ order: 3
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 3**, aprox. **pp. 113–158**. Contrasta figuras y tablas con tu PDF.
+
 Cuanto más se despliega la IA, más margen hay para **fallos catastróficos**. Casos reales ya lo demostraron: un pasajero confió en el **chatbot de Air Canada** sobre tarifas por duelo y recibió información falsa; la aerolínea tuvo que cumplir el error tras una demanda. **Abogados** presentaron escritos con **citas de casos inventadas** por un LLM y fueron sancionados. Un usuario fue empujado al suicidio por un chatbot. Sin control de calidad en las salidas, el riesgo puede superar el beneficio en muchas aplicaciones.
 
 Al adoptar IA con prisa, muchos equipos descubren que la **evaluación** es a menudo el mayor obstáculo; en algunas apps puede consumir **la mayor parte del esfuerzo de desarrollo** (Greg Brockman: “evals are surprisingly often all you need”). Este capítulo cubre **métodos** para evaluar modelos abiertos: cómo funcionan y dónde fallan. El capítulo 4 pasa a **usar** esos métodos para elegir modelos y montar un pipeline de evaluación en tu aplicación.
 
 La evaluación no va aislada: sirve para **mitigar riesgos** y **detectar oportunidades**. Hay que saber **dónde falla el sistema** y diseñar la medición en torno a esos modos de fallo; a veces hace falta **rediseñar el sistema** para ganar visibilidad. Sin eso, ninguna pila de métricas hace el producto robusto.
+
+## Objetivos de aprendizaje
+
+Al terminar este capítulo deberías poder:
+
+- Explicar por qué las salidas **abiertas** rompen métricas clásicas de acierto.
+- Elegir entre **perplejidad**, comprobaciones exactas, similitud y **IA como juez** según la tarea.
+- Enumerar modos de fallo y sesgos de leaderboards **comparativos**.
+- Describir cuándo la **corrección funcional** es la métrica principal.
+- Conectar el diseño de evaluación con **riesgo** (legal, seguridad, reputación).
 
 ---
 
@@ -202,6 +214,25 @@ Las métricas de lenguaje y la similitud diseñada a mano son maduras; **IA como
 
 ---
 
+## Preguntas de discusión
+
+- Nombra tres **modos de fallo** de tu app que ningún leaderboard público captura.
+- ¿Cuándo te sirve la **perplejidad**—y cuándo engaña?
+- Diseña una comprobación de **corrección funcional** para una tarea generativa que tengas.
+- ¿Qué sesgos probarías si adoptas un **juez IA**?
+- ¿Qué te convencería de que un **+2 % en Arena** vale un **2× en precio**?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Entender modelos fundacionales](/ai-engineering/docs/es/understanding-foundation-models) — qué estás midiendo.
+- **Siguiente:** [Evaluar sistemas de IA modernos](/ai-engineering/docs/es/evaluating-modern-ai-systems) — pipelines y selección de modelo.
+- **Prompts:** [Ingeniería de prompts](/ai-engineering/docs/es/prompt-engineering) — evaluación defensiva ante inyección y fugas.
+- **Producción:** [Arquitectura de IA y feedback de usuario](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) — el feedback como evaluación continua.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
+
 ## Notas finales
 
 Lo que me queda de este capítulo es que la evaluación es donde el AI engineering deja de ser demo y pasa a ser **ingeniería**. Los ejemplos de Air Canada y los abogados recuerdan que una salida incorrecta tiene **coste legal y reputacional**, no solo una mala puntuación de UX. Eso me empuja a nombrar modos de fallo al inicio (hechos alucinados, errores de política, consejo dañino) en lugar de optimizar un leaderboard que no refleja a nuestros usuarios ni nuestros datos.
@@ -210,4 +241,35 @@ En **métricas**, ordeno mentalmente por capas. **Perplejidad** y afines sirven 
 
 Para **elegir modelo**, los leaderboards comparativos responden “¿A vs. B?” no “¿suficientemente bueno?”. Una victoria estrecha frente a un baseline débil o un precio 2× exigen **umbrales absolutos** y métricas de negocio. Montar la evaluación como **pipeline** (ejecutar → juez automático → humano puntual) es como desplegaría algo tipo text-to-SQL: si la consulta no corre bien, lo demás no compensa.
 
-**Referencia:** Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Capítulo 3: Evaluation Methodology.
+---
+
+## Referencias
+
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Capítulo 3: Evaluation Methodology.
+
+### Métricas y similitud
+
+- [BERTScore](https://arxiv.org/abs/1904.09675) — Zhang et al. (2020).
+- [BLEURT](https://arxiv.org/abs/2004.04696) — Sellam et al. (2020).
+- [sacreBLEU](https://github.com/mjpost/sacrebleu) — Implementación estándar de BLEU.
+
+### Benchmarks y contaminación
+
+- [MMLU](https://arxiv.org/abs/2009.03300) — Hendrycks et al. (2020).
+- [MMLU-Pro](https://arxiv.org/abs/2406.01574) — Wang et al. (2024).
+- [Chatbot Arena](https://chat.lmsys.org/) — Evaluación comparativa (LMSYS).
+- [Data Contamination in LLMs](https://arxiv.org/abs/2310.17589) — Sainz et al. (2023).
+
+### AI como juez
+
+- [Judging LLM-as-a-Judge](https://arxiv.org/abs/2306.05685) — Zheng et al. (2023).
+- [G-Eval](https://arxiv.org/abs/2303.16634) — Liu et al. (2023).
+
+### Corrección funcional
+
+- [HumanEval](https://arxiv.org/abs/2107.03374) — Chen et al. (2021).
+- [SWE-bench](https://www.swebench.com/) — Jimenez et al. (2024).
+
+### Cursos
+
+- [UPM — Taller 6 PDF](https://innovacioneducativa.upm.es/sites/default/files/saga/presentacion-taller6-programacion-software-ia.pdf) — Taller en español.

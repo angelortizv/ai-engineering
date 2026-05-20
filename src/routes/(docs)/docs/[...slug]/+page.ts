@@ -1,4 +1,4 @@
-import { getDoc, getPrevNext, getRawContent } from '$lib/docs/index.js';
+import { docsConfig, getDoc, getPrevNext, getRawContent } from '$lib/docs/index.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types.js';
 
@@ -11,6 +11,7 @@ export const load: PageLoad = ({ params }) => {
 	return {
 		meta: doc.meta,
 		slug: params.slug,
+		locale: docsConfig.i18n?.defaultLocale ?? 'en',
 		prev,
 		next,
 		rawContent: getRawContent(params.slug)

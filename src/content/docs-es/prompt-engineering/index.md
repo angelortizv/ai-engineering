@@ -6,6 +6,8 @@ order: 5
 
 ## Introducción
 
+> **O'Reilly (1.ª ed.)** — Huyen (2025), **Capítulo 5**, aprox. **pp. 211–252**. Contrasta figuras y tablas con tu PDF.
+
 La **ingeniería de prompts** es la forma más fácil y habitual de adaptar foundation models: redactar una instrucción que provoque el comportamiento deseado **sin cambiar pesos**. Muchas aplicaciones se lanzan solo con prompting, pero lo fácil del inicio esconde dificultad real.
 
 > Prompt engineering se refiere al proceso de elaborar una instrucción que haga que el modelo genere el resultado deseado… Puedes pensarlo como comunicación humano–IA.
@@ -170,6 +172,25 @@ El capítulo 5 plantea el prompting como **comunicación humano–IA**: anatomí
 Las instrucciones solas no bastan: hace falta el **contexto** adecuado (capítulo 6). El finetuning queda cuando el prompting se estanca (capítulo 7).
 
 ---
+
+## Preguntas de discusión
+
+- ¿Qué tareas quedan **zero-shot** y cuáles necesitan **few-shot**—y por qué?
+- ¿Cómo **versionas** prompts y los ligas a corridas de eval?
+- ¿Cuál es tu política ante **texto no confiable** en el contexto (inyección indirecta)?
+- ¿Cuándo usar **salidas estructuradas** frente a texto libre + parsing?
+- ¿Qué te haría dejar de iterar prompts y probar **RAG** o **finetuning**?
+
+---
+
+## Relacionado
+
+- **Anterior:** [Evaluar sistemas de IA modernos](/ai-engineering/docs/es/evaluating-modern-ai-systems) — saber qué es «bueno» antes de iterar prompts.
+- **Siguiente:** [RAG y agentes](/ai-engineering/docs/es/rag-and-agents) — contexto más allá de la ventana del prompt.
+- **Seguridad:** [Metodología de evaluación](/ai-engineering/docs/es/evaluation-methodology) — elección de juez y métricas para pruebas de safety.
+- **Arquitectura:** [Arquitectura de IA y feedback de usuario](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) — guardrails alrededor de los prompts.
+- **Repositorio del libro:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glosario:** [Glosario](/ai-engineering/docs/es/glossary) — términos del libro y estas notas.
 
 ## Notas finales
 

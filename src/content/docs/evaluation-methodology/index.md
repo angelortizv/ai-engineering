@@ -6,11 +6,23 @@ order: 3
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 3**, approximately **pp. 113–158**. Cross-check figures and tables in your PDF.
+
 The more AI is deployed, the more room there is for **catastrophic failure**. Real cases already made that concrete: a passenger relied on **Air Canada’s chatbot** for bereavement fares and got wrong policy information—the airline had to honor the mistake after a lawsuit. **Lawyers** submitted briefs with **hallucinated case citations** and faced sanctions. A user was encouraged toward self-harm by a chatbot. Without quality control on outputs, risk can outweigh benefit for many applications.
 
 As teams rush to adopt AI, many discover that **evaluation** is often the biggest hurdle—and for some apps it can consume **most of the development effort** (Greg Brockman: “evals are surprisingly often all you need”). This chapter covers **methods** for evaluating open-ended models: how they work and where they break. Chapter 4 turns to **using** those methods to pick models and build an evaluation pipeline for your application.
 
 Evaluation is never isolated: it exists to **mitigate risks** and **surface opportunities**. You must know **where the system fails** and design measurement around those failure modes—sometimes that means **redesigning the system** for visibility. Without that, no metric stack makes the product robust.
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Explain why **open-ended** outputs break classic accuracy metrics.
+- Choose among **perplexity**, exact checks, similarity, and **AI-as-judge** for a given task.
+- List failure modes and biases of **comparative** leaderboards.
+- Describe when **functional correctness** is the right primary metric.
+- Connect evaluation design to **risk** (legal, safety, reputation).
 
 ---
 
@@ -202,6 +214,25 @@ Language metrics and hand-designed similarity are mature; **AI-as-judge** and **
 
 ---
 
+## Discussion questions
+
+- Name three **failure modes** for your app that no public leaderboard captures.
+- When is **perplexity** useful for you—and when is it misleading?
+- Design a **functional correctness** check for one generative task you own.
+- What biases will you test for if you adopt an **AI judge**?
+- What would convince you a **2% Arena win** is worth a 2× price increase?
+
+---
+
+## Related
+
+- **Back:** [Understanding Foundation Models](/ai-engineering/docs/understanding-foundation-models) — what you are measuring.
+- **Next:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — pipelines and model selection.
+- **Prompts:** [Prompt Engineering](/ai-engineering/docs/prompt-engineering) — defensive eval for injection and leakage.
+- **Production:** [AI Engineering Architecture and User Feedback](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) — feedback as ongoing eval.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
+
 ## Closing notes
 
 What I take from this chapter is that evaluation is where AI engineering stops being a demo and becomes **engineering**. The Air Canada and lawyer examples are reminders that wrong outputs have **legal and reputational** cost—not just a bad UX score. That pushes me to name failure modes up front (hallucinated facts, policy errors, harmful advice) instead of optimizing a leaderboard that does not match our users or data.
@@ -210,4 +241,36 @@ On **metrics**, I mentally sort tools into layers. **Perplexity** and friends ar
 
 For **model selection**, comparative leaderboards answer “A vs. B?” not “good enough?” A slim win against a weak baseline or a 2× price bump needs **absolute** gates and business metrics. Building eval as a **pipeline** (execute → automate judge → human spot-check) matches how I would ship something like text-to-SQL: if the query does not run correctly, nothing else matters.
 
-**Reference:** Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 3: Evaluation Methodology.
+---
+
+## References
+
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 3: Evaluation Methodology.
+
+### Metrics and similarity
+
+- [BLEU](https://arxiv.org/abs/2109.11346) — Papineni et al.; see also [sacreBLEU](https://github.com/mjpost/sacrebleu).
+- [ROUGE](https://aclanthology.org/W04-1013/) — Lin (2004).
+- [BERTScore](https://arxiv.org/abs/1904.09675) — Zhang et al. (2020).
+- [BLEURT](https://arxiv.org/abs/2004.04696) — Sellam et al. (2020).
+
+### Benchmarks and contamination
+
+- [MMLU](https://arxiv.org/abs/2009.03300) — Hendrycks et al. (2020).
+- [MMLU-Pro](https://arxiv.org/abs/2406.01574) — Wang et al. (2024).
+- [Chatbot Arena](https://chat.lmsys.org/) — LMSYS comparative evaluation platform.
+- [Data Contamination in LLMs](https://arxiv.org/abs/2310.17589) — Sainz et al. (2023).
+
+### AI as judge
+
+- [Judging LLM-as-a-Judge](https://arxiv.org/abs/2306.05685) — Zheng et al. (2023).
+- [G-Eval](https://arxiv.org/abs/2303.16634) — Liu et al. (2023).
+
+### Functional correctness
+
+- [HumanEval](https://arxiv.org/abs/2107.03374) — Chen et al. (2021).
+- [SWE-bench](https://www.swebench.com/) — Jimenez et al. (2024).
+
+### Courses
+
+- [UPM — Taller 6 PDF](https://innovacioneducativa.upm.es/sites/default/files/saga/presentacion-taller6-programacion-software-ia.pdf) — Spanish workshop on AI-assisted software.

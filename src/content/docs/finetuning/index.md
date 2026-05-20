@@ -6,6 +6,8 @@ order: 7
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 7**, approximately **pp. 307–362**. Cross-check figures and tables in your PDF.
+
 Chapters 5–6 adapt models through **prompts, context, and tools** without changing weights. **Finetuning** adapts by **further training** the whole model or part of it—adjusting weights.
 
 > Finetuning is the process of adapting a model to a specific task by further training the whole model or part of the model… by adjusting its weights.
@@ -15,6 +17,16 @@ Chapters 5–6 adapt models through **prompts, context, and tools** without chan
 It can improve **domain capability**, **safety**, and especially **instruction-following** (formats, styles). It demands more **up-front investment** than prompting: data, hardware, ML talent, serving, and ongoing maintenance.
 
 This chapter is the most technically dense in the book. Skip sections that are not relevant to your role; the book’s GitHub repo lists ML refreshers.
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Decide **when to finetune** vs. prompt/RAG using the book’s criteria.
+- Estimate **memory** for inference vs. full finetune vs. **PEFT**.
+- Contrast **PTQ** and **QAT** for deployment.
+- Explain **model merging** use cases and risks.
+- Plan hyperparameter and data tactics that avoid **overfitting** small sets.
 
 ---
 
@@ -134,6 +146,20 @@ Example — **7B full finetune, FP16:**
 
 **PEFT** reduces trainable params → much smaller gradient/optimizer memory.
 
+```mermaid
+flowchart TB
+  subgraph infer["Inference memory"]
+    W[Model weights]
+    KV[Activations / KV cache]
+  end
+  subgraph train["Full finetuning adds"]
+    G[Gradients]
+    O[Adam optimizer states]
+  end
+  W --> G
+  G --> O
+```
+
 ### Quantization
 
 > Reducing precision, also known as quantization, is a cheap and extremely effective way to reduce a model's memory footprint.
@@ -234,6 +260,25 @@ Finetuning trades **weight updates** for **memory, data, and ops complexity**. M
 **Model merging** experiments combine specialized checkpoints for multi-task and edge deployment. Chapter 8 addresses the data bottleneck—especially **instruction data**.
 
 ---
+
+## Discussion questions
+
+- List **reasons not to finetune** for your current product.
+- Estimate **trainable params** and memory with the chapter’s napkin math.
+- When is **form** (tone/format) finetuning enough without new facts?
+- Would **LoRA vs. full** change your compliance story?
+- How will you detect **catastrophic forgetting** on general tasks?
+
+---
+
+## Related
+
+- **Back:** [RAG and Agents](/ai-engineering/docs/rag-and-agents) — prompt-based adaptation first.
+- **Next:** [Dataset Engineering](/ai-engineering/docs/dataset-engineering) — data quality for SFT and preferences.
+- **Inference:** [Inference Optimization](/ai-engineering/docs/inference-optimization) — serving cost after you adapt weights.
+- **Eval:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — prove finetuning beat prompts/RAG.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

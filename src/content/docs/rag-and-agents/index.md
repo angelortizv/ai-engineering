@@ -6,6 +6,8 @@ order: 6
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 6**, approximately **pp. 253–306**. Cross-check figures and tables in your PDF.
+
 A model needs **instructions** (Chapter 5) and **context** per query. Chapter 5 covered how to write instructions; this chapter covers **how to build context**—the two dominant patterns are **RAG** (retrieval-augmented generation) and **agents** (tool-using planners).
 
 - **RAG** retrieves from external memory (databases, past chats, the web) and feeds results into the generator.
@@ -164,6 +166,15 @@ Typical loop:
 
 **ReAct** (Yao et al., 2022): interleave **Thought → Act → Observation** until done—planning + reflection in one pattern.
 
+```mermaid
+flowchart LR
+  Q[User query] --> T[Thought]
+  T --> A[Action / tool call]
+  A --> O[Observation]
+  O --> T
+  O -->|task done| R[Final answer]
+```
+
 **Reflexion** (Shinn et al., 2023): separate **evaluator** + **self-reflection** → new trajectory. Cost: many tokens per step.
 
 **Granularity:** natural-language plans vs exact function names—NL plans survive API renames but need a **translator** step.
@@ -250,6 +261,25 @@ Chapter 6 pairs **RAG** (retrieve → generate; sparse vs dense vs hybrid; chunk
 Agents need **defensive engineering** from Chapter 5 when tools touch data, code, and the internet—especially **indirect injection** via retrieved or browsed content.
 
 ---
+
+## Discussion questions
+
+- Where does **hybrid retrieval** beat dense-only for your domain?
+- What is the failure mode of your **chunking** strategy today?
+- Sketch a **ReAct** loop for one workflow—what is human-verified?
+- Which **agent failures** (planning vs. tools) dominate your logs?
+- When is RAG “enough” without an agent?
+
+---
+
+## Related
+
+- **Back:** [Prompt Engineering](/ai-engineering/docs/prompt-engineering) — instructions and context design.
+- **Next:** [Finetuning](/ai-engineering/docs/finetuning) — when retrieval and tools are not enough.
+- **Data:** [Dataset Engineering](/ai-engineering/docs/dataset-engineering) — corpora and chunk quality for retrieval.
+- **Eval:** [Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) — end-to-end and component eval.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

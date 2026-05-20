@@ -6,15 +6,38 @@ order: 10
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 10**, approximately **pp. 449–494**. Cross-check figures and tables in your PDF.
+
 Previous chapters covered techniques to **adapt** foundation models. This chapter shows how to **assemble** them into production applications—and how **user feedback** becomes a first-class data source for improvement.
 
 The architecture section uses a **gradual build**: simplest path first, then components as needs arise. User feedback is harder to extract in conversational UIs than to collect—design matters for both UX and the data flywheel (Chapter 8).
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Walk through the **five-step progressive architecture** with tradeoffs.
+- Place **guardrails** on input vs. output for your risk model.
+- Explain **router vs. gateway** responsibilities.
+- Design **feedback** capture that feeds the data flywheel safely.
+- Connect monitoring to **new failure modes** of foundation models.
 
 ---
 
 ## AI engineering architecture
 
 A validated pattern at many companies—your app may diverge, but the components recur.
+
+```mermaid
+flowchart TB
+  S0["Baseline: query → model → response"]
+  S1["Step 1: Enhance context (RAG, tools)"]
+  S2["Step 2: Guardrails (input / output)"]
+  S3["Step 3: Router and gateway"]
+  S4["Step 4: Caches (KV, prompt, semantic)"]
+  S5["Step 5: Agent patterns"]
+  S0 --> S1 --> S2 --> S3 --> S4 --> S5
+```
 
 ### Baseline: query → model → response
 
@@ -237,6 +260,25 @@ Engineers increasingly own feedback because it feeds the model improvement loop�
 Many challenges need a **whole-system view**—not a single technique in isolation.
 
 ---
+
+## Discussion questions
+
+- Which **architecture step** (context, guardrails, router, cache, agents) is missing today?
+- Where could **semantic caching** leak personalized answers?
+- What **observability** signal would have caught your last incident?
+- How do you avoid a **degenerate feedback loop**?
+- What feedback do you collect without hurting UX?
+
+---
+
+## Related
+
+- **Back:** [Inference Optimization](/ai-engineering/docs/inference-optimization) — latency/cost under load.
+- **Capstone:** [Introduction to Building AI Applications](/ai-engineering/docs/introduction-to-building-ai-applications-with-foundation-models) — stack and planning from Chapter 1.
+- **Feedback data:** [Dataset Engineering](/ai-engineering/docs/dataset-engineering) — turning logs into training sets.
+- **Epilogue:** [Epilogue](/ai-engineering/docs/epilogue) — closing perspective and book repo.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
 
 ## Closing notes
 

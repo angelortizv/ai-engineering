@@ -6,6 +6,8 @@ order: 4
 
 ## Introduction
 
+> **O'Reilly (1st ed.)** — Huyen (2025), **Chapter 4**, approximately **pp. 159–210**. Cross-check figures and tables in your PDF.
+
 A model is only useful if it works for **your** application. Chapter 3 surveyed **how** to evaluate (exact metrics, AI judges, comparative ranking). This chapter covers **what** to measure, **how to choose models**, and **how to build a pipeline** you can trust over time.
 
 Three parts:
@@ -15,6 +17,16 @@ Three parts:
 3. **Evaluation pipeline** — guidelines, methods, data slices, and iteration in production.
 
 Evaluation must sit in the **system** context: know where failures happen, design measurement around them, and sometimes redesign for visibility.
+
+## Learning objectives
+
+After this chapter, you should be able to:
+
+- Apply the **four evaluation criteria** to a real use case.
+- Outline a **model selection workflow** (filter → public → custom → production).
+- Argue **build vs. buy** with privacy, latency, and capability tradeoffs.
+- Design a three-step **evaluation pipeline** with human spot-checks.
+- Map benchmark scores to **business thresholds**, not leaderboard rank alone.
 
 ---
 
@@ -183,6 +195,25 @@ No single score captures a high-dimensional system; **combining methods** mitiga
 
 ---
 
+## Discussion questions
+
+- Draft four **evaluation pillars** (domain, generation, instruction, cost/latency) for your product.
+- What is on your **private eval set** that MMLU will never see?
+- Where could **contaminated** public benchmarks mis-rank models for you?
+- Write a one-paragraph **evaluation guideline** like the LinkedIn “helpfulness” example.
+- What **usefulness threshold** gates automation vs. human review?
+
+---
+
+## Related
+
+- **Back:** [Evaluation Methodology](/ai-engineering/docs/evaluation-methodology) — methods this chapter operationalizes.
+- **Next:** [Prompt Engineering](/ai-engineering/docs/prompt-engineering) — first adaptation layer after you pick a model.
+- **Data:** [Dataset Engineering](/ai-engineering/docs/dataset-engineering) — building slices that match production.
+- **Agents:** [RAG and Agents](/ai-engineering/docs/rag-and-agents) — evaluating retrieval and tool loops.
+- **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
+- **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
+
 ## Closing notes
 
 What I internalize from this chapter is a discipline shift: **define success before building**. The four pillars remind me not to optimize only accuracy on a leaderboard—domain fit, output quality, instruction adherence, and economics all gate shipping.
@@ -195,4 +226,32 @@ The LinkedIn “terrible fit” example sticks: evaluation guidelines must encod
 >
 > — Huyen (2025, p. 208)
 
-**Reference:** Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 4: Evaluate AI Systems.
+---
+
+## References
+
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 4: Evaluate AI Systems.
+
+### Holistic evaluation
+
+- [HELM](https://crfm.stanford.edu/helm/latest/) — Liang et al., Stanford holistic benchmarking.
+- [OpenAI — Evals guide](https://platform.openai.com/docs/guides/evals) — Product-oriented eval workflows.
+
+### Model selection and benchmarks
+
+- [MMLU](https://arxiv.org/abs/2009.03300) — Hendrycks et al. (2020).
+- [Chatbot Arena](https://chat.lmsys.org/) — Comparative ranking (LMSYS).
+- [Data Contamination in LLMs](https://arxiv.org/abs/2310.17589) — Sainz et al. (2023).
+
+### Build vs. buy and production
+
+- [Hugging Face — Model Hub](https://huggingface.co/models) — Open weights and cards.
+- [vLLM](https://github.com/vllm-project/vllm) — High-throughput serving for self-hosting comparisons.
+
+### Practitioner essays
+
+- [Greg Brockman on evals](https://x.com/gdb) — “Evals are surprisingly often all you need” (search talks/posts for context).
+
+### Courses
+
+- [UPM — Taller 6 PDF](https://innovacioneducativa.upm.es/sites/default/files/saga/presentacion-taller6-programacion-software-ia.pdf) — Spanish workshop on AI-assisted software.

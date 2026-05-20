@@ -12,7 +12,13 @@
 <SeoHead title={data.meta.title} description={data.meta.description} />
 
 {#if doc}
-	<DocRenderer meta={doc.meta} component={doc.component} slug={data.slug} rawContent={data.rawContent} />
+	<DocRenderer
+		meta={doc.meta}
+		component={doc.component}
+		slug={data.slug}
+		rawContent={data.rawContent}
+		locale={data.locale}
+	/>
 {/if}
-<DocsFooter prev={data.prev} next={data.next} />
+<DocsFooter prev={data.prev} next={data.next} locale={data.locale} />
 <KeyboardNav prev={data.prev} next={data.next} />
