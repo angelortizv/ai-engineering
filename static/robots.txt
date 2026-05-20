@@ -1,7 +1,7 @@
 # allow crawling everything by default
 User-agent: *
 Disallow:
-Sitemap: https://svelte-docs-starter.pages.dev/sitemap.xml
+Sitemap: https://angelortizv.github.io/ai-engineering/sitemap.xml
 
 # LLM-friendly content
 # See https://llmstxt.org for the specification

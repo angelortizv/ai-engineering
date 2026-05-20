@@ -1,28 +1,24 @@
 {
-	"name": "svelte-docs-starter",
+	"name": "ai-engineering",
 	"version": "1.0.0",
-	"description": "A modern, full-featured documentation starter built with SvelteKit, Tailwind CSS v4, shadcn-svelte, and MDSvex.",
-	"author": "code-gio",
+	"description": "Chapter notes, study tools, and EN/ES summaries for Chip Huyen's AI Engineering (O'Reilly).",
+	"author": "Angelo Ortiz Vega",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/code-gio/svelte-docs-starter"
+		"url": "https://github.com/angelortizv/ai-engineering.git"
 	},
-	"homepage": "https://github.com/code-gio/svelte-docs-starter",
+	"homepage": "https://github.com/angelortizv/ai-engineering",
 	"bugs": {
-		"url": "https://github.com/code-gio/svelte-docs-starter/issues"
+		"url": "https://github.com/angelortizv/ai-engineering/issues"
 	},
 	"keywords": [
-		"svelte",
-		"sveltekit",
+		"ai-engineering",
+		"foundation-models",
 		"documentation",
-		"docs",
-		"starter",
-		"template",
-		"tailwindcss",
-		"shadcn-svelte",
-		"mdsvex",
-		"markdown"
+		"sveltekit",
+		"chip-huyen",
+		"llm"
 	],
 	"type": "module",
 	"scripts": {
