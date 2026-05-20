@@ -73,6 +73,8 @@ Foundation models often embed a **language model**; LM metrics correlate with do
 
 **Perplexity** is `2^H` (or `e^H` with nats in PyTorch/TensorFlow)—intuitively, the **effective number of choices** for the next token. PPL of 10 ≈ choosing among 10 equally likely tokens.
 
+**Worked example:** Suppose cross-entropy on a dev set is **3 bits** per token. Then PPL ≈ 2³ = **8**—as if the model were uniformly unsure among eight next tokens. Drop cross-entropy to **2 bits** → PPL = **4** (better fit). If a model scores PPL **2** on MMLU-style items while peers score **8**, suspect **contamination** or a mismatched eval setup—not magic capability.
+
 **Interpretation rules:**
 
 - More **structured** text (e.g. HTML) → lower expected PPL.
@@ -89,6 +91,19 @@ Foundation models often embed a **language model**; LM metrics correlate with do
 **Critical caveat:** **SFT** and **RLHF** often **increase** PPL—the model optimizes for helpful task completion, not raw next-token prediction. **Quantization** can shift PPL unexpectedly too.
 
 Commercial APIs do not always expose **logprobs**, which are required to compute PPL on arbitrary text.
+
+### Data contamination and benchmark hygiene
+
+Public benchmarks **leak into training data** when crawls include exam sites, GitHub solutions, or benchmark mirrors. Symptoms: sudden SOTA jumps, **suspiciously low PPL** on benchmark text, or strong benchmark performance with weak private eval.
+
+**Mitigations:**
+
+- Prefer **private, task-specific** eval sets (Ch. 4).
+- **Deduplicate** training data against benchmarks (n-gram / embedding overlap).
+- Report **contamination-aware** results when using public leaderboards (HELM-style).
+- Treat Arena/MMLU rank as a **filter**, not a shipping contract.
+
+> **Legal risk (callout):** Wrong outputs are not only UX bugs. **Air Canada** was held to a chatbot’s incorrect bereavement policy; **lawyers** were sanctioned for **hallucinated case citations**. Evaluation is liability control—not only model quality.
 
 ---
 
@@ -153,6 +168,8 @@ Built-in criteria vary by tool (Azure: groundedness, relevance…; Ragas: faithf
 - **Cost and latency** — judging every response can double API spend; multiple criteria multiply calls; production guardrails add latency.
 - **Biases:** **self-bias** (model favors its own outputs), **position bias** (first answer favored; opposite of human recency bias), **verbosity bias** (longer answers win even when wrong). Mitigate with order swapping, specialized judges, or weaker models for spot-checks.
 
+**Frozen judge spec:** pin model version, prompt template, temperature, and calibration examples in version control; re-baseline when the judge model changes.
+
 **Which model judges?** Stronger judges correlate better with humans but cost more; **weaker judges** or **specialized** models (reward models, reference-based judges like BLEURT/Prometheus, **preference models** like PandaLM/JudgeLM) can be cheaper and task-specific. **Self-critique** helps sanity checks and revision loops.
 
 AI judges should **supplement** exact metrics and human evaluation—not replace them.
@@ -160,6 +177,8 @@ AI judges should **supplement** exact metrics and human evaluation—not replace
 ---
 
 ## The competitive arena: ranking with comparative evaluation
+
+**Absolute thresholds vs. rankings:** A model that wins **52%** on Chatbot Arena against a weak baseline may still fail your **latency**, **cost**, or **domain** gates. Always pair comparative wins with **minimum quality bars** (e.g. ≥90% functional correctness on SQL, toxicity rate below X%)—developed in [Chapter 4](/ai-engineering/docs/evaluating-modern-ai-systems).
 
 Often the question is not “What is Model A’s score?” but **“Is Model A better than Model B for us?”**
 

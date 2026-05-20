@@ -46,6 +46,16 @@ Lewis et al. entrenaban recuperador y generador juntos; hoy muchos sistemas usan
 
 Flujo típico: **fragmentar** documentos → recuperar top-*k* → unir al prompt final → generar. Recuperar documentos enteros puede reventar la ventana de contexto.
 
+```mermaid
+flowchart LR
+  D[Documentos] --> I[Índice / chunks]
+  Q[Consulta] --> R[Recuperador]
+  I --> R
+  R --> C[Contexto en prompt]
+  C --> G[LLM generador]
+  G --> A[Respuesta]
+```
+
 ### Algoritmos de recuperación
 
 La recuperación ordena documentos por **relevancia**. Dos familias:
@@ -120,6 +130,14 @@ Los foundation models permiten agentes que **planifican** y usan **herramientas*
 
 Categorías: **aumento de conocimiento**, **extensión de capacidad** (calculadora, intérprete de código), **escritura** en sistemas reales.
 
+**Checklist de riesgos en acciones de escritura:**
+
+- [ ] ¿La acción es **reversible** o idempotente?
+- [ ] ¿Aprobación humana en ops **irreversibles** (pagos, borrados, envíos)?
+- [ ] ¿**Scope** de tools con mínimo privilegio (solo lectura por defecto)?
+- [ ] ¿Registrar **args** y resultados de tools para auditoría?
+- [ ] ¿Red-team de **inyección indirecta** vía docs recuperados y salidas de tools?
+
 **Function calling:** declarar herramientas; subconjunto por consulta; validar parámetros en logs.
 
 **Selección de herramientas:** más herramientas = más capacidad y más confusión; estudios de ablación; definiciones de herramienta muy claras; diseño **poka-yoke**.
@@ -172,11 +190,11 @@ Fallos de **herramienta** (salida incorrecta, traducción NL→comando, herramie
 
 ### Memoria
 
-| Tipo | Qué | Persistencia |
-|------|-----|--------------|
-| **Conocimiento interno** | Pesos del entrenamiento | Hasta actualizar modelo |
-| **Corto plazo** | Ventana de contexto | Por sesión |
-| **Largo plazo** | Vector DB, archivos | Entre sesiones |
+| Tipo | Qué | Persistencia | Patrones |
+|------|-----|--------------|----------|
+| **Conocimiento interno** | Pesos del entrenamiento | Hasta actualizar modelo | — |
+| **Corto plazo** | Ventana de contexto / conversación | Por sesión | Historial bruto, **resumen** |
+| **Largo plazo** | Vector DB, archivos, stores estructurados | Entre sesiones | **Vector** retrieval, **episódica** |
 
 Gestión: FIFO simple vs **resumen** y **reflexión** sobre qué fusionar o borrar. Recuperar de largo plazo **es RAG**.
 
@@ -192,6 +210,30 @@ Los **protocolos de agentes** estandarizan formatos y procedimientos para intero
 - **Escenario:** propósito general vs dominio específico.
 
 **Trilema de comunicación:** versatilidad, eficiencia, portabilidad—difícil maximizar las tres.
+
+| | **MCP** (Model Context Protocol) | **A2A** (Agent-to-Agent) |
+| --- | --- | --- |
+| **Conecta** | Agente ↔ tools / fuentes de datos | Agente ↔ agente |
+| **Uso típico** | Estandarizar RAG, BD, integraciones IDE | Delegar subtareas entre agentes |
+| **Obtienes** | Esquemas portables de tool/recurso | Handoffs y roles multi-agente |
+
+### Cuándo usar RAG, agente o híbrido
+
+```mermaid
+flowchart TD
+  Q[¿Hechos externos?] -->|No| P[Solo prompt]
+  Q -->|Sí| R{¿Basta RAG?}
+  R -->|Un retrieval + respuesta| G[Pipeline RAG]
+  R -->|Multi-paso / escrituras| A[Bucle agente]
+  A --> H[Puertas humanas en escrituras]
+```
+
+| Patrón | Elegir cuando |
+| --- | --- |
+| **Solo prompt** | Estilo/formato; conocimiento en pesos |
+| **RAG** | Q&A sobre corpus privado; un retrieval basta |
+| **Agente** | Muchas tools, ramas, escrituras, planes largos |
+| **Híbrido** | RAG para hechos + agente para acciones (muchos productos) |
 
 ---
 

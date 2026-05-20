@@ -43,11 +43,24 @@ flowchart TB
 
 User query → model API (third-party or self-hosted, Chapter 9) → response. No context augmentation, guardrails, or optimization (Figure 10-1 in book).
 
+```mermaid
+flowchart LR
+  Q[User query] --> M[Model API]
+  M --> R[Response]
+```
+
 ### Step 1. Enhance context
 
 Add retrieval (text, image, tabular) and **tools** (search, weather, APIs)—“feature engineering” for foundation models (Chapter 6).
 
 Provider differences: file upload limits, chunking, parallel tool execution. Specialized RAG stacks vs generic API file features.
+
+```mermaid
+flowchart LR
+  Q[Query] --> RAG[RAG / tools]
+  RAG --> M[Model]
+  M --> R[Response]
+```
 
 ### Step 2. Guardrails
 
@@ -69,6 +82,14 @@ Place guardrails wherever risk exists—**input** and **output**.
 **Trade-offs:** guardrails add **latency**; some teams skip them for speed. **Streaming** hard to guard on partial tokens. Third-party APIs ship built-in safety; self-hosting reduces external PII exposure but you own more guardrails.
 
 **Tools:** Purple Llama, NeMo Guardrails, Azure PyRIT / content filters, Perspective API, OpenAI moderation; gateways may bundle guardrails.
+
+```mermaid
+flowchart TB
+  Q[Query] --> IN[Input guardrails]
+  IN --> CTX[Context + model]
+  CTX --> OUT[Output guardrails]
+  OUT --> R[Response]
+```
 
 ### Step 3. Model router and gateway
 
@@ -93,6 +114,14 @@ Implement with small LMs (BERT, Llama 7B) or tiny classifiers—must be **fast a
 
 Examples: Portkey, MLflow AI Gateway, TrueFoundry, Kong, Cloudflare. Gateway **replaces** the raw “model API” box in diagrams.
 
+```mermaid
+flowchart LR
+  Q[Query] --> RT[Router]
+  RT --> GW[Gateway]
+  GW --> M1[Model A]
+  GW --> M2[Model B]
+```
+
 ### Step 4. Reduce latency with caches
 
 Beyond **KV cache** and **prompt cache** (Chapter 9)—**system caching**:
@@ -106,11 +135,28 @@ Exact cache: product summaries, embedding search results, multi-step chains. Bac
 
 Semantic cache: higher hit rate, can **hurt quality** if threshold wrong.
 
+```mermaid
+flowchart LR
+  Q[Query] --> C{Cache hit?}
+  C -->|yes| R[Cached response]
+  C -->|no| M[Model path]
+  M --> R2[Response + store]
+```
+
 ### Step 5. Agent patterns
 
 Loops (retrieve again after failed answer), parallel branches, **write actions** (email, orders, transfers)—high capability, high risk (Chapter 6). Architecture feeds outputs back into the pipeline (Figures 10-9–10-10).
 
 Complexity → more failure modes → observability becomes critical.
+
+```mermaid
+flowchart TB
+  Q[Query] --> A[Agent loop]
+  A --> T[Tools / RAG]
+  T --> A
+  A --> W[Write actions?]
+  W --> LOG[Logs → flywheel]
+```
 
 ---
 
@@ -123,6 +169,13 @@ Observability should be **designed in**, not bolted on. Goal aligns with **evalu
 - **MTTD** — mean time to detect issues.
 - **MTTR** — mean time to resolve.
 - **CFR** — change failure rate; high CFR may mean weak pre-deploy eval.
+
+**What to log (minimum viable observability):**
+
+- Request/response payloads (redacted), model id, temperature, token counts, latency (TTFT + total).
+- Retrieval ids / tool calls / agent steps (for RAG and agents).
+- User feedback events linked to `trace_id`.
+- Errors, rate limits, safety blocks, cost per request.
 
 Eval metrics should **translate** to production monitoring; monitoring findings feed back to eval pipelines.
 
@@ -175,6 +228,12 @@ Different from general workflow tools (Airflow)—AI orchestrators focus on LLM 
 
 **Advice:** build without orchestrator first; add when complexity justifies it. Watch hidden API calls and latency.
 
+| | **Start without orchestrator** | **Add orchestrator (LangChain, etc.)** |
+| --- | --- | --- |
+| **Pros** | Fewer abstractions; easier debug; lower latency | Reusable chains, community patterns |
+| **Cons** | Spaghetti as steps grow | Hidden LLM calls; harder to trace cost |
+| **When** | ≤3 steps, one team, clear code | Many branches, tools, shared components |
+
 **Evaluate:** integration/extensibility, branching/parallel/error handling, UX/docs/community, scale.
 
 **Latency tip:** parallelize independent steps (routing + PII scrubbing).
@@ -188,6 +247,13 @@ Feedback drives **evaluation** and **development**; in AI it is also **proprieta
 Treat feedback as **user data**—privacy, consent, transparency.
 
 ### Explicit vs implicit
+
+| Signal class | Examples | Extraction |
+| --- | --- | --- |
+| **Explicit** | Thumbs, stars, surveys | Direct labels |
+| **Implicit** | Regenerate, abandon, time-on-page | Behavioral logs |
+| **Natural language** | “No, I meant…”, complaints | NLP on messages |
+| **Actions** | Edit answer, share, delete thread | Event pipeline |
 
 | Type | Examples |
 |------|----------|
@@ -243,6 +309,8 @@ Combine signals; RL/NLP feedback research predates ChatGPT (Fu et al., 2019; Ale
 
 **Biases:** leniency (Uber 4.8 average), random clicks, **position bias** (mitigate shuffle or modeling), length/recency preference in side-by-side.
 
+> **Degenerate feedback loop (callout):** Optimizing on clicks or thumbs-up can amplify popularity bias (filter bubbles) and **sycophancy**—models learn to agree with users instead of staying truthful (Sharma et al., 2023; Stray, 2023). Mitigate with slice eval, holdout human review, and caps on how much feedback data enters each training round.
+
 **Degenerate feedback loop:** recommendations amplify clicks → filter bubbles; cat-photo example; **sycophancy** when training on feedback (Sharma et al., 2023; Stray, 2023)—models tell users what they want vs what is true.
 
 Feedback only on **shown** outputs—exposure bias. Understand limits before closing the loop.
@@ -279,6 +347,17 @@ Many challenges need a **whole-system view**—not a single technique in isolati
 - **Epilogue:** [Epilogue](/ai-engineering/docs/epilogue) — closing perspective and book repo.
 - **Book repository:** [chiphuyen/aie-book](https://github.com/chiphuyen/aie-book).
 - **Glossary:** [Glossary](/ai-engineering/docs/glossary) — key terms from the book and these notes.
+
+### Capstone: which chapter solves which layer
+
+| Layer / problem | Primary chapters |
+| --- | --- |
+| **What model & how it behaves** | [2](/ai-engineering/docs/understanding-foundation-models), [5](/ai-engineering/docs/prompt-engineering) |
+| **Is it good enough?** | [3](/ai-engineering/docs/evaluation-methodology), [4](/ai-engineering/docs/evaluating-modern-ai-systems) |
+| **Private knowledge & tools** | [6](/ai-engineering/docs/rag-and-agents) |
+| **Behavior / format in weights** | [7](/ai-engineering/docs/finetuning), [8](/ai-engineering/docs/dataset-engineering) |
+| **Fast & cheap at scale** | [9](/ai-engineering/docs/inference-optimization) |
+| **Production system & improvement loop** | **10** (this chapter) |
 
 ## Closing notes
 

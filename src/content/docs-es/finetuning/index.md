@@ -96,6 +96,8 @@ Muchos equipos descubren que experimentos de prompt débiles motivaron “necesi
 
 **Ruta recomendada con ambos problemas:** **RAG** primero para hechos (p. ej. resúmenes de jurisprudencia), luego **finetuning** para formato XML propietario.
 
+> **Callout legal / formato:** En dominios regulados, **RAG** ancla respuestas en fuentes citables; el **finetuning** enseña el **esquema** de salida (p. ej. XML de la firma) sin memorizar toda la normativa en pesos. Finetuning solo de tono sin RAG deja expuesto el riesgo factual (eval cap. 3).
+
 **Flujo de trabajo (con pipeline de evaluación):**
 
 1. Prompting (capítulo 5), añadir few-shot.
@@ -195,7 +197,15 @@ Matriz de pesos **W** congelada; actualización de bajo rango **ΔW = B × A** (
 
 **Dónde aplicar:** habitualmente **Wq, Wk, Wv, Wo** en atención; Databricks reportó fuertes ganancias con LoRA en **feedforward**. Con presupuesto fijo de parámetros entrenables, importa la asignación de rango (Hu et al., 2021 en GPT-3 175B). **r típico: 4–64** (depende de la tarea).
 
-**Multi-LoRA serving:** una base **W** + muchos adaptadores (A, B) pequeños—mucho menos almacenamiento que 100 modelos fusionados completos.
+| Hiperparámetro | Rango típico | Notas |
+| --- | --- | --- |
+| **Rango r** | 4–64 | r alto → más capacidad, más sobreajuste |
+| **Alpha α** | A menudo 2× r | Escala la fusión: W′ = W₀ + (α/r)BA |
+| **Módulos objetivo** | Wq, Wk, Wv, Wo (+ FFN opcional) | Ablaciones atención vs FFN |
+| **Dropout** | 0–0.1 en adaptadores | Regulariza datasets pequeños |
+| **LR** | ~1e-4 – 3e-4 | Menor que full finetune |
+
+**Multi-LoRA serving:** una base **W** congelada + muchos (A, B) pequeños—ver [capítulo 9](/ai-engineering/docs/es/inference-optimization) (coste de serving) y [capítulo 8](/ai-engineering/docs/es/dataset-engineering) (calidad de datos SFT).
 
 **QLoRA:** pesos base en **4-bit (NF4)**; forward/backward en BF16; **optimizadores paginados**—**65B en una GPU de 48 GB** (Dettmers et al., 2023). Coste: tiempo de cuantización/desquantización.
 
@@ -215,6 +225,8 @@ Combinar varios modelos fine-tuned en uno más útil—no es lo mismo que **ense
 | **Layer stacking (frankenmerge)** | Apilar capas de distintos modelos | Suele requerir más finetuning (Goliath-120B) |
 | **MoE desde denso** | Duplicar capas + router (Komatsuzaki et al.) | Sparse upcycling |
 | **Concatenación (LoRA)** | Rango fusionado = r₁ + r₂ | Normalmente **no** recomendada por memoria |
+
+**Ejemplo de aritmética de tareas:** Sea **τ** = (pesos fine-tuned − base). Para añadir capacidad «español» y restar «tóxico» de dos adaptadores: **W_nuevo = W_base + λ₁τ_español − λ₂τ_tóxico** (λ ajustados en un eval pequeño). Ilharco et al. (2022) muestran que puede funcionar sin reentrenar un merge completo—validar en **tus** slices antes de producción.
 
 ---
 

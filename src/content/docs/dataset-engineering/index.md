@@ -150,7 +150,18 @@ Budget example: $10k at $2/example → max 5,000 examples—balance data vs comp
 
 ## Data acquisition and annotation
 
-**Best source:** your **application’s own data**—the data flywheel (user content, logs, feedback; Chapter 10). Perfect relevance and distribution.
+**Best source:** your **application’s own data**—the **data flywheel** (user content, logs, feedback; [Chapter 10](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback)). Perfect relevance and distribution.
+
+```mermaid
+flowchart LR
+  U[Users] --> P[Product]
+  P --> L[Logs & feedback]
+  L --> D[Dataset curation]
+  D --> M[Better model]
+  M --> P
+```
+
+**Weak supervision & active learning** (*Designing Machine Learning Systems*, Huyen): label a **subset**, train a **teacher**, propagate labels to similar examples, and **actively sample** uncertain points for human review—useful when full annotation is too expensive (see also clean/filter heuristics below).
 
 Otherwise: mix public, purchased, annotated, and synthetic sources. Typical pipeline:
 
@@ -204,14 +215,25 @@ Libraries like **Faker** started for test data; LLMs enable doctor notes, contra
 - Topics → subtopics → instructions (UltraChat, Ding et al., 2023).
 - **Alpaca:** 175 Self-Instruct seeds → 52k pairs via GPT-3 (Taori et al., 2023).
 
-**Llama 3 coding pipeline (case study):**
+**Llama 3 coding pipeline (case study)** — checklist:
 
-1. AI problem descriptions (diverse topics).
-2. Solutions per language + CoT + lint rules.
-3. AI unit tests; revise on failure (~20% self-correct).
-4. Cross-language translation + filter.
-5. Explanations/docs with **back-translation** verification.  
-→ **2.7M+** synthetic coding examples.
+- [ ] Generate diverse problem statements (topics/subtopics).
+- [ ] Produce solutions per language + CoT; run **linters**.
+- [ ] Generate **unit tests**; auto-revise failures (~20% self-correct in book).
+- [ ] Cross-language translation + consistency filter.
+- [ ] Add explanations; verify with **back-translation**.
+- [ ] Hold out eval set; confirm lift before full SFT mix.
+
+→ **2.7M+** synthetic coding examples when all gates pass.
+
+**FITS feedback types (Table 10-1, bridge to Ch. 10)** — useful labels when mining user logs into training data:
+
+| Cluster | Example user signal |
+| --- | --- |
+| Complaints | Wrong, verbose, toxic |
+| Corrections | “No, I meant…” |
+| Confirmations | “Are you sure?” |
+| Early stop | User aborts generation |
 
 ### Data verification
 
@@ -221,11 +243,13 @@ Ultimate test: **does it improve the model?**
 
 ### Limitations of AI-generated data
 
-1. **Quality** — garbage in, garbage out without verification.  
-2. **Superficial imitation** — style without reasoning (**Gudibande et al., 2023**).  
-3. **Model collapse** — training on recursive synthetic data forgets rare events (Shumailov et al., 2023); mitigated by **mixing real + synthetic** (Gerstgrasser et al., 2024).  
-4. **Obscure lineage** — copyright, benchmark contamination risks.  
-5. **Bias amplification** — feedback loops (Taori & Hashimoto, 2023).
+| Limitation | Risk | Mitigation |
+| --- | --- | --- |
+| **Quality** | Garbage in → garbage out | Verification pipelines (tests, judges) |
+| **Imitation** | Style without reasoning (Gudibande et al., 2023) | Mix real expert traces |
+| **Model collapse** | Rare events forgotten (Shumailov et al., 2023) | Blend real + synthetic (Gerstgrasser et al., 2024) |
+| **Lineage** | Copyright / benchmark leak | Provenance audit, dedup vs benchmarks |
+| **Bias amplification** | Feedback loops (Taori & Hashimoto, 2023) | Slice eval, cap synthetic ratio |
 
 **Nemotron-4** used ~98% synthetic in post-training (NVIDIA, 2024)—success with rigorous verification; not proof for unbounded recursion.
 

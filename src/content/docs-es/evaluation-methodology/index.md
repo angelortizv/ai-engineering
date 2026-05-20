@@ -73,6 +73,8 @@ La **entropía cruzada** mide qué tan difícil le resulta al **modelo** predeci
 
 La **perplejidad** es `2^H` (o `e^H` con nats en PyTorch/TensorFlow): de forma intuitiva, el **número efectivo de opciones** para el siguiente token. PPL = 10 ≈ elegir entre 10 tokens igualmente probables.
 
+**Ejemplo numérico:** Si la entropía cruzada en dev es **3 bits** por token, PPL ≈ 2³ = **8**—como si el modelo dudara entre ocho tokens igualmente probables. Bajar a **2 bits** → PPL = **4** (mejor ajuste). Si un modelo marca PPL **2** en ítems tipo MMLU y los demás **8**, sospecha **contaminación** o eval mal configurado—not magia de capacidad.
+
 **Reglas de interpretación:**
 
 - Texto más **estructurado** (p. ej. HTML) → menor PPL esperada.
@@ -89,6 +91,19 @@ La **perplejidad** es `2^H` (o `e^H` con nats en PyTorch/TensorFlow): de forma i
 **Advertencia crítica:** **SFT** y **RLHF** suelen **subir** la PPL: el modelo optimiza utilidad en la tarea, no predicción cruda del siguiente token. La **cuantización** también puede alterar la PPL.
 
 Las APIs comerciales no siempre exponen **logprobs**, necesarios para calcular PPL en texto arbitrario.
+
+### Contaminación de datos e higiene de benchmarks
+
+Los benchmarks públicos **filtran al entrenamiento** cuando los crawls incluyen exámenes, soluciones en GitHub o mirrors de benchmarks. Síntomas: saltos SOTA bruscos, **PPL sospechosamente baja** en texto del benchmark, o buen leaderboard con eval privado débil.
+
+**Mitigaciones:**
+
+- Preferir eval **privado y específico de tarea** (cap. 4).
+- **Deduplicar** entrenamiento frente a benchmarks (solapamiento n-gramas / embeddings).
+- Reportar resultados **conscientes de contaminación** en leaderboards públicos (estilo HELM).
+- Tratar el rank en Arena/MMLU como **filtro**, no como contrato de despliegue.
+
+> **Riesgo legal (callout):** Las salidas incorrectas no son solo bugs de UX. **Air Canada** tuvo que cumplir la política errónea de su chatbot; **abogados** fueron sancionados por **citas de casos inventadas**. La evaluación es control de responsabilidad—not solo calidad del modelo.
 
 ---
 
@@ -155,11 +170,15 @@ Los criterios integrados varían por herramienta (Azure: groundedness, relevance
 
 **¿Qué modelo juzga?** Jueces más fuertes correlacionan mejor con humanos pero cuestan más; **jueces débiles** o **especializados** (reward models, jueces con referencia como BLEURT/Prometheus, **modelos de preferencia** como PandaLM/JudgeLM) pueden ser más baratos y específicos. La **autocrítica** ayuda en sanity checks y bucles de revisión.
 
+**Especificación de juez congelada:** fijar en control de versiones id de modelo, plantilla de prompt, temperatura y ejemplos de calibración; re-ejecutar baseline al cambiar el juez.
+
 Los jueces IA deben **complementar** métricas exactas y evaluación humana — no sustituirlas.
 
 ---
 
 ## La arena competitiva: ranking con evaluación comparativa
+
+**Umbrales absolutos vs. rankings:** Un modelo que gana **52%** en Chatbot Arena frente a un baseline débil puede fallar tus puertas de **latencia**, **coste** o **dominio**. Combina victorias comparativas con **barras mínimas de calidad** (p. ej. ≥90% de corrección funcional en SQL, tasa de toxicidad bajo X%)—desarrolladas en [capítulo 4](/ai-engineering/docs/es/evaluating-modern-ai-systems).
 
 A menudo la pregunta no es “¿cuánto saca el modelo A?” sino **“¿A es mejor que B para nosotros?”**
 

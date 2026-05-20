@@ -150,7 +150,18 @@ Ejemplo de presupuesto: 10.000 USD a 2 USD/ejemplo → máximo 5.000 ejemplos—
 
 ## Adquisición y anotación
 
-**Mejor fuente:** datos de tu **propia aplicación**—el volante de datos (contenido de usuario, logs, feedback; capítulo 10). Relevancia y distribución ideales.
+**Mejor fuente:** datos de tu **propia aplicación**—el **volante de datos** (contenido de usuario, logs, feedback; [capítulo 10](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback)). Relevancia y distribución ideales.
+
+```mermaid
+flowchart LR
+  U[Usuarios] --> P[Producto]
+  P --> L[Logs y feedback]
+  L --> D[Curación de datos]
+  D --> M[Mejor modelo]
+  M --> P
+```
+
+**Supervisión débil y aprendizaje activo** (*Designing Machine Learning Systems*, Huyen): etiquetar un **subconjunto**, entrenar un **profesor**, propagar etiquetas a ejemplos similares y muestrear activamente puntos inciertos para revisión humana.
 
 Si no: mezcla fuentes públicas, compradas, anotadas y sintéticas. Pipeline típico:
 
@@ -204,14 +215,25 @@ Librerías como **Faker** empezaron para tests; los LLM permiten notas médicas,
 - Temas → subtemas → instrucciones (UltraChat, Ding et al., 2023).  
 - **Alpaca:** 175 semillas Self-Instruct → 52k pares con GPT-3 (Taori et al., 2023).
 
-**Pipeline de código Llama 3 (caso de estudio):**
+**Pipeline de código Llama 3 (caso de estudio)** — checklist:
 
-1. Descripciones de problemas con IA.  
-2. Soluciones por lenguaje + CoT + reglas de estilo.  
-3. Tests unitarios con IA; revisión si falla (~20% autocorrige).  
-4. Traducción entre lenguajes + filtro.  
-5. Explicaciones/documentación con verificación por **back-translation**.  
-→ **Más de 2,7M** ejemplos sintéticos de código.
+- [ ] Enunciados diversos (temas/subtemas).
+- [ ] Soluciones por lenguaje + CoT; ejecutar **linters**.
+- [ ] **Tests unitarios**; auto-revisión si fallan (~20% en el libro).
+- [ ] Traducción entre lenguajes + filtro de consistencia.
+- [ ] Explicaciones; verificar con **back-translation**.
+- [ ] Eval holdout; confirmar mejora antes del mix SFT completo.
+
+→ **Más de 2,7M** ejemplos cuando pasan todas las compuertas.
+
+**Tipos de feedback FITS (tabla 10-1, puente al cap. 10)** — señales útiles al minar logs:
+
+| Cluster | Ejemplo de señal |
+| --- | --- |
+| Quejas | Incorrecto, verboso, tóxico |
+| Correcciones | «No, quise decir…» |
+| Confirmaciones | «¿Estás seguro?» |
+| Parada temprana | Usuario aborta generación |
 
 ### Verificación de datos
 
@@ -221,11 +243,13 @@ Prueba final: **¿mejora el modelo?**
 
 ### Límites de datos generados por IA
 
-1. **Calidad** — basura entra, basura sale sin verificación.  
-2. **Imitación superficial** — estilo sin razonamiento (**Gudibande et al., 2023**).  
-3. **Colapso del modelo** — entrenar recursivamente con sintético olvida eventos raros (Shumailov et al., 2023); mitigable **mezclando real + sintético** (Gerstgrasser et al., 2024).  
-4. **Linaje oscuro** — copyright, contaminación de benchmarks.  
-5. **Amplificación de sesgos** — bucles de feedback (Taori & Hashimoto, 2023).
+| Limitación | Riesgo | Mitigación |
+| --- | --- | --- |
+| **Calidad** | Basura in → basura out | Tests, linters, jueces |
+| **Imitación** | Estilo sin razonamiento (Gudibande et al., 2023) | Mezclar trazas reales de expertos |
+| **Colapso** | Olvido de eventos raros (Shumailov et al., 2023) | Mezcla real + sintético (Gerstgrasser et al., 2024) |
+| **Linaje** | Copyright / fuga de benchmarks | Auditoría de procedencia, dedup |
+| **Sesgos** | Bucles de feedback (Taori & Hashimoto, 2023) | Eval por slices, tope de ratio sintético |
 
 **Nemotron-4** usó ~98% sintético en post-training (NVIDIA, 2024)—éxito con verificación rigurosa; no prueba recursión ilimitada.
 

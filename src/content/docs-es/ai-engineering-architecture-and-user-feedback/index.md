@@ -43,11 +43,24 @@ flowchart TB
 
 Consulta → API de modelo (tercero o self-hosted, capítulo 9) → respuesta. Sin contexto, guardrails ni optimización (figura 10-1 del libro).
 
+```mermaid
+flowchart LR
+  Q[Consulta] --> M[API modelo]
+  M --> R[Respuesta]
+```
+
 ### Paso 1. Enriquecer contexto
 
 Añadir retrieval (texto, imagen, tabular) y **herramientas** (búsqueda, clima, APIs)—“feature engineering” para modelos fundacionales (capítulo 6).
 
 Diferencias entre proveedores: límites de archivos, chunking, ejecución paralela de tools. Stacks RAG especializados vs APIs genéricas.
+
+```mermaid
+flowchart LR
+  Q[Consulta] --> RAG[RAG / tools]
+  RAG --> M[Modelo]
+  M --> R[Respuesta]
+```
 
 ### Paso 2. Guardrails
 
@@ -69,6 +82,14 @@ Colocar guardrails donde hay riesgo—**entrada** y **salida**.
 **Trade-offs:** guardrails añaden **latencia**; algunos equipos los omiten por velocidad. **Streaming** dificulta evaluar tokens parciales. APIs de terceros traen seguridad integrada; self-hosting reduce exposición externa pero más guardrails propios.
 
 **Herramientas:** Purple Llama, NeMo Guardrails, Azure PyRIT / filtros de contenido, Perspective API, moderación OpenAI; gateways pueden incluir guardrails.
+
+```mermaid
+flowchart TB
+  Q[Consulta] --> IN[Guardrails entrada]
+  IN --> CTX[Contexto + modelo]
+  CTX --> OUT[Guardrails salida]
+  OUT --> R[Respuesta]
+```
 
 ### Paso 3. Router y gateway de modelos
 
@@ -93,6 +114,14 @@ Clasificadores pequeños (BERT, Llama 7B)—**rápidos y baratos**. Patrón com�
 
 Ejemplos: Portkey, MLflow AI Gateway, TrueFoundry, Kong, Cloudflare. El gateway **sustituye** la caja “API de modelo” en los diagramas.
 
+```mermaid
+flowchart LR
+  Q[Consulta] --> RT[Router]
+  RT --> GW[Gateway]
+  GW --> M1[Modelo A]
+  GW --> M2[Modelo B]
+```
+
 ### Paso 4. Reducir latencia con cachés
 
 Además de **KV cache** y **prompt cache** (capítulo 9)—**caché de sistema**:
@@ -106,11 +135,28 @@ Caché exacta: resúmenes, resultados de búsqueda vectorial, cadenas multi-paso
 
 Caché semántica: más hits, puede **dañar calidad**.
 
+```mermaid
+flowchart LR
+  Q[Consulta] --> C{¿Hit caché?}
+  C -->|sí| R[Respuesta cacheada]
+  C -->|no| M[Ruta modelo]
+  M --> R2[Respuesta + guardar]
+```
+
 ### Paso 5. Patrones de agente
 
 Bucles (re-retrieval), ramas paralelas, **acciones de escritura** (email, pedidos, transferencias)—mucha capacidad, mucho riesgo (capítulo 6).
 
 La complejidad exige **observabilidad**.
+
+```mermaid
+flowchart TB
+  Q[Consulta] --> A[Bucle agente]
+  A --> T[Tools / RAG]
+  T --> A
+  A --> W[¿Acciones de escritura?]
+  W --> LOG[Logs → volante]
+```
 
 ---
 
@@ -123,6 +169,13 @@ La observabilidad debe **diseñarse desde el inicio**. Objetivo alineado con **e
 - **MTTD** — tiempo medio hasta detectar.
 - **MTTR** — tiempo medio hasta resolver.
 - **CFR** — tasa de fallos en despliegues; CFR alto → eval pre-deploy débil.
+
+**Qué registrar (observabilidad mínima):**
+
+- Payloads petición/respuesta (redactados), modelo, temperature, tokens, latencia (TTFT + total).
+- IDs de retrieval / llamadas a tools / pasos de agente.
+- Eventos de feedback del usuario ligados a `trace_id`.
+- Errores, rate limits, bloqueos de seguridad, coste por petición.
 
 Métricas de eval deben **traducirse** a producción; hallazgos de monitorización alimentan eval.
 
@@ -169,6 +222,12 @@ Distinto de Airflow general. **LangChain**, LlamaIndex, Flowise, Langflow, Hayst
 
 **Consejo:** empezar sin orquestador; añadir cuando la complejidad lo justifique. Cuidado con llamadas ocultas y latencia.
 
+| | **Sin orquestador** | **Con orquestador (LangChain, etc.)** |
+| --- | --- | --- |
+| **Pros** | Menos abstracción; debug más fácil; menos latencia | Cadenas reutilizables, patrones de comunidad |
+| **Contras** | Espagueti al crecer pasos | Llamadas LLM ocultas; trazas de coste difíciles |
+| **Cuándo** | ≤3 pasos, equipo pequeño | Muchas ramas, tools, componentes compartidos |
+
 **Evaluar:** integración, ramas/paralelo/errores, documentación, escala.
 
 **Latencia:** paralelizar routing y eliminación de PII.
@@ -182,6 +241,13 @@ El feedback impulsa **evaluación** y **desarrollo**; en IA es también **datos 
 Tratar feedback como **datos de usuario**—privacidad, consentimiento, transparencia.
 
 ### Explícito vs implícito
+
+| Clase de señal | Ejemplos | Extracción |
+| --- | --- | --- |
+| **Explícito** | Pulgares, estrellas, encuestas | Etiquetas directas |
+| **Implícito** | Regenerar, abandonar, tiempo en página | Logs de comportamiento |
+| **Lenguaje natural** | «No, quise decir…», quejas | NLP sobre mensajes |
+| **Acciones** | Editar respuesta, compartir, borrar hilo | Pipeline de eventos |
 
 | Tipo | Ejemplos |
 |------|----------|
@@ -226,11 +292,24 @@ Evitar comparaciones imposibles; UI clara (error emoji Luma 1 vs 5 estrellas).
 
 **Sesgos:** leniencia (Uber 4.8), clics aleatorios, **sesgo de posición**, preferencia por respuestas largas.
 
+> **Callout — bucle degenerado:** Optimizar por clics o pulgares puede amplificar sesgo de popularidad y **adulación**—el modelo aprende a complacer en lugar de ser veraz (Sharma et al., 2023; Stray, 2023). Mitigar con eval por slices, revisión humana en holdout y topes por ronda de entrenamiento.
+
 **Bucle degenerado:** amplificación de clics → burbujas de filtro; ejemplo de fotos de gatos; **adulación** al entrenar con feedback (Sharma et al., 2023).
 
 Feedback solo sobre lo **mostrado**—sesgo de exposición.
 
 ---
+
+### Capstone: qué capítulo resuelve qué capa
+
+| Capa / problema | Capítulos principales |
+| --- | --- |
+| **Modelo y comportamiento** | [2](/ai-engineering/docs/es/understanding-foundation-models), [5](/ai-engineering/docs/es/prompt-engineering) |
+| **¿Es suficientemente bueno?** | [3](/ai-engineering/docs/es/evaluation-methodology), [4](/ai-engineering/docs/es/evaluating-modern-ai-systems) |
+| **Conocimiento privado y tools** | [6](/ai-engineering/docs/es/rag-and-agents) |
+| **Formato/comportamiento en pesos** | [7](/ai-engineering/docs/es/finetuning), [8](/ai-engineering/docs/es/dataset-engineering) |
+| **Rápido y barato a escala** | [9](/ai-engineering/docs/es/inference-optimization) |
+| **Sistema en producción y mejora** | **10** (este capítulo) |
 
 ## Cierre del capítulo
 

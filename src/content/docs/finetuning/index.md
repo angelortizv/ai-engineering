@@ -96,6 +96,8 @@ Many teams discover weak prompt experiments drove “we need finetuning” claim
 
 **Recommended path when both issues exist:** start with **RAG** for facts (e.g. legal summaries from case law), then **finetune** for proprietary XML format.
 
+> **Legal / format callout:** For regulated domains, **RAG** grounds answers in citable sources first; **finetuning** then teaches output **schema** (e.g. firm-specific XML tags) without asking the model to memorize every statute in weights. Skipping RAG and finetuning tone-only still leaves factual liability exposed (Ch. 3 eval).
+
 **Workflow (after eval pipeline exists):**
 
 1. Prompting (Chapter 5), add few-shot examples.
@@ -195,7 +197,15 @@ Frozen weight matrix **W**; train low-rank update **ΔW = B × A** (rank **r**).
 
 **Where to apply:** commonly **Wq, Wk, Wv, Wo** in attention; Databricks reported strong gains from **feedforward** LoRA too. With fixed trainable budget, rank allocation across matrices matters (Hu et al., 2021 on GPT-3 175B). Typical **r: 4–64** (task-dependent; overfitting possible at very high r).
 
-**Multi-LoRA serving:** one frozen base **W** + many small (A, B) adapters—far less storage than 100 full merged models; fast adapter swap (e.g. per-customer adapters).
+| Hyperparameter | Typical range | Notes |
+| --- | --- | --- |
+| **Rank r** | 4–64 | Higher r → more capacity, more overfit risk |
+| **Alpha α** | Often 2× r | Scales merged update: W′ = W₀ + (α/r)BA |
+| **Target modules** | Wq, Wk, Wv, Wo (+ FFN optional) | Match task: attention vs FFN ablations |
+| **Dropout** | 0–0.1 on adapters | Regularize small datasets |
+| **LR** | ~1e-4 – 3e-4 (task-dependent) | Lower than full finetune |
+
+**Multi-LoRA serving:** one frozen base **W** + many small (A, B) adapters—see [Chapter 9](/ai-engineering/docs/inference-optimization) for serving cost and [Chapter 8](/ai-engineering/docs/dataset-engineering) for SFT data quality. one frozen base **W** + many small (A, B) adapters—far less storage than 100 full merged models; fast adapter swap (e.g. per-customer adapters).
 
 **QLoRA:** base weights in **4-bit (NF4)**; compute forward/backward in BF16; **paged optimizers** for CPU/GPU spillover—**65B on one 48 GB GPU** (Dettmers et al., 2023). Tradeoff: quantization/dequantization time.
 
@@ -210,6 +220,8 @@ Combine multiple finetuned models into one more useful model—not the same as *
 | Approach | Idea | Notes |
 |----------|------|-------|
 | **Summing / averaging** | Weighted average of models or **task vectors** (finetuned − base) | Task arithmetic: add/subtract capabilities |
+
+**Task arithmetic example:** Let **τ** = (finetuned weights − base). To add “Spanish” and subtract “toxic” capabilities from two adapters: **W_new = W_base + λ₁τ_spanish − λ₂τ_toxic** (coefficients tuned on a small eval set). Ilharco et al. (2022) show this can work without retraining a full merge—still validate on **your** slices before shipping.
 | **SLERP** | Interpolate on a sphere between two models | Pairs well for two checkpoints |
 | **TIES / DARE** | Prune redundant task-vector params before merge | Reduces interference |
 | **Layer stacking (frankenmerge)** | Stack layers from different models | Often needs more finetuning (Goliath-120B) |

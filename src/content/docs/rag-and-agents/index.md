@@ -46,6 +46,16 @@ Originally Lewis et al. trained retriever and generator jointly; today many syst
 
 Typical flow: split documents into **chunks** → retrieve top-*k* for the query → stitch chunks into the final prompt → generate. Whole-document retrieval can blow the context window.
 
+```mermaid
+flowchart LR
+  D[Documents] --> I[Index / chunks]
+  Q[User query] --> R[Retriever]
+  I --> R
+  R --> C[Context in prompt]
+  C --> G[Generator LLM]
+  G --> A[Answer]
+```
+
 ### Retrieval algorithms
 
 Retrieval ranks documents by **relevance**. Two families:
@@ -141,6 +151,14 @@ Categories:
 2. **Capability extension** — calculator, calendar, code interpreter, OCR, text-to-image; **Chameleon** (GPT-4 + 13 tools) beats GPT-4 alone on several benchmarks.
 3. **Write actions** — automate workflows; never give interns—or unreliable models—delete-on-production without gates.
 
+**Write-actions risk checklist:**
+
+- [ ] Is the action **reversible** or idempotent?
+- [ ] Human approval for **irreversible** ops (payments, deletes, sends)?
+- [ ] **Scope** tools to least privilege (read-only default)?
+- [ ] Log **tool args** and outcomes for audit?
+- [ ] Red-team **indirect injection** via retrieved docs and tool outputs?
+
 **Function calling:** declare tools (name, params, docs); per-query subset (`required` / `none` / `auto`); model returns `tool_calls`—validate parameter values in logs.
 
 **Tool selection:** more tools → more capability and harder choice; ablation studies, mistake patterns, usage plots (Chameleon). Prefer fewer, clearer tools; **prompt-engineer tool definitions** with examples and edge cases; **poka-yoke** designs that make common LLM mistakes hard.
@@ -221,11 +239,11 @@ Benchmarks: Berkeley Function Calling Leaderboard, AgentOps, TravelPlanner; book
 
 Three mechanisms (Figure 6-16 in book):
 
-| Type | What | Persistence |
-|------|------|-------------|
-| **Internal knowledge** | Weights from training | Until model update |
-| **Short-term** | Context window / conversation | Per session |
-| **Long-term** | Vector DB, files, structured stores | Across sessions |
+| Type | What | Persistence | Patterns |
+|------|------|-------------|----------|
+| **Internal knowledge** | Weights from training | Until model update | — |
+| **Short-term** | Context window / conversation | Per session | Raw history, **summary** buffer |
+| **Long-term** | Vector DB, files, structured stores | Across sessions | **Vector** retrieval, **episodic** logs |
 
 Benefits: overflow handling, **personalization**, consistency of subjective answers, **structured** stores (Excel leads queue) vs unstructured chat.
 
@@ -251,6 +269,32 @@ As agents multiply, **interoperability** needs shared rules for messages and too
 - **Portability** (ease of implementation).
 
 Protocol choice shapes how RAG tools, planners, and external systems plug together in multi-vendor stacks.
+
+| | **MCP** (Model Context Protocol) | **A2A** (Agent-to-Agent) |
+| --- | --- | --- |
+| **Connects** | Agent ↔ tools / data sources | Agent ↔ agent |
+| **Typical use** | Standardize RAG, DB, IDE integrations | Delegate subtasks between agents |
+| **You get** | Portable tool/resource schemas | Multi-agent handoffs and roles |
+
+---
+
+### When to use RAG, agents, or hybrid
+
+```mermaid
+flowchart TD
+  Q[Need external facts?] -->|No| P[Prompt only]
+  Q -->|Yes| R{RAG enough?}
+  R -->|Single retrieval + answer| G[RAG pipeline]
+  R -->|Multi-step tools / writes| A[Agent loop]
+  A --> H[Add human gates on writes]
+```
+
+| Pattern | Choose when |
+| --- | --- |
+| **Prompt only** | Style/format; knowledge in weights |
+| **RAG** | Private corpus Q&A; one-shot retrieval suffices |
+| **Agent** | Many tools, branching, write actions, long plans |
+| **Hybrid** | RAG for facts + agent for actions (most production apps) |
 
 ---
 

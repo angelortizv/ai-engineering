@@ -65,6 +65,8 @@ System prompts may outperform equivalent user text because instructions come **f
 
 ### Context length and efficiency
 
+**Prompt caching (preview):** When many requests share a long **identical prefix** (system prompt, retrieved docs, few-shot block), providers can reuse **KV cache** for that prefix so you pay less and see lower **TTFT** on repeats. Critical for multi-turn chat and RAG with stable context—details in [Chapter 9: Inference Optimization](/ai-engineering/docs/inference-optimization) and architecture patterns in [Chapter 10](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback).
+
 Context windows grew from ~1K (early GPT) to millions of tokens—but **not all positions are equal**. **Needle in a haystack (NIAH):** hide a fact at different positions; models recall best at the **start and end**, worse in the **middle** (Liu et al., 2023). Use private test needles to avoid memorization from training.
 
 Longer context that degrades performance → shorten or restructure prompts. Put critical instructions and retrieval at **high-salience** positions.
@@ -82,6 +84,15 @@ Distilled from OpenAI, Anthropic, Meta, Google, and production teams—technique
 - **Examples** reduce ambiguity (Santa bot: without examples, “fictional character”; with tooth-fairy example, magical yes).
 - Prefer **token-efficient** example formats when performance is equal (arrow format vs verbose Input/Output blocks).
 - **Output format** — concise, no preambles, JSON keys specified; use **end markers** for classification so the model does not continue the input (`chicken -->` vs `chicken --> edible`).
+
+### Structured outputs (comparison)
+
+| Approach | Guarantees | Tradeoff |
+| --- | --- | --- |
+| **JSON mode** (API) | Valid JSON syntax | Semantics still wrong without tests |
+| **Grammar / regex** (Outlines, Guidance) | Token-level constraints | Setup cost; model-specific |
+| **Schema libraries** (Instructor, Pydantic) | Parse + validate objects | Extra dependency; repair loops |
+| **Tool / function calling** | Structured args for APIs | Must validate execution server-side |
 
 ### Provide sufficient context
 
@@ -128,6 +139,16 @@ Deployed apps face **intended users** and **attackers**. Three attack families:
 **Risks:** unauthorized tool/SQL execution, data leaks, harmful tutorials, misinformation, service denial, **brand damage** (Tay, “eat rocks” search).
 
 Better instruction-following improves UX **and** attack success rate—economic value raises incentive to attack.
+
+Map risks to **[OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)** (2023–2025 editions): prompt injection, insecure output handling, training data poisoning, model denial of service, supply chain, sensitive disclosure, insecure plugins, excessive agency, overreliance, model theft. Use the OWASP list in security reviews alongside your eval red-team set.
+
+| Defense pattern | What it does | Limitation |
+| --- | --- | --- |
+| **Delimiters / structure** | Separate system vs user vs tool blocks | Bypassed by indirect injection |
+| **Canary tokens** | Detect leaked system strings | Does not stop harmful compliance |
+| **Privilege separation** | Read-only tools by default | UX friction; misconfigured scopes |
+| **Instruction hierarchy** | System > developer > user | Model-dependent |
+| **Output guardrails** | Block policy violations post-hoc | Latency; false refusals |
 
 ### Prompt extraction and reverse engineering
 

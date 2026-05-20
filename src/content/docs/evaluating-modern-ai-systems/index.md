@@ -46,18 +46,37 @@ Focusing only on what is easy to measure is like searching for keys under the la
 
 An application deployed without evaluable outcomes is a **liability**—it consumes resources without knowable value.
 
+**Concrete EDD example (support bot):** Before building RAG, the team writes: (1) **≥85%** answers rated helpful on 200 real tickets, (2) **zero** policy violations on a red-team set, (3) p95 latency **under 3s**, (4) cost **under $0.02**/conversation. Week 1: baseline GPT + prompt only on 50 tickets—fails helpfulness at 62%. Week 3: add retrieval + rubric judge—hits 81%. Ship only after private set passes all four gates; production logs feed the next eval slice (Ch. 10).
+
 ---
 
 ## The four pillars of evaluation criteria
 
 Think in four buckets (example: summarize a legal contract):
 
-| Pillar | Question |
-|--------|----------|
-| **Domain-specific capability** | Does the model understand law / code / medicine? |
-| **Generation capability** | Is the summary coherent, faithful, safe? |
-| **Instruction-following** | Right format, length, constraints? |
-| **Cost and latency** | Affordable and fast enough? |
+| Pillar | Question | Example metrics / methods |
+|--------|----------|---------------------------|
+| **Domain-specific capability** | Does the model understand law / code / medicine? | Private QA set, exact match on IDs, RAG faithfulness |
+| **Generation capability** | Is the summary coherent, faithful, safe? | Rubric judge, BLEU/ROUGE where refs exist, human sample |
+| **Instruction-following** | Right format, length, constraints? | JSON schema pass rate, tool-call accuracy |
+| **Cost and latency** | Affordable and fast enough? | TTFT/TPOT p99, $/1M tokens, MFU on self-host |
+
+### Evaluation pipeline (overview)
+
+```mermaid
+flowchart LR
+  F[Filter candidates] --> P[Public benchmarks]
+  P --> C[Custom private eval]
+  C --> R[Production monitoring]
+  R --> F
+```
+
+| Step | Goal | Pitfall |
+| --- | --- | --- |
+| **Filter** | Drop obviously wrong models cheaply | Over-trusting one public score |
+| **Public benchmarks** | Broad capability signal | Contamination, not your distribution |
+| **Custom eval** | Mirror real prompts + rubrics | Stale set; no slice analysis |
+| **Production** | Drift, regressions, incidents | No link to offline eval ([Ch. 10](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback)) |
 
 Chapter 3 asked “what can this **method** measure?” Here we ask “given this **criterion**, which methods apply?”
 

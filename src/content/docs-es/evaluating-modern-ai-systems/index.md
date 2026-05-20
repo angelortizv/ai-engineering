@@ -46,18 +46,37 @@ Centrarse solo en lo fácil de medir es buscar las llaves bajo el farol: cómodo
 
 Una aplicación desplegada sin resultados evaluables es un **pasivo**: consume recursos sin valor conocible.
 
+**Ejemplo concreto de EDD (bot de soporte):** Antes de RAG, el equipo fija: (1) **≥85%** de respuestas útiles en 200 tickets reales, (2) **cero** violaciones de política en red-team, (3) p95 de latencia **menos de 3 s**, (4) coste **menos de 0,02 USD**/conversación. Semana 1: GPT + prompt en 50 tickets—62% de utilidad. Semana 3: retrieval + juez con rúbrica—81%. Desplegar solo tras pasar las cuatro compuertas en eval privado; logs de producción alimentan el siguiente slice (cap. 10).
+
 ---
 
 ## Los cuatro pilares de los criterios de evaluación
 
 Cuatro bloques (ejemplo: resumir un contrato legal):
 
-| Pilar | Pregunta |
-|-------|----------|
-| **Capacidad de dominio** | ¿Entiende derecho / código / medicina? |
-| **Capacidad generativa** | ¿Resumen coherente, fiel, seguro? |
-| **Seguimiento de instrucciones** | ¿Formato, longitud, restricciones? |
-| **Coste y latencia** | ¿Asequible y rápido para el caso de uso? |
+| Pilar | Pregunta | Métricas / métodos de ejemplo |
+|-------|----------|-------------------------------|
+| **Capacidad de dominio** | ¿Entiende derecho / código / medicina? | QA privado, match exacto de IDs, fidelidad RAG |
+| **Capacidad generativa** | ¿Resumen coherente, fiel, seguro? | Juez con rúbrica, BLEU/ROUGE si hay refs, muestra humana |
+| **Seguimiento de instrucciones** | ¿Formato, longitud, restricciones? | Tasa de JSON válido, precisión de tool-calls |
+| **Coste y latencia** | ¿Asequible y rápido para el caso de uso? | TTFT/TPOT p99, USD/1M tokens, MFU en self-host |
+
+### Pipeline de evaluación (panorama)
+
+```mermaid
+flowchart LR
+  F[Filtrar candidatos] --> P[Benchmarks públicos]
+  P --> C[Eval privado]
+  C --> R[Monitorización producción]
+  R --> F
+```
+
+| Paso | Objetivo | Trampa |
+| --- | --- | --- |
+| **Filtrar** | Descartar modelos malos barato | Confiar en un solo score público |
+| **Benchmarks públicos** | Señal amplia de capacidad | Contaminación, no tu distribución |
+| **Eval privado** | Prompts reales + rúbricas | Set obsoleto; sin slices |
+| **Producción** | Deriva, regresiones, incidentes | Sin enlace al offline ([cap. 10](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback)) |
 
 El cap. 3 preguntaba “¿qué mide este **método**?”. Aquí: “dado este **criterio**, ¿qué métodos aplican?”.
 

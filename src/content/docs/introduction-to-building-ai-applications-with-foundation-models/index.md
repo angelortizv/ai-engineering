@@ -91,6 +91,16 @@ Cross-cutting ideas from the chapter:
 - **Data organization**: labeling, PDF extraction, multimodal search; IDP as a growing market.
 - **Automation and agents**: tasks needing **external tools** and planning → **agents** (a central topic later in the book).
 
+**Typical adaptation by pattern** (first lever before finetuning):
+
+| Use case pattern | Usually start with | Escalate when |
+| --- | --- | --- |
+| Coding / writing assist | **Prompt** + examples | Format or domain gap persists |
+| Q&A on private docs | **RAG** | Retrieval fails or tone must be baked in |
+| Support / policy bots | **RAG** + guardrails | High-volume format/style → **finetune** |
+| Classification / routing | **Prompt** (JSON) | Latency/cost → smaller specialized model |
+| Multi-step workflows | **Agent** + tools | Reliability → eval + human gates |
+
 ---
 
 ## Planning AI applications
@@ -106,6 +116,14 @@ Typical motivations (from highest perceived urgency): **business continuity** ag
 Useful dimensions (inspired by Apple documentation cited in the book): **critical vs complementary**, **reactive vs proactive** (different latency and quality expectations), **dynamic vs static** (continuous personalization vs a shared model updated on releases).
 
 **Human-in-the-loop**: from suggestions for human agents to full automation. Microsoft’s **Crawl–Walk–Run**: humans required first, then AI with internals, then more automation with external users.
+
+| Stage | Who drives | Risk | Typical scope |
+| --- | --- | --- | --- |
+| **Crawl** | Human | Lowest | AI suggests; human executes every customer-facing action |
+| **Walk** | Human + AI | Medium | AI acts on internal tools; human reviews before external impact |
+| **Run** | AI (monitored) | Highest | Automated flows with guardrails, eval gates, and rollback |
+
+**Planning criteria** before coding: business motivation (continuity vs. capture vs. exploration), **usefulness threshold** (quality/latency/cost), whether the task is **critical or complementary**, and whether you need **dynamic** personalization. Define eval before scaling—see [Chapter 4: Evaluating Modern AI Systems](/ai-engineering/docs/evaluating-modern-ai-systems) and model fundamentals in [Chapter 2](/ai-engineering/docs/understanding-foundation-models).
 
 ### Defensibility (moats)
 
@@ -129,11 +147,41 @@ Evaluate **off-the-shelf** models before committing resources. The jump from dem
 2. **Model development**: training/finetuning frameworks, **dataset engineering**, inference optimization.
 3. **Infrastructure**: serving, data, compute, monitoring.
 
+```mermaid
+flowchart TB
+  subgraph L1["1. Application development"]
+    A[Prompts · RAG · eval · UI · guardrails]
+  end
+  subgraph L2["2. Model development"]
+    M[Pretrain · finetune · datasets · inference opt]
+  end
+  subgraph L3["3. Infrastructure"]
+    I[Serving · GPUs · monitoring]
+  end
+  L1 --> L2
+  L2 --> L3
+```
+
+| Layer | You typically own | Book chapters |
+| --- | --- | --- |
+| Application | Product UX, prompts, retrieval, eval pipelines | 3–6, 10 |
+| Model development | Adaptation choices, data, serving config | 2, 7–9 |
+| Infrastructure | APIs, clusters, observability | 9–10 |
+
 GitHub data (high-star AI repos) shows that after ChatGPT/Stable Diffusion, **applications** and **application tooling** exploded; infrastructure grows less because needs (serving, monitoring) **still resemble** classical ML.
 
 Principles that **remain**: align business and ML metrics, systematic experimentation (now: models, prompts, retrieval, sampling…), production feedback loops, efficiency.
 
 ### AI engineering versus traditional ML
+
+| Dimension | Traditional ML engineering | AI engineering |
+| --- | --- | --- |
+| Default model | Train task-specific model on your data | Adapt a **foundation model** via API or open weights |
+| Data | Curated labeled datasets dominate | Unstructured text/multimodal + preference data + logs |
+| Output | Often fixed label or score | **Open-ended** text, code, images |
+| Evaluation | Accuracy/F1 on held-out set | Rubrics, judges, functional checks, human review |
+| Compute focus | Training once, batch inference | **Inference cost/latency** at scale (Ch. 9) |
+| Product loop | Model → deploy | **Product-first**; eval and prompts iterate daily |
 
 Three major differences:
 

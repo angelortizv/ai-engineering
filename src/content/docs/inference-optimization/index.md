@@ -72,6 +72,8 @@ sequenceDiagram
 
 **Stable Diffusion** inference tends compute-bound; **autoregressive LLMs** tend bandwidth-bound today—hardware/software may shift this over time.
 
+**Roofline intuition:** Plot **achievable FLOP/s** vs **arithmetic intensity** (ops/byte). Kernels left of the ridge are **bandwidth-bound** (steeper slope = need more HBM bandwidth); right side **compute-bound** (need more FLOPs). LLM **decode** sits left; **prefill** moves right as batch/sequence parallelism grows—profile with Nsight before buying more GPUs.
+
 ### Online vs. batch APIs
 
 | API type | Optimizes for | Typical use |
@@ -129,6 +131,15 @@ Example — 7B FP16 at 100 tok/s on A100 2 TB/s: 7B × 2 × 100 = 700 GB/s → *
 
 Higher utilization is not the goal—**faster and cheaper end-to-end** is.
 
+| Metric | What it measures | When to watch |
+| --- | --- | --- |
+| **TTFT** | Time to first token | Chat UX, streaming perceived speed |
+| **TPOT / TBT** | Time per output token | Long answers, reading pace |
+| **Throughput** | Tokens/s or RPM | Capacity planning |
+| **Goodput** | Requests meeting SLOs | SLAs—better than raw RPM |
+| **MFU** | FLOP/s vs peak | Prefill-heavy workloads, training |
+| **MBU** | HBM bandwidth vs peak | Decode-heavy serving |
+
 ---
 
 ## AI accelerators (overview)
@@ -185,7 +196,22 @@ Llama 2 13B example in book: **~54 GB** KV at B=32, S=2048.
 
 Kernel techniques: **vectorization**, **parallelization**, **loop tiling**, **operator fusion**. **Lowering** via **torch.compile**, XLA, **TensorRT**, TVM, MLIR.
 
-**PyTorch Llama-7B case study (A100):** compile → INT8 → INT4 → speculative decoding—large throughput gains (quality impact unclear in cited experiment).
+**PyTorch Llama-7B optimization checklist (A100 case study, book):**
+
+1. **`torch.compile`** — graph fusion baseline.
+2. **INT8 quantization** — cut memory bandwidth.
+3. **INT4** — further compress (watch quality).
+4. **Speculative decoding** — draft model + verify (decode speedup).
+
+Measure **quality on your eval set** after each step—not only tokens/s.
+
+### Serving stacks (brief comparison)
+
+| Stack | Strength | Typical use |
+| --- | --- | --- |
+| **vLLM** | PagedAttention, high throughput | Multi-tenant GPU serving |
+| **TensorRT-LLM** | NVIDIA-optimized kernels | Latency-sensitive NVIDIA fleets |
+| **llama.cpp** | CPU/Apple Silicon, quant-friendly | Edge, local, smaller models |
 
 ---
 

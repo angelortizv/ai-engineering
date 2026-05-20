@@ -129,6 +129,15 @@ Ejemplo — 7B FP16 a 100 tok/s en A100 2 TB/s: 7B × 2 × 100 = 700 GB/s → **
 
 La meta no es maximizar utilización—es **más rápido y más barato**.
 
+| Métrica | Qué mide | Cuándo mirarla |
+| --- | --- | --- |
+| **TTFT** | Tiempo al primer token | UX de chat, streaming |
+| **TPOT / TBT** | Tiempo por token de salida | Respuestas largas |
+| **Throughput** | Tokens/s o RPM | Capacidad |
+| **Goodput** | Peticiones que cumplen SLO | SLAs de producción |
+| **MFU** | FLOP/s vs pico | Cargas con mucho prefill |
+| **MBU** | Banda HBM vs pico | Serving decode-heavy |
+
 ---
 
 ## Aceleradores de IA (panorama)
@@ -184,7 +193,22 @@ Ejemplo Llama 2 13B en libro: **~54 GB** KV con B=32, S=2048.
 
 Vectorización, paralelización, tiling, fusión de operadores. **Lowering** con **torch.compile**, XLA, **TensorRT**, TVM, MLIR.
 
-**Caso PyTorch Llama-7B (A100):** compile → INT8 → INT4 → speculative decoding—gran subida de throughput.
+**Checklist de optimización PyTorch Llama-7B (A100, libro):**
+
+1. **`torch.compile`** — fusión de grafo base.
+2. **Cuantización INT8** — menos ancho de banda.
+3. **INT4** — más compresión (vigilar calidad).
+4. **Decodificación especulativa** — draft + verificación.
+
+Medir **calidad en tu eval** tras cada paso, no solo tokens/s.
+
+### Stacks de serving (comparativa breve)
+
+| Stack | Fortaleza | Uso típico |
+| --- | --- | --- |
+| **vLLM** | PagedAttention, alto throughput | Serving multi-tenant en GPU |
+| **TensorRT-LLM** | Kernels optimizados NVIDIA | Latencia en flotas NVIDIA |
+| **llama.cpp** | CPU/Apple Silicon, quant | Edge, local, modelos pequeños |
 
 ---
 

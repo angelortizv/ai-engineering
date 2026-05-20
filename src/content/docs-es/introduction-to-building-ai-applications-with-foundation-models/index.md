@@ -91,6 +91,16 @@ Ideas transversales del capítulo:
 - **Organización de datos**: etiquetado, extracción de PDFs, búsqueda multimodal; IDP como mercado en crecimiento.
 - **Automatización y agentes**: tareas que requieren **herramientas externas** y planificación → **agentes** (tema central más adelante en el libro).
 
+**Adaptación típica por patrón** (primera palanca antes del finetuning):
+
+| Patrón de caso de uso | Suele empezar con | Escalar cuando |
+| --- | --- | --- |
+| Asistencia de código / escritura | **Prompt** + ejemplos | Persiste brecha de formato o dominio |
+| Q&A sobre documentos privados | **RAG** | Falla la recuperación o el tono debe ir en pesos |
+| Bots de soporte / políticas | **RAG** + guardrails | Alto volumen de formato/estilo → **finetune** |
+| Clasificación / enrutamiento | **Prompt** (JSON) | Latencia/coste → modelo especializado pequeño |
+| Flujos multi-paso | **Agente** + tools | Fiabilidad → eval + puertas humanas |
+
 ---
 
 ## Planificar aplicaciones de IA
@@ -106,6 +116,14 @@ Motivaciones típicas (de mayor urgencia percibida): **continuidad del negocio**
 Dimensiones útiles (inspiradas en documentación de Apple, citada en el libro): **crítico vs complementario**, **reactivo vs proactivo** (latencia y expectativas de calidad distintas), **dinámico vs estático** (personalización continua vs modelo compartido actualizado en releases).
 
 **Human-in-the-loop**: desde sugerencias para agentes humanos hasta automatización total. Marco **Crawl–Walk–Run** (Microsoft): primero humano obligatorio, luego IA con internos, luego más automatización con externos.
+
+| Etapa | Quién conduce | Riesgo | Alcance típico |
+| --- | --- | --- | --- |
+| **Crawl** | Humano | Mínimo | La IA sugiere; el humano ejecuta todo lo visible al cliente |
+| **Walk** | Humano + IA | Medio | La IA actúa en herramientas internas; humano revisa antes del impacto externo |
+| **Run** | IA (monitorizada) | Máximo | Flujos automatizados con guardrails, eval y rollback |
+
+**Criterios de planificación** antes de codificar: motivación de negocio (continuidad vs. captura vs. exploración), **umbral de utilidad** (calidad/latencia/coste), si la tarea es **crítica o complementaria**, y si hace falta personalización **dinámica**. Definir eval antes de escalar—ver [capítulo 4](/ai-engineering/docs/es/evaluating-modern-ai-systems) y fundamentos de modelo en [capítulo 2](/ai-engineering/docs/es/understanding-foundation-models).
 
 ### Defensibilidad (“moats”)
 
@@ -129,11 +147,41 @@ Evaluar modelos **off-the-shelf** antes de comprometer recursos. El salto de dem
 2. **Desarrollo de modelo**: frameworks de entrenamiento/finetuning, **dataset engineering**, optimización de inferencia.
 3. **Infraestructura**: serving, datos, cómputo, monitorización.
 
+```mermaid
+flowchart TB
+  subgraph L1["1. Desarrollo de aplicación"]
+    A[Prompts · RAG · eval · UI · guardrails]
+  end
+  subgraph L2["2. Desarrollo de modelo"]
+    M[Pretrain · finetune · datasets · optimización inferencia]
+  end
+  subgraph L3["3. Infraestructura"]
+    I[Serving · GPUs · monitorización]
+  end
+  L1 --> L2
+  L2 --> L3
+```
+
+| Capa | Sueles poseer | Capítulos del libro |
+| --- | --- | --- |
+| Aplicación | UX, prompts, retrieval, pipelines de eval | 3–6, 10 |
+| Desarrollo de modelo | Adaptación, datos, config de serving | 2, 7–9 |
+| Infraestructura | APIs, clústeres, observabilidad | 9–10 |
+
 En datos de GitHub (repos AI con muchas estrellas), tras ChatGPT/Stable Diffusion explotaron sobre todo **aplicaciones** y **herramientas de aplicación**; la infraestructura crece menos porque muchas necesidades (serving, monitorización) **siguen parecidas** al ML clásico.
 
 Principios que **permanecen**: alinear métricas de negocio con métricas de ML, experimentación sistemática (ahora: modelos, prompts, retrieval, sampling…), feedback loops con datos de producción, eficiencia.
 
 ### AI engineering frente a ML “tradicional”
+
+| Dimensión | ML engineering clásico | AI engineering |
+| --- | --- | --- |
+| Modelo por defecto | Entrenar modelo específico con tus datos | Adaptar un **foundation model** vía API o pesos abiertos |
+| Datos | Datasets etiquetados dominan | Texto/multimodal no estructurado + preferencias + logs |
+| Salida | Etiqueta o score fijo | Texto, código, imágenes **abiertos** |
+| Evaluación | Accuracy/F1 en holdout | Rúbricas, jueces, checks funcionales, revisión humana |
+| Cómputo | Entrenar una vez, inferencia batch | **Coste/latencia de inferencia** a escala (cap. 9) |
+| Bucle de producto | Modelo → despliegue | **Producto primero**; eval y prompts iteran a diario |
 
 Tres diferencias grandes:
 

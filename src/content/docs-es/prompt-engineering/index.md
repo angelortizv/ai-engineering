@@ -65,6 +65,8 @@ El system prompt puede rendir mejor que el mismo texto en user porque va **prime
 
 ### Longitud de contexto y eficiencia
 
+**Caché de prompt (adelanto):** Cuando muchas peticiones comparten un **prefijo idéntico** largo (system prompt, documentos recuperados, bloque few-shot), los proveedores pueden reutilizar **KV cache** de ese prefijo: menos coste y menor **TTFT** en repeticiones. Clave en chat multi-turno y RAG con contexto estable—detalles en [capítulo 9](/ai-engineering/docs/es/inference-optimization) y patrones en [capítulo 10](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback).
+
 Las ventanas pasaron de ~1K tokens a millones, pero **no todas las posiciones valen igual**. **Needle in a haystack (NIAH):** ocultar un dato en distintas posiciones; el modelo recuerda mejor al **inicio y al final**, peor en el **medio** (Liu et al., 2023). Usa agujas de prueba privadas para no confundir con memorización del entrenamiento.
 
 Si el rendimiento cae con contexto largo → acorta o reestructura. Pon instrucciones críticas y retrieval en posiciones de **alta saliencia**.
@@ -82,6 +84,15 @@ Destiladas de OpenAI, Anthropic, Meta, Google y equipos en producción—técnic
 - Los **ejemplos** reducen ambigüedad (bot de Papá Noel: sin ejemplos, “personaje ficticio”; con hada de los dientes, respuesta mágica afirmativa).
 - Formatos de ejemplo **eficientes en tokens** si el rendimiento es igual.
 - **Formato de salida** — conciso, sin preámbulos, claves JSON; **marcadores finales** en clasificación para que el modelo no continúe la entrada.
+
+### Salidas estructuradas (comparativa)
+
+| Enfoque | Garantiza | Tradeoff |
+| --- | --- | --- |
+| **Modo JSON** (API) | Sintaxis JSON válida | Semántica incorrecta sin tests |
+| **Gramática / regex** (Outlines, Guidance) | Restricciones a nivel de token | Coste de configuración; depende del modelo |
+| **Librerías de esquema** (Instructor, Pydantic) | Objetos parseados y validados | Dependencia extra; bucles de reparación |
+| **Tool / function calling** | Args estructurados para APIs | Validar ejecución en servidor |
 
 ### Proporciona contexto suficiente
 
@@ -128,6 +139,16 @@ Apps desplegadas tienen **usuarios legítimos** y **atacantes**. Tres familias:
 **Riesgos:** ejecución SQL/herramientas no autorizada, fugas, tutoriales dañinos, desinformación, denegación de servicio, **daño de marca**.
 
 Mejor seguimiento de instrucciones mejora UX **y** éxito de ataques.
+
+Mapea riesgos al **[OWASP Top 10 para aplicaciones LLM](https://owasp.org/www-project-top-10-for-large-language-model-applications/)** (ediciones 2023–2025): inyección de prompt, manejo inseguro de salidas, envenenamiento de datos de entrenamiento, denegación de servicio al modelo, cadena de suministro, divulgación sensible, plugins inseguros, agencia excesiva, sobreconfianza, robo de modelo. Usa OWASP en revisiones de seguridad junto a tu red-team de eval.
+
+| Patrón de defensa | Qué hace | Limitación |
+| --- | --- | --- |
+| **Delimitadores / estructura** | Separar system vs user vs tool | Bypass por inyección indirecta |
+| **Tokens canario** | Detectar fugas del system prompt | No evita cumplimiento dañino |
+| **Separación de privilegios** | Tools solo lectura por defecto | Fricción UX; scopes mal configurados |
+| **Jerarquía de instrucciones** | System > developer > user | Depende del modelo |
+| **Guardrails de salida** | Bloquear violaciones post-hoc | Latencia; rechazos falsos |
 
 ### Extracción y reverse engineering
 

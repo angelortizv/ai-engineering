@@ -44,6 +44,16 @@ English dominates many crawls; long-tail languages can be **orders of magnitude*
 
 ## Modeling
 
+### Encoder-only, decoder-only, encoder–decoder
+
+| Family | Examples | Attention | Best for |
+| --- | --- | --- | --- |
+| **Encoder-only** | BERT, RoBERTa | Bidirectional (masked LM) | Classification, embeddings, NER |
+| **Decoder-only** | GPT, Llama, Claude | Causal (left-to-right) | Text generation, chat, agents |
+| **Encoder–decoder** | T5, BART, original Transformer | Both | Translation, summarization (seq2seq) |
+
+Most **foundation models** you deploy for chat are **decoder-only** autoregressive LMs. Encoder-only checkpoints still matter for **retrieval embeddings** and rerankers (Ch. 6).
+
 ### Architecture: transformer dominance
 
 Transformers won language modeling because **self-attention** lets representations mix across the sequence while **parallelizing** token processing far more aggressively than classic recurrent stacks—at the cost of **quadratic** attention cost in naive formulations as context grows. That cost motivates a rich line of work on **efficient attention**, **long-context tricks**, and **alternative sequence layers**.
@@ -63,6 +73,8 @@ Model quality is not “parameters alone”—it couples **parameters**, **token
 > — Huyen (2025, p. 72) (paraphrasing the Chinchilla / compute-optimal framing in the chapter)
 
 **Product caveat:** Chinchilla optimizes **training loss under a pre-training budget**. Real teams also optimize **inference cost**, **latency**, and **usability**—the book notes that some widely adopted families deliberately sit “sub-Chinchilla-optimal” on raw loss to ship smaller, cheaper-to-serve models.
+
+**Worked intuition:** If you budget **~10²³ FLOPs** for pre-training, Chinchilla suggests pairing on the order of **~70B parameters** with **~1.4T tokens**—not a 70B model trained on only 300B tokens (under-trained) nor a 7B model on 1.4T alone (wasteful at that compute). Your API model’s card rarely states this explicitly; treat it as “was the model trained **compute-optimal** for its size?”
 
 ---
 
@@ -84,6 +96,15 @@ The **Shoggoth with a smiley face** meme captures the intuition: pre-training is
 
 Alignment is **not solved**: preferences are plural, reward models mis-specify objectives, and some safety interventions trade off factuality or capability—engineering judgment still matters.
 
+| Stage | What you optimize | Data | Typical output |
+| --- | --- | --- | --- |
+| **SFT** | Imitate demonstrations | `(instruction, response)` pairs | Follow format, chatty tone |
+| **Preference tuning** | Win vs. lose pairs | Human or AI preferences | Helpful, harmless, on-brand |
+| **RLHF** (classic) | Reward model score | Preferences + RM training | Policy shift via PPO-style loop |
+| **DPO** (common today) | Direct preference loss | Chosen/rejected pairs | Similar goals, simpler training |
+
+**Engineering note:** SFT teaches **what to say**; preference tuning teaches **what users prefer** among valid answers. Bad SFT data teaches wrong facts; bad preferences teach **sycophancy** (Ch. 10).
+
 ---
 
 ## Sampling
@@ -100,6 +121,13 @@ Each decode step produces a **distribution over the full vocabulary**; **samplin
 
 In practice, `temperature = 0` (argmax / greedy-style decoding) is common when you need repeatability—APIs simulate it without literally dividing by zero. **Top-*p*** (nucleus), **top-*k***, and custom samplers further shape tail behavior; the right dial depends on the task (creative writing vs strict JSON).
 
+| Knob | Effect | Turn up when | Turn down when |
+| --- | --- | --- | --- |
+| **Temperature** | Sharp vs flat distribution | Creativity, brainstorming | JSON, compliance, reproducibility |
+| **Top-p** | Truncate tail mass | Balance diversity | Need stable rare-token control |
+| **Top-k** | Cap candidate tokens | Limit nonsense tokens | Top-k too low drops valid options |
+| **Frequency / presence penalty** | Discourage repetition | Long prose drifts | Short factual answers |
+
 ### Test-time compute
 
 **Test-time compute** means spending **extra inference** to improve quality: sample **many** completions, then **select** with a verifier, reward model, heuristic (e.g. shortest answer), or consistency vote (**self-consistency** / majority for math). The book gives striking examples: verifiers can dwarf raw parameter scaling in some settings, and “best-of-*N*” curves saturate (e.g. gains taper after hundreds of samples in cited experiments). This is the explicit **compute ↔ quality** knob at deployment time.
@@ -107,6 +135,15 @@ In practice, `temperature = 0` (argmax / greedy-style decoding) is common when y
 ### Structured outputs
 
 For **agents**, **tool calling**, and **machine-readable** pipelines, you often need **constrained** generation: JSON modes, grammar-guided decoders, regex constraints, or frameworks (e.g. Guidance-style constraints—see the book’s discussion). Note: “valid JSON” ≠ “semantically correct JSON.” Mitigations stack: better prompts, constrained decoding, finetuning, and evaluation.
+
+### Hallucination taxonomy
+
+| Type | Cause | Mitigation (book arc) |
+| --- | --- | --- |
+| **Sampling noise** | Random decode | Lower temperature; best-of-N + verifier |
+| **Knowledge gap** | Fact not in weights | **RAG** (Ch. 6), fresher model, finetune on domain data (Ch. 7–8) |
+| **Context failure** | Long prompt, lost needle | Chunking, placement, summarization (Ch. 5–6) |
+| **Overconfidence / snowball** | Model doubles down on wrong premise | Self-critique, guardrails, human review (Ch. 3–4, 10) |
 
 ### Hallucinations vs sampling noise
 
@@ -163,9 +200,16 @@ What I’m taking into practice: (1) **audit data fit** first—especially for n
 
 ## References
 
-Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media.
+Huyen, C. (2025). *AI engineering: Building applications with foundation models*. O’Reilly Media. Chapter 2: Understanding Foundation Models.
 
-### Additional materials to review
+### Foundational papers
 
-- [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) — Jay Alammar’s visual walkthrough of attention and the transformer block.
-- [Intro to large language models](https://www.youtube.com/watch?v=zjkBMFhNj_g) — Andrej Karpathy (2023): a compact deep dive on how LLMs are trained and used; strong complement on **transformers**, **prompting**, and the **human-feedback** alignment story. (If you have a specific lecture titled *“LLM Lecture: A Deep Dive into Transformers, Prompts, and Human Feedback”*, add it alongside—naming varies across courses.)
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762) — Vaswani et al. (2017), Transformer.
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) — Brown et al., GPT-3 (2020).
+- [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) — Hoffmann et al., Chinchilla (2022).
+- [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) — Ouyang et al., InstructGPT / RLHF (2022).
+
+### Additional materials
+
+- [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) — Jay Alammar.
+- [Intro to large language models](https://www.youtube.com/watch?v=zjkBMFhNj_g) — Andrej Karpathy (2023).
