@@ -22,6 +22,8 @@
 	} from '$lib/docs/reading-progress.svelte.js';
 	import { isTrackedChapter } from '$lib/docs/reading-progress.js';
 	import CircleCheckIcon from '@lucide/svelte/icons/circle-check';
+	import GraduationCapIcon from '@lucide/svelte/icons/graduation-cap';
+	import { hasStudy, studyHref } from '$lib/study/load-study.js';
 
 	let {
 		meta,
@@ -42,6 +44,7 @@
 	const isTracked = $derived(isTrackedChapter(slug));
 	const progress = $derived(getReadingProgress());
 	const chapterDone = $derived(isTracked && progress.data.completed[slug]);
+	const showStudy = $derived(hasStudy(slug, locale));
 
 	let readingTime = $derived(rawContent ? calculateReadingTime(rawContent) : '');
 
@@ -52,14 +55,16 @@
 					lastUpdated: 'Última actualización:',
 					dateLocale: 'es',
 					markComplete: 'Marcar como completado',
-					markIncomplete: 'Quitar completado'
+					markIncomplete: 'Quitar completado',
+					studyChapter: 'Estudiar este capítulo'
 				}
 			: {
 					editOnGitHub: 'Edit this page on GitHub',
 					lastUpdated: 'Last updated:',
 					dateLocale: 'en-US',
 					markComplete: 'Mark chapter complete',
-					markIncomplete: 'Unmark complete'
+					markIncomplete: 'Unmark complete',
+					studyChapter: 'Study this chapter'
 				}
 	);
 
@@ -196,12 +201,23 @@
 		{#if meta.description}
 			<p class="text-muted-foreground mt-2 text-lg">{meta.description}</p>
 		{/if}
-		{#if readingTime}
-			<div class="text-muted-foreground mt-3 flex items-center gap-1.5 text-sm">
-				<ClockIcon class="size-3.5" />
-				<span>{readingTime}</span>
-			</div>
-		{/if}
+		<div class="mt-3 flex flex-wrap items-center gap-3">
+			{#if readingTime}
+				<div class="text-muted-foreground flex items-center gap-1.5 text-sm">
+					<ClockIcon class="size-3.5" />
+					<span>{readingTime}</span>
+				</div>
+			{/if}
+			{#if showStudy}
+				<a
+					href={studyHref(slug, locale)}
+					class="bg-primary/10 text-primary hover:bg-primary/15 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+				>
+					<GraduationCapIcon class="size-4" />
+					{ui.studyChapter}
+				</a>
+			{/if}
+		</div>
 	</header>
 
 	<MobileToc />

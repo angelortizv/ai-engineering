@@ -1,0 +1,99 @@
+{
+	"chapterSlug": "introduction-to-building-ai-applications-with-foundation-models",
+	"cards": [
+		{
+			"id": "fm-def",
+			"front": "Foundation model vs LLM (in this book)?",
+			"back": "LLM: large language model. Foundation model: broader—may be multimodal or general-purpose; adapted via prompting, RAG, or finetuning for many downstream tasks.",
+			"sectionHash": "#from-language-models-to-foundation-models"
+		},
+		{
+			"id": "autoregressive",
+			"front": "Autoregressive vs masked language models?",
+			"back": "Autoregressive predicts the next token from prior tokens (standard for text generation). Masked (e.g. BERT) uses bidirectional context—common for non-generative tasks.",
+			"sectionHash": "#language-and-tokens"
+		},
+		{
+			"id": "adaptation-trio",
+			"front": "Three main ways to adapt a foundation model?",
+			"back": "Prompt engineering (no weight change), RAG (external context), finetuning (continued training on your data/task).",
+			"sectionHash": "#adaptation"
+		},
+		{
+			"id": "three-layers",
+			"front": "The AI engineering stack (three layers)?",
+			"back": "Infrastructure → model development (pre-training, post-training, data, inference) → application development (product, eval, prompts, UI).",
+			"sectionHash": "#three-layers"
+		},
+		{
+			"id": "product-first",
+			"front": "How does AI engineering workflow differ from classical ML?",
+			"back": "Often product-first: ship with a shared foundation model, then add specialized data/models only if the product proves value—inverted from bespoke-model-first ML.",
+			"sectionHash": "#ai-engineering-and-full-stack"
+		},
+		{
+			"id": "agents-pattern",
+			"front": "What distinguishes “agents” among use cases?",
+			"back": "Tasks needing external tools, planning, and multi-step actions—not just text in/out.",
+			"sectionHash": "#use-cases-patterns"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-fm",
+			"prompt": "A foundation model is best described as:",
+			"choices": [
+				"A model trained only on labeled tabular data",
+				"A large pretrained model adaptable to many tasks via prompting, RAG, or finetuning",
+				"A deployment pipeline for Kubernetes"
+			],
+			"correctIndex": 1,
+			"explanation": "Chapter 1 frames FMs as the shared base; differentiation moves to the application layer.",
+			"sectionHash": "#from-language-models-to-foundation-models"
+		},
+		{
+			"id": "q-ar",
+			"prompt": "For open-ended text generation today, the book defaults to:",
+			"choices": ["Masked LMs", "Autoregressive LMs", "Only diffusion models"],
+			"correctIndex": 1,
+			"explanation": "Unless stated otherwise, “language model” means autoregressive generation.",
+			"sectionHash": "#language-and-tokens"
+		},
+		{
+			"id": "q-layers",
+			"prompt": "Application-layer differentiation most often comes from:",
+			"choices": [
+				"Training a new foundation model from scratch",
+				"Evaluation, prompts/context, and product UX on shared models",
+				"Replacing GPUs only"
+			],
+			"correctIndex": 1,
+			"explanation": "With shared base models, product and eval—not pre-training—are the moat for most teams.",
+			"sectionHash": "#application-development-top-layer"
+		},
+		{
+			"id": "q-plan",
+			"prompt": "Before coding, planning should clarify:",
+			"choices": [
+				"Only which API key to use",
+				"Use-case fit, human/AI roles, metrics, and defensibility",
+				"Only the font in the UI"
+			],
+			"correctIndex": 1,
+			"explanation": "Chapter 1 stresses use-case evaluation, expectations, and moats—not jumping to prompts.",
+			"sectionHash": "#planning-ai-applications"
+		},
+		{
+			"id": "q-mlops",
+			"prompt": "AI engineering vs traditional MLOps differs mainly because:",
+			"choices": [
+				"FMs shift effort toward adaptation, eval, and product on shared models",
+				"MLOps no longer applies",
+				"All teams must pre-train"
+			],
+			"correctIndex": 0,
+			"explanation": "The discipline spans the stack but emphasizes adaptation and evaluation over bespoke training for most apps.",
+			"sectionHash": "#why-ai-engineering-and-not-just-mlops"
+		}
+	]
+}

@@ -1,0 +1,103 @@
+{
+	"chapterSlug": "rag-and-agents",
+	"cards": [
+		{
+			"id": "rag-def",
+			"front": "¿RAG en una frase?",
+			"back": "Recuperar información externa relevante y generar con ese contexto—retrieve-then-generate.",
+			"sectionHash": "#generación-aumentada-por-recuperación-rag"
+		},
+		{
+			"id": "why-rag-long",
+			"front": "¿RAG con contexto enorme?",
+			"back": "Los datos crecen más rápido que los límites; contexto largo ≠ buen uso; RAG elige chunks específicos y baratos.",
+			"sectionHash": "#por-qué-rag-sigue-importando-con-contexto-largo"
+		},
+		{
+			"id": "retriever-dominates",
+			"front": "¿Qué domina la calidad RAG?",
+			"back": "La calidad del recuperador—mala recuperación no se arregla solo con un generador fuerte.",
+			"sectionHash": "#arquitectura-rag"
+		},
+		{
+			"id": "sparse-dense",
+			"front": "Recuperación dispersa vs densa:",
+			"back": "Dispersa: BM25/términos. Densa: embeddings. Híbrido suele ganar en producción.",
+			"sectionHash": "#algoritmos-de-recuperación"
+		},
+		{
+			"id": "agent-def",
+			"front": "Agente de IA (cap. 6):",
+			"back": "Planifica y actúa—a menudo con herramientas—más allá de un solo turno retrieve-responde.",
+			"sectionHash": "#agentes-de-ia"
+		},
+		{
+			"id": "rag-agent-sec",
+			"front": "Requisito común RAG y agentes:",
+			"back": "Evaluación rigurosa y seguridad (inyección vía contenido recuperado o herramientas).",
+			"sectionHash": "#introducción"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-rag",
+			"prompt": "RAG mejora principalmente:",
+			"choices": [
+				"Pesos en cada consulta",
+				"Anclar respuestas con contexto externo recuperado",
+				"Drivers GPU"
+			],
+			"correctIndex": 1,
+			"explanation": "Construcción de contexto antes de generar.",
+			"sectionHash": "#generación-aumentada-por-recuperación-rag"
+		},
+		{
+			"id": "q-chunk",
+			"prompt": "Recuperar documento entero suele fallar porque:",
+			"choices": [
+				"Siempre baja latencia",
+				"Puede exceder contexto y diluir relevancia",
+				"Embeddings son ilegales"
+			],
+			"correctIndex": 1,
+			"explanation": "Chunks + top-k es el patrón típico.",
+			"sectionHash": "#arquitectura-rag"
+		},
+		{
+			"id": "q-hybrid",
+			"prompt": "BM25 + embeddings ayuda cuando:",
+			"choices": [
+				"Hace falta match léxico y semántico",
+				"Nunca hay nombres propios",
+				"Se apaga el generador"
+			],
+			"correctIndex": 0,
+			"explanation": "Disperso captura tokens exactos; denso parafraseo.",
+			"sectionHash": "#algoritmos-de-recuperación"
+		},
+		{
+			"id": "q-agent",
+			"prompt": "Los agentes difieren del chat RAG básico por:",
+			"choices": [
+				"Solo prompts más cortos",
+				"Planificación multi-paso y herramientas que cambian estado",
+				"Eliminar eval"
+			],
+			"correctIndex": 1,
+			"explanation": "Pueden escribir acciones; RAG es sobre todo contexto.",
+			"sectionHash": "#agentes-de-ia"
+		},
+		{
+			"id": "q-inject",
+			"prompt": "Inyección indirecta en RAG suele llegar por:",
+			"choices": [
+				"Documentos recuperados o salidas de herramientas",
+				"Solo el archivo de plantilla en disco",
+				"Certificados SSL"
+			],
+			"correctIndex": 0,
+			"explanation": "Texto no confiable entra al prompt.",
+			"sectionHash": "#introducción"
+		}
+	]
+}

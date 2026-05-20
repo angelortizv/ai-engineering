@@ -1,0 +1,99 @@
+{
+	"chapterSlug": "evaluation-methodology",
+	"cards": [
+		{
+			"id": "ppl-limit",
+			"front": "Perplexity is useful when—and limited when?",
+			"back": "Useful for model/data comparison on language modeling; limited for open-ended apps where human goals aren’t captured by next-token likelihood.",
+			"sectionHash": "#foundational-metrics-language-modeling"
+		},
+		{
+			"id": "functional-first",
+			"front": "“Functional correctness first” in eval pipelines?",
+			"back": "Non-negotiable gates: does the output run/work (SQL executes, code passes tests) before softer quality signals.",
+			"sectionHash": "#exact-evaluation-metrics"
+		},
+		{
+			"id": "ai-judge",
+			"front": "AI-as-judge main pitfalls?",
+			"back": "Position bias, verbosity bias, self-preference, inconsistency—needs calibration and human spot checks.",
+			"sectionHash": "#the-subjective-judge-ai-as-a-judge"
+		},
+		{
+			"id": "comparative",
+			"front": "Comparative (Arena-style) evaluation captures:",
+			"back": "Relative human preference between models—complements but doesn’t replace absolute thresholds (pass rate, latency, cost).",
+			"sectionHash": "#the-competitive-arena-ranking-with-comparative-evaluation"
+		},
+		{
+			"id": "layered",
+			"front": "Layered eval stack (Chapter 3 synthesis)?",
+			"back": "Exact/functional checks → scalable AI judges/semantic metrics → human review on high-stakes or ambiguous cases.",
+			"sectionHash": "#synthesis-building-a-robust-pipeline"
+		},
+		{
+			"id": "contamination",
+			"front": "Benchmark contamination risk?",
+			"back": "Test data may appear in training—public leaderboard gains may not transfer to your distribution.",
+			"sectionHash": "#challenges-of-evaluating-foundation-models"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-ppl",
+			"prompt": "Low perplexity on a holdout set implies for your chatbot:",
+			"choices": [
+				"Guaranteed user satisfaction",
+				"Better LM fit to that distribution—not necessarily task success",
+				"No need for RAG"
+			],
+			"correctIndex": 1,
+			"explanation": "LM metrics don’t fully encode instruction-following or business outcomes.",
+			"sectionHash": "#foundational-metrics-language-modeling"
+		},
+		{
+			"id": "q-exact",
+			"prompt": "For text-to-SQL, the first eval gate should be:",
+			"choices": ["Brand color of the UI", "Does the SQL run and return correct results?", "Tweet length"],
+			"correctIndex": 1,
+			"explanation": "Synthesis example: functional correctness before judges or humans.",
+			"sectionHash": "#synthesis-building-a-robust-pipeline"
+		},
+		{
+			"id": "q-judge",
+			"prompt": "AI judges should be used:",
+			"choices": [
+				"As the only signal, never audited",
+				"At scale with known biases and human sanity checks",
+				"Only for image models"
+			],
+			"correctIndex": 1,
+			"explanation": "Chapter 3 documents judge failure modes and mitigation.",
+			"sectionHash": "#the-subjective-judge-ai-as-a-judge"
+		},
+		{
+			"id": "q-arena",
+			"prompt": "Winning on a public Arena leaderboard means:",
+			"choices": [
+				"You should skip private eval",
+				"Relative preference signal—you still need absolute bars for production",
+				"Zero latency cost"
+			],
+			"correctIndex": 1,
+			"explanation": "Pair comparative ranking with pass rates, latency, and cost.",
+			"sectionHash": "#the-competitive-arena-ranking-with-comparative-evaluation"
+		},
+		{
+			"id": "q-open",
+			"prompt": "Open-ended outputs are hard to benchmark because:",
+			"choices": [
+				"Many valid answers exist; static labels under-specify quality",
+				"GPUs are slow",
+				"JSON is illegal"
+			],
+			"correctIndex": 0,
+			"explanation": "Chapter 3 motivates exact, judge, and comparative methods together.",
+			"sectionHash": "#challenges-of-evaluating-foundation-models"
+		}
+	]
+}

@@ -1,0 +1,103 @@
+{
+	"chapterSlug": "ai-engineering-architecture-and-user-feedback",
+	"cards": [
+		{
+			"id": "flywheel",
+			"front": "Flywheel de feedback de usuario:",
+			"back": "Señales → etiquetar/analizar → mejorar datos, prompts, modelos → redesplegar con monitoreo.",
+			"sectionHash": "#feedback-de-usuario"
+		},
+		{
+			"id": "obs",
+			"front": "Monitoreo en apps de IA:",
+			"back": "Latencia, coste, errores, proxies de calidad y regresiones por slice—not solo uptime.",
+			"sectionHash": "#monitoreo-y-observabilidad"
+		},
+		{
+			"id": "orchestration",
+			"front": "Orquestación de pipelines IA:",
+			"back": "Coordinar RAG, llamadas al modelo, herramientas, guardrails y pasos humanos.",
+			"sectionHash": "#orquestación-de-pipelines-de-ia"
+		},
+		{
+			"id": "modular",
+			"front": "Arquitectura modular:",
+			"back": "Cambiar modelo, recuperador o políticas sin reescribir todo—eval por módulo.",
+			"sectionHash": "#arquitectura-de-ai-engineering"
+		},
+		{
+			"id": "guardrails",
+			"front": "Guardrails de salida:",
+			"back": "Filtros post-modelo (política, PII, toxicidad)—coste de latencia pero capturan fallos.",
+			"sectionHash": "#arquitectura-de-ai-engineering"
+		},
+		{
+			"id": "implicit-fb",
+			"front": "Feedback implícito:",
+			"back": "Copiar, tiempo en página, regenerar, ediciones aceptadas—a menudo más rico que pulgares.",
+			"sectionHash": "#feedback-de-usuario"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-fly",
+			"prompt": "Cerrar el loop de feedback requiere:",
+			"choices": [
+				"Solo log de errores",
+				"Convertir señales en datos etiquetados y mejoras medibles",
+				"Quitar eval"
+			],
+			"correctIndex": 1,
+			"explanation": "Cap. 10 une producto y datasets.",
+			"sectionHash": "#feedback-de-usuario"
+		},
+		{
+			"id": "q-prod",
+			"prompt": "Monitoreo en producción debe enlazar con:",
+			"choices": [
+				"Slices de eval offline e incidentes",
+				"Nada más que dashboards",
+				"Solo KPIs de marketing"
+			],
+			"correctIndex": 0,
+			"explanation": "Deriva necesita eval del cap. 4.",
+			"sectionHash": "#monitoreo-y-observabilidad"
+		},
+		{
+			"id": "q-orch",
+			"prompt": "Orquestación ayuda cuando:",
+			"choices": [
+				"Hay varios pasos (RAG, herramientas, humano)",
+				"Un solo prompt zero-shot basta siempre",
+				"Nunca hacen falta guardrails"
+			],
+			"correctIndex": 0,
+			"explanation": "Retries, routing y observabilidad por paso.",
+			"sectionHash": "#orquestación-de-pipelines-de-ia"
+		},
+		{
+			"id": "q-mod",
+			"prompt": "Diseño modular facilita:",
+			"choices": [
+				"Cambiar el recuperador sin rehacer todo el UI",
+				"Evitar pruebas",
+				"Ocultar latencia para siempre"
+			],
+			"correctIndex": 0,
+			"explanation": "Componentes componibles.",
+			"sectionHash": "#arquitectura-de-ai-engineering"
+		},
+		{
+			"id": "q-guard",
+			"prompt": "Guardrails complementan prompts porque:",
+			"choices": [
+				"El modelo siempre obedece el system prompt",
+				"Capturan PII/política post-hoc con tasas medibles",
+				"Sustituyen RAG"
+			],
+			"correctIndex": 1,
+			"explanation": "Defensa en profundidad.",
+			"sectionHash": "#arquitectura-de-ai-engineering"
+		}
+	]
+}

@@ -1,0 +1,95 @@
+{
+	"chapterSlug": "inference-optimization",
+	"cards": [
+		{
+			"id": "ttft-tpot",
+			"front": "TTFT vs tiempo por token de salida:",
+			"back": "TTFT: hasta el primer token (prefill). Después: velocidad de generación—el usuario siente ambos.",
+			"sectionHash": "#métricas-de-rendimiento-de-inferencia"
+		},
+		{
+			"id": "kv-cache",
+			"front": "¿Para qué el KV cache?",
+			"back": "Reutilizar keys/values de tokens previos en decode—clave en chat y prompts largos.",
+			"sectionHash": "#comprensión-de-la-optimización-de-inferencia"
+		},
+		{
+			"id": "prompt-cache",
+			"front": "Prompt caching (proveedor):",
+			"back": "Reutilizar KV de prefijos idénticos—baja coste y TTFT en bloques sistema/RAG repetidos.",
+			"sectionHash": "#comprensión-de-la-optimización-de-inferencia"
+		},
+		{
+			"id": "quant",
+			"front": "Tradeoff de cuantización:",
+			"back": "Menos precisión → menos memoria y más throughput; posible pérdida de calidad—validar en tu eval.",
+			"sectionHash": "#optimización-a-nivel-de-modelo"
+		},
+		{
+			"id": "batch",
+			"front": "Batching continuo:",
+			"back": "Agrupa peticiones dinámicas para mejor utilización GPU sin esperar longitudes idénticas.",
+			"sectionHash": "#optimización-del-servicio-de-inferencia"
+		},
+		{
+			"id": "prefill-decode",
+			"front": "Fase prefill vs decode:",
+			"back": "Prefill procesa el prompt en paralelo; decode genera token a token—cuellos de botella distintos.",
+			"sectionHash": "#comprensión-de-la-optimización-de-inferencia"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-ttft",
+			"prompt": "Quejas de «tarda en aparecer algo» → medir:",
+			"choices": ["TTFT", "Solo loss de entrenamiento", "Tamaño del dataset"],
+			"correctIndex": 0,
+			"explanation": "Time to first token = retraso de prefill.",
+			"sectionHash": "#métricas-de-rendimiento-de-inferencia"
+		},
+		{
+			"id": "q-kv",
+			"prompt": "KV cache beneficia más:",
+			"choices": [
+				"Chat multi-turno con prefijos largos compartidos",
+				"Solo prompts de 5 tokens",
+				"Solo imágenes"
+			],
+			"correctIndex": 0,
+			"explanation": "Prefijos repetidos amortizan atención.",
+			"sectionHash": "#comprensión-de-la-optimización-de-inferencia"
+		},
+		{
+			"id": "q-quant",
+			"prompt": "Antes de INT8/4-bit en producción:",
+			"choices": [
+				"Correr eval privada por regresión de calidad",
+				"Asumir calidad idéntica",
+				"Apagar monitoreo"
+			],
+			"correctIndex": 0,
+			"explanation": "Tradeoff throughput–calidad.",
+			"sectionHash": "#optimización-a-nivel-de-modelo"
+		},
+		{
+			"id": "q-batch",
+			"prompt": "Batching continuo mejora:",
+			"choices": ["Utilización GPU con carga variable", "FLOPs de entrenamiento", "SEO HTML"],
+			"correctIndex": 0,
+			"explanation": "Capa de serving.",
+			"sectionHash": "#optimización-del-servicio-de-inferencia"
+		},
+		{
+			"id": "q-ar",
+			"prompt": "Latencia crece con longitud de salida porque:",
+			"choices": [
+				"Cada token nuevo es otro paso decode",
+				"La ventana se encoge",
+				"RAG se desactiva"
+			],
+			"correctIndex": 0,
+			"explanation": "Generación secuencial token a token.",
+			"sectionHash": "#comprensión-de-la-optimización-de-inferencia"
+		}
+	]
+}

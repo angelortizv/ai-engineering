@@ -1,0 +1,99 @@
+{
+	"chapterSlug": "introduction-to-building-ai-applications-with-foundation-models",
+	"cards": [
+		{
+			"id": "fm-def",
+			"front": "¿Foundation model vs LLM (en el libro)?",
+			"back": "LLM: modelo de lenguaje grande. Foundation model: más amplio—puede ser multimodal; se adapta con prompting, RAG o finetuning.",
+			"sectionHash": "#de-modelos-de-lenguaje-a-modelos-fundacionales"
+		},
+		{
+			"id": "autoregressive",
+			"front": "¿Autoregresivo vs enmascarado?",
+			"back": "Autoregresivo: predice el siguiente token (generación de texto). Enmascarado (BERT): contexto bidireccional—tareas no generativas.",
+			"sectionHash": "#lenguaje-y-tokens"
+		},
+		{
+			"id": "adaptation-trio",
+			"front": "¿Tres formas de adaptar un foundation model?",
+			"back": "Prompt engineering, RAG (contexto externo) y finetuning (entrenamiento continuado).",
+			"sectionHash": "#adaptación"
+		},
+		{
+			"id": "three-layers",
+			"front": "¿Tres capas del stack de AI engineering?",
+			"back": "Infraestructura → desarrollo del modelo → desarrollo de la aplicación (producto, eval, prompts, UI).",
+			"sectionHash": "#tres-capas"
+		},
+		{
+			"id": "product-first",
+			"front": "¿Workflow product-first vs ML clásico?",
+			"back": "A menudo producto primero: modelo fundacional compartido; datos/modelos especializados solo si el producto lo justifica.",
+			"sectionHash": "#ai-engineering-y-full-stack"
+		},
+		{
+			"id": "agents-pattern",
+			"front": "¿Qué distingue a los “agentes” entre casos de uso?",
+			"back": "Tareas con herramientas externas, planificación y acciones multi-paso—not solo texto entrada/salida.",
+			"sectionHash": "#casos-de-uso-patrones"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-fm",
+			"prompt": "Un foundation model se describe mejor como:",
+			"choices": [
+				"Modelo solo con datos tabulares etiquetados",
+				"Modelo preentrenado grande adaptable con prompting, RAG o finetuning",
+				"Pipeline de Kubernetes"
+			],
+			"correctIndex": 1,
+			"explanation": "Cap. 1: base compartida; la diferenciación está en la aplicación.",
+			"sectionHash": "#de-modelos-de-lenguaje-a-modelos-fundacionales"
+		},
+		{
+			"id": "q-ar",
+			"prompt": "Para generación abierta de texto, el libro asume por defecto:",
+			"choices": ["LM enmascarados", "LM autoregresivos", "Solo difusión"],
+			"correctIndex": 1,
+			"explanation": "Salvo que se diga lo contrario, LM = autoregresivo.",
+			"sectionHash": "#lenguaje-y-tokens"
+		},
+		{
+			"id": "q-layers",
+			"prompt": "La diferenciación en la capa de aplicación viene sobre todo de:",
+			"choices": [
+				"Preentrenar desde cero",
+				"Eval, prompts/contexto y UX sobre modelos compartidos",
+				"Solo cambiar GPUs"
+			],
+			"correctIndex": 1,
+			"explanation": "Con modelos base compartidos, el producto y la eval son el foso.",
+			"sectionHash": "#desarrollo-de-aplicaciones-capa-superior"
+		},
+		{
+			"id": "q-plan",
+			"prompt": "Antes de codificar conviene aclarar:",
+			"choices": [
+				"Solo la API key",
+				"Ajuste del caso de uso, roles humano/IA, métricas y defensibilidad",
+				"Solo la fuente del UI"
+			],
+			"correctIndex": 1,
+			"explanation": "Planificación del caso de uso y expectativas—not saltar a prompts.",
+			"sectionHash": "#planificación-de-aplicaciones-de-ia"
+		},
+		{
+			"id": "q-mlops",
+			"prompt": "AI engineering vs MLOps clásico difiere porque:",
+			"choices": [
+				"El esfuerzo se mueve a adaptación, eval y producto sobre modelos compartidos",
+				"MLOps ya no aplica",
+				"Todos deben preentrenar"
+			],
+			"correctIndex": 0,
+			"explanation": "Énfasis en adaptación y evaluación para la mayoría de apps.",
+			"sectionHash": "#por-qué-ai-engineering-y-no-solo-mlops"
+		}
+	]
+}

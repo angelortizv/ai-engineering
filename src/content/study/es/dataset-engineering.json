@@ -1,0 +1,91 @@
+{
+	"chapterSlug": "dataset-engineering",
+	"cards": [
+		{
+			"id": "data-centric",
+			"front": "Visión data-centric de la IA:",
+			"back": "La calidad del modelo está acotada por calidad, cobertura y cantidad de datos.",
+			"sectionHash": "#una-visión-centrada-en-datos-de-la-ia"
+		},
+		{
+			"id": "quality-quantity",
+			"front": "Calidad vs cantidad:",
+			"back": "Datos sucios escalan mal; curación y deduplicación suelen ganar a volumen ciego.",
+			"sectionHash": "#calidad-de-datos"
+		},
+		{
+			"id": "coverage",
+			"front": "Cobertura de datos:",
+			"back": "Representar slices, idiomas y casos borde reales—not solo el camino feliz.",
+			"sectionHash": "#cobertura-de-datos"
+		},
+		{
+			"id": "synthetic",
+			"front": "Riesgos de datos sintéticos:",
+			"back": "Colapso de modelo, sesgos amplificados, fuga eval–train si no se controla.",
+			"sectionHash": "#aumento-y-síntesis-de-datos"
+		},
+		{
+			"id": "distill",
+			"front": "Destilación (ángulo datos):",
+			"back": "Modelo pequeño imita salidas/trazas de uno grande—ligado a coste (cap. 7).",
+			"sectionHash": "#destilación-de-modelos"
+		},
+		{
+			"id": "annotation",
+			"front": "Reto de anotación abierta:",
+			"back": "Salidas de FM son más difíciles de etiquetar que clases fijas—hacen falta rúbricas y acuerdo.",
+			"sectionHash": "#adquisición-y-anotación-de-datos"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-centric",
+			"prompt": "Mejorar una app FM suele empezar por:",
+			"choices": ["Ignorar datos", "Ingeniería de datasets y slices de eval", "Solo CSS"],
+			"correctIndex": 1,
+			"explanation": "Cap. 8: curación, calidad, cobertura, síntesis.",
+			"sectionHash": "#una-visión-centrada-en-datos-de-la-ia"
+		},
+		{
+			"id": "q-dedup",
+			"prompt": "Deduplicar datos de entrenamiento reduce:",
+			"choices": ["Memorización y ruido repetido", "Solo latencia API", "Precio token a cero"],
+			"correctIndex": 0,
+			"explanation": "Casi-duplicados desperdician compute.",
+			"sectionHash": "#curación-de-datos"
+		},
+		{
+			"id": "q-coverage",
+			"prompt": "Eval solo con emails felices en inglés falla en:",
+			"choices": ["Cobertura de slices reales", "Drivers GPU", "Sintaxis Markdown"],
+			"correctIndex": 0,
+			"explanation": "Analizar segmentos subrepresentados.",
+			"sectionHash": "#cobertura-de-datos"
+		},
+		{
+			"id": "q-synth",
+			"prompt": "Datos sintéticos de finetuning deben:",
+			"choices": [
+				"Usarse sin controles",
+				"Validarse vs distribución real y reglas de fuga",
+				"Ser siempre 100× solo sintéticos"
+			],
+			"correctIndex": 1,
+			"explanation": "Útiles con control de calidad y contaminación.",
+			"sectionHash": "#aumento-y-síntesis-de-datos"
+		},
+		{
+			"id": "q-distill",
+			"prompt": "Destilación busca típicamente:",
+			"choices": [
+				"Que un modelo pequeño imite a uno grande en una tarea",
+				"Eliminar eval",
+				"Desactivar RAG"
+			],
+			"correctIndex": 0,
+			"explanation": "Datasets maestro–alumno.",
+			"sectionHash": "#destilación-de-modelos"
+		}
+	]
+}

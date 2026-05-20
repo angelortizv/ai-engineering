@@ -1,0 +1,99 @@
+{
+	"chapterSlug": "evaluating-modern-ai-systems",
+	"cards": [
+		{
+			"id": "edd",
+			"front": "Evaluation-driven development (EDD)?",
+			"back": "Treat eval sets and metrics as the steering wheel—iterate prompts/RAG/models against measurable criteria before scaling.",
+			"sectionHash": "#the-core-philosophy-evaluation-driven-development"
+		},
+		{
+			"id": "four-pillars",
+			"front": "Four pillars of evaluation criteria?",
+			"back": "Domain-specific capability, generation quality, instruction-following, cost and latency.",
+			"sectionHash": "#the-four-pillars-of-evaluation-criteria"
+		},
+		{
+			"id": "private-eval",
+			"front": "Why custom private eval sets?",
+			"back": "Mirror real prompts, rubrics, and failure slices—public benchmarks rarely match your distribution.",
+			"sectionHash": "#evaluation-pipeline-overview"
+		},
+		{
+			"id": "rag-faith",
+			"front": "Local factual consistency (RAG) checks:",
+			"back": "Whether the answer is supported by the retrieved context—not open-world truth alone.",
+			"sectionHash": "#generation-capability"
+		},
+		{
+			"id": "ifeval",
+			"front": "IFEval-style benchmarks test:",
+			"back": "Automatically verifiable instruction formats (JSON, keywords, length)—not your niche domain knowledge alone.",
+			"sectionHash": "#instruction-following-capability"
+		},
+		{
+			"id": "latency-filter",
+			"front": "Cost/latency pillar in model selection?",
+			"back": "Filter by hard TTFT/latency ceilings and $/token; optimize quality among survivors.",
+			"sectionHash": "#cost-and-latency"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-edd",
+			"prompt": "EDD means you should:",
+			"choices": [
+				"Ship the demo then never measure again",
+				"Build eval harnesses early and iterate against them",
+				"Only trust vendor marketing"
+			],
+			"correctIndex": 1,
+			"explanation": "Chapter 4 operationalizes Chapter 3 methods for product decisions.",
+			"sectionHash": "#the-core-philosophy-evaluation-driven-development"
+		},
+		{
+			"id": "q-pillar",
+			"prompt": "A model outputs valid JSON but wrong medical facts. Which pillar failed first?",
+			"choices": ["Instruction-following", "Domain-specific capability", "Cost and latency"],
+			"correctIndex": 1,
+			"explanation": "Format can pass while domain knowledge fails—test each pillar.",
+			"sectionHash": "#the-four-pillars-of-evaluation-criteria"
+		},
+		{
+			"id": "q-bench",
+			"prompt": "Public benchmarks are risky because:",
+			"choices": [
+				"They are always contaminated and useless",
+				"Contamination and distribution mismatch can mis-rank for your app",
+				"They measure latency only"
+			],
+			"correctIndex": 1,
+			"explanation": "Use public scores as a filter, then private eval and production monitoring.",
+			"sectionHash": "#evaluation-pipeline-overview"
+		},
+		{
+			"id": "q-local",
+			"prompt": "For RAG support bots, factual consistency usually means:",
+			"choices": [
+				"Global open-world truth only",
+				"Answer supported by provided context",
+				"No citations ever"
+			],
+			"correctIndex": 1,
+			"explanation": "Local consistency is about faithfulness to retrieved chunks.",
+			"sectionHash": "#generation-capability"
+		},
+		{
+			"id": "q-select",
+			"prompt": "Model selection should optimize for:",
+			"choices": [
+				"The global #1 on a leaderboard",
+				"The best model for your app under your eval + latency/cost constraints",
+				"The largest parameter count always"
+			],
+			"correctIndex": 1,
+			"explanation": "Re-select as prompts, RAG, and finetuning change.",
+			"sectionHash": "#model-selection-workflow"
+		}
+	]
+}

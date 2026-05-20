@@ -1,0 +1,95 @@
+{
+	"chapterSlug": "inference-optimization",
+	"cards": [
+		{
+			"id": "ttft-tpot",
+			"front": "TTFT vs TPOT / time-per-output-token?",
+			"back": "TTFT: latency until first token (prefill-heavy). TPOT: generation speed after streaming starts—users feel both.",
+			"sectionHash": "#inference-performance-metrics"
+		},
+		{
+			"id": "kv-cache",
+			"front": "KV cache purpose?",
+			"back": "Reuse attention keys/values for prior tokens so decode steps don’t recompute the full prefix—critical for long prompts and chat.",
+			"sectionHash": "#understanding-inference-optimization"
+		},
+		{
+			"id": "prompt-cache",
+			"front": "Prompt caching (provider feature)?",
+			"back": "Reuse KV for identical long prefixes across requests—cuts cost and TTFT for repeated system/RAG blocks.",
+			"sectionHash": "#understanding-inference-optimization"
+		},
+		{
+			"id": "quant",
+			"front": "Quantization tradeoff?",
+			"back": "Lower precision weights/activations → less memory and higher throughput, possible quality loss—validate on your eval.",
+			"sectionHash": "#model-level-optimization"
+		},
+		{
+			"id": "batch",
+			"front": "Continuous batching helps by:",
+			"back": "Grouping dynamic requests to raise GPU utilization without waiting for identical sequence lengths.",
+			"sectionHash": "#inference-service-optimization"
+		},
+		{
+			"id": "prefill-decode",
+			"front": "Prefill vs decode phase?",
+			"back": "Prefill processes the prompt in parallel; decode generates one (or few) tokens at a time—different bottlenecks.",
+			"sectionHash": "#understanding-inference-optimization"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-ttft",
+			"prompt": "Users complain about “time until anything appears.” Measure:",
+			"choices": ["TTFT", "Only training loss", "Dataset size"],
+			"correctIndex": 0,
+			"explanation": "Time to first token captures prefill-dominated delay.",
+			"sectionHash": "#inference-performance-metrics"
+		},
+		{
+			"id": "q-kv",
+			"prompt": "KV caching most benefits:",
+			"choices": [
+				"Multi-turn chat with long shared prefixes",
+				"One-shot 5-token prompts only",
+				"Static images"
+			],
+			"correctIndex": 0,
+			"explanation": "Repeated prefixes amortize attention work across turns.",
+			"sectionHash": "#understanding-inference-optimization"
+		},
+		{
+			"id": "q-quant",
+			"prompt": "Before shipping INT8/4-bit weights you should:",
+			"choices": [
+				"Run your private eval for quality regression",
+				"Assume zero quality change",
+				"Disable monitoring"
+			],
+			"correctIndex": 0,
+			"explanation": "Quantization is a throughput–quality tradeoff.",
+			"sectionHash": "#model-level-optimization"
+		},
+		{
+			"id": "q-batch",
+			"prompt": "Continuous batching improves:",
+			"choices": ["GPU utilization under variable load", "Training FLOPs", "HTML SEO"],
+			"correctIndex": 0,
+			"explanation": "Serving layer optimizes throughput and tail latency.",
+			"sectionHash": "#inference-service-optimization"
+		},
+		{
+			"id": "q-ar",
+			"prompt": "Autoregressive inference latency grows with output length because:",
+			"choices": [
+				"Each new token needs another decode step",
+				"Context window shrinks",
+				"RAG is disabled"
+			],
+			"correctIndex": 0,
+			"explanation": "Generation is sequential token-by-token unless speculative decoding etc.",
+			"sectionHash": "#understanding-inference-optimization"
+		}
+	]
+}

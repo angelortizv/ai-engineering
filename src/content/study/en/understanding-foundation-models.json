@@ -1,0 +1,95 @@
+{
+	"chapterSlug": "understanding-foundation-models",
+	"cards": [
+		{
+			"id": "data-recipe",
+			"front": "“Data dictates destiny” means:",
+			"back": "Capabilities and biases come from the training mixture—inspect the data recipe before choosing a provider or checkpoint.",
+			"sectionHash": "#data"
+		},
+		{
+			"id": "chinchilla",
+			"front": "Chinchilla-style scaling (high level)?",
+			"back": "Under a fixed compute budget, balance model size and training tokens; many models were under-trained on tokens relative to parameters.",
+			"sectionHash": "#modeling"
+		},
+		{
+			"id": "post-train",
+			"front": "SFT + preference tuning do what?",
+			"back": "Turn raw pre-trained completion into steerable, usable chat behavior—also where many safety and format behaviors are baked in.",
+			"sectionHash": "#post-training"
+		},
+		{
+			"id": "sampling",
+			"front": "Temperature / top-p affect:",
+			"back": "Randomness vs determinism in decoding—higher temperature → more diverse outputs; tune for your task’s need for consistency.",
+			"sectionHash": "#sampling"
+		},
+		{
+			"id": "self-sup",
+			"front": "Self-supervision in LM pre-training?",
+			"back": "Labels come from the data itself (predict next token)—enables training on huge unlabeled corpora.",
+			"sectionHash": "#self-supervision-and-scaling"
+		},
+		{
+			"id": "probabilistic",
+			"front": "Why plan for hallucination architecturally?",
+			"back": "Models are probabilistic by construction—inconsistency needs eval, retrieval, and system design, not hope alone.",
+			"sectionHash": "#key-takeaways"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-data",
+			"prompt": "Before picking a model API, you should first understand:",
+			"choices": ["Only the logo", "Training data mix and post-training recipe", "GPU color"],
+			"correctIndex": 1,
+			"explanation": "Chapter 2: read the data recipe—language, time, domains, and alignment steps matter.",
+			"sectionHash": "#data"
+		},
+		{
+			"id": "q-scale",
+			"prompt": "Chinchilla laws mainly guide:",
+			"choices": [
+				"Token–parameter balance under a compute budget",
+				"UI font sizes",
+				"Only inference batching"
+			],
+			"correctIndex": 0,
+			"explanation": "Scaling laws inform pre-training efficiency; serve-time economics still need separate validation.",
+			"sectionHash": "#modeling"
+		},
+		{
+			"id": "q-align",
+			"prompt": "Post-training (SFT + preferences) primarily improves:",
+			"choices": [
+				"Steerability and usability of outputs",
+				"Raw pre-training loss only",
+				"Database indexing"
+			],
+			"correctIndex": 0,
+			"explanation": "Alignment turns completion into assistant-like behavior users can direct.",
+			"sectionHash": "#post-training"
+		},
+		{
+			"id": "q-sample",
+			"prompt": "Higher temperature generally produces:",
+			"choices": ["More deterministic outputs", "More diverse/random outputs", "Shorter context windows"],
+			"correctIndex": 1,
+			"explanation": "Sampling knobs trade creativity vs repeatability—test on your task.",
+			"sectionHash": "#sampling"
+		},
+		{
+			"id": "q-halluc",
+			"prompt": "Hallucination is best handled by:",
+			"choices": [
+				"Assuming the model is always right",
+				"Evaluation, retrieval, and architecture—not vibes alone",
+				"Disabling temperature only"
+			],
+			"correctIndex": 1,
+			"explanation": "Key takeaway #5: probabilistic systems need layered mitigations.",
+			"sectionHash": "#key-takeaways"
+		}
+	]
+}

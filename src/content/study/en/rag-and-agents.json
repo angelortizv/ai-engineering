@@ -1,0 +1,103 @@
+{
+	"chapterSlug": "rag-and-agents",
+	"cards": [
+		{
+			"id": "rag-def",
+			"front": "RAG in one sentence?",
+			"back": "Retrieve relevant external information, then generate using that context—retrieve-then-generate.",
+			"sectionHash": "#retrieval-augmented-generation-rag"
+		},
+		{
+			"id": "why-rag-long",
+			"front": "Why RAG with million-token context?",
+			"back": "Data grows faster than limits; long context ≠ good use of context; RAG picks query-specific, cost-controlled chunks.",
+			"sectionHash": "#why-rag-still-matters-with-long-context"
+		},
+		{
+			"id": "retriever-dominates",
+			"front": "What dominates RAG quality?",
+			"back": "Retriever quality—bad retrieval cannot be fully fixed by a strong generator.",
+			"sectionHash": "#rag-architecture"
+		},
+		{
+			"id": "sparse-dense",
+			"front": "Sparse vs dense retrieval?",
+			"back": "Sparse: term/BM25-style overlap. Dense: embedding similarity. Hybrid often wins in production.",
+			"sectionHash": "#retrieval-algorithms"
+		},
+		{
+			"id": "agent-def",
+			"front": "AI agent (Chapter 6 sense)?",
+			"back": "System that plans and acts—often with tools—beyond a single retrieve-then-answer turn.",
+			"sectionHash": "#ai-agents"
+		},
+		{
+			"id": "rag-agent-sec",
+			"front": "Shared requirement for RAG and agents?",
+			"back": "Rigorous evaluation and security (prompt injection via retrieved/tool content).",
+			"sectionHash": "#introduction"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-rag",
+			"prompt": "RAG primarily improves:",
+			"choices": [
+				"Weight updates on every query",
+				"Grounding answers with retrieved external context",
+				"GPU driver versions"
+			],
+			"correctIndex": 1,
+			"explanation": "Context construction before generation—Lewis et al. (2020) knowledge-intensive setup.",
+			"sectionHash": "#retrieval-augmented-generation-rag"
+		},
+		{
+			"id": "q-chunk",
+			"prompt": "Whole-document retrieval often fails because:",
+			"choices": [
+				"It always improves latency",
+				"It can exceed context limits and dilute relevance",
+				"Embeddings are illegal"
+			],
+			"correctIndex": 1,
+			"explanation": "Chunking + top-k retrieval is the typical pattern.",
+			"sectionHash": "#rag-architecture"
+		},
+		{
+			"id": "q-hybrid",
+			"prompt": "BM25 + embeddings hybrid helps when:",
+			"choices": [
+				"Queries need both lexical and semantic matches",
+				"You never have proper nouns",
+				"You disable the generator"
+			],
+			"correctIndex": 0,
+			"explanation": "Sparse catches exact tokens; dense catches paraphrase.",
+			"sectionHash": "#retrieval-algorithms"
+		},
+		{
+			"id": "q-agent",
+			"prompt": "Agents differ from basic RAG chat mainly by:",
+			"choices": [
+				"Using only shorter prompts",
+				"Multi-step planning and tool use that can change state",
+				"Eliminating evaluation"
+			],
+			"correctIndex": 1,
+			"explanation": "Agents can write actions; RAG is mainly context construction.",
+			"sectionHash": "#ai-agents"
+		},
+		{
+			"id": "q-inject",
+			"prompt": "Indirect prompt injection in RAG often arrives via:",
+			"choices": [
+				"Retrieved documents or tool outputs",
+				"Only the system prompt template file on disk",
+				"SSL certificates"
+			],
+			"correctIndex": 0,
+			"explanation": "Untrusted text becomes prompt content—Chapter 5–6 security overlap.",
+			"sectionHash": "#introduction"
+		}
+	]
+}

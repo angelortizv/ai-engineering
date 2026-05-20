@@ -1,0 +1,103 @@
+{
+	"chapterSlug": "evaluation-methodology",
+	"cards": [
+		{
+			"id": "ppl-limit",
+			"front": "Perplejidad: útil y limitada cuando…",
+			"back": "Útil para comparar LM; limitada en apps abiertas donde el objetivo humano no es solo likelihood.",
+			"sectionHash": "#métricas-fundamentales-modelado-de-lenguaje"
+		},
+		{
+			"id": "functional-first",
+			"front": "«Corrección funcional primero»:",
+			"back": "Compuertas no negociables: ¿el SQL corre, el código pasa tests?—antes de jueces blandos.",
+			"sectionHash": "#métricas-de-evaluación-exactas"
+		},
+		{
+			"id": "ai-judge",
+			"front": "Riesgos del juez IA:",
+			"back": "Sesgo de posición, verbosidad, auto-preferencia—inconsistencia; calibrar y auditar con humanos.",
+			"sectionHash": "#el-juez-subjetivo-ia-como-juez"
+		},
+		{
+			"id": "comparative",
+			"front": "Evaluación comparativa (estilo Arena):",
+			"back": "Preferencia relativa entre modelos—complementa umbrales absolutos (pass rate, latencia, coste).",
+			"sectionHash": "#la-arena-competitiva-ranking-con-evaluación-comparativa"
+		},
+		{
+			"id": "layered",
+			"front": "Pipeline de eval en capas:",
+			"back": "Checks exactos → jueces IA / semántica → humanos en casos críticos o ambiguos.",
+			"sectionHash": "#síntesis-construir-un-pipeline-robusto"
+		},
+		{
+			"id": "contamination",
+			"front": "Contaminación de benchmarks:",
+			"back": "Datos de test en entrenamiento—inflan leaderboards públicos vs tu distribución.",
+			"sectionHash": "#retos-de-evaluar-modelos-fundacionales"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-ppl",
+			"prompt": "Baja perplejidad en holdout implica para tu chatbot:",
+			"choices": [
+				"Satisfacción garantizada",
+				"Mejor ajuste LM—not necesariamente éxito de tarea",
+				"No hace falta RAG"
+			],
+			"correctIndex": 1,
+			"explanation": "Métricas LM ≠ instrucciones ni negocio.",
+			"sectionHash": "#métricas-fundamentales-modelado-de-lenguaje"
+		},
+		{
+			"id": "q-exact",
+			"prompt": "En text-to-SQL, la primera compuerta es:",
+			"choices": [
+				"Color de marca",
+				"¿El SQL ejecuta y devuelve lo correcto?",
+				"Largo del tweet"
+			],
+			"correctIndex": 1,
+			"explanation": "Ejemplo de síntesis del cap. 3.",
+			"sectionHash": "#síntesis-construir-un-pipeline-robusto"
+		},
+		{
+			"id": "q-judge",
+			"prompt": "Los jueces IA deben usarse:",
+			"choices": [
+				"Solo, sin auditoría",
+				"A escala con sesgos conocidos y chequeos humanos",
+				"Solo en imágenes"
+			],
+			"correctIndex": 1,
+			"explanation": "Cap. 3 documenta fallos y mitigaciones.",
+			"sectionHash": "#el-juez-subjetivo-ia-como-juez"
+		},
+		{
+			"id": "q-arena",
+			"prompt": "Ganar un Arena público significa:",
+			"choices": [
+				"Omitir eval privada",
+				"Señal relativa—aún necesitas barreras absolutas en producción",
+				"Latencia cero"
+			],
+			"correctIndex": 1,
+			"explanation": "Combinar ranking con pass rate, latencia y coste.",
+			"sectionHash": "#la-arena-competitiva-ranking-con-evaluación-comparativa"
+		},
+		{
+			"id": "q-open",
+			"prompt": "Salidas abiertas son difíciles de medir porque:",
+			"choices": [
+				"Hay muchas respuestas válidas; etiquetas fijas sub-especifican calidad",
+				"Las GPUs son lentas",
+				"JSON es ilegal"
+			],
+			"correctIndex": 0,
+			"explanation": "Motiva métodos exactos, juez y comparativos juntos.",
+			"sectionHash": "#retos-de-evaluar-modelos-fundacionales"
+		}
+	]
+}

@@ -1,0 +1,91 @@
+{
+	"chapterSlug": "dataset-engineering",
+	"cards": [
+		{
+			"id": "data-centric",
+			"front": "Data-centric view of AI?",
+			"back": "Model quality is bounded by data quality, coverage, and quantity—engineering datasets is as important as picking architectures.",
+			"sectionHash": "#a-data-centric-view-of-ai"
+		},
+		{
+			"id": "quality-quantity",
+			"front": "Quality vs quantity tradeoff?",
+			"back": "Dirty or mislabeled data hurts more as you scale; curation and deduplication often beat blindly adding volume.",
+			"sectionHash": "#data-quality"
+		},
+		{
+			"id": "coverage",
+			"front": "Data coverage means:",
+			"back": "Representing the slices, locales, and edge cases your app will see—not just average-case examples.",
+			"sectionHash": "#data-coverage"
+		},
+		{
+			"id": "synthetic",
+			"front": "Synthetic data risks?",
+			"back": "Model collapse, bias amplification, and eval leakage if synthetic trains and tests overlap—validate with real slices.",
+			"sectionHash": "#data-augmentation-and-synthesis"
+		},
+		{
+			"id": "distill",
+			"front": "Model distillation (data angle)?",
+			"back": "Train a smaller model on outputs/trajectories from a larger teacher—ties to finetuning and cost (Chapter 7).",
+			"sectionHash": "#model-distillation"
+		},
+		{
+			"id": "annotation",
+			"front": "Open-ended annotation challenge?",
+			"back": "Foundation-model outputs are harder to label consistently than fixed-class tasks—need rubrics and inter-annotator agreement.",
+			"sectionHash": "#data-acquisition-and-annotation"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-centric",
+			"prompt": "Improving a foundation-model app often starts with:",
+			"choices": ["Ignoring data", "Dataset engineering and eval slices", "Only changing CSS"],
+			"correctIndex": 1,
+			"explanation": "Chapter 8 centers curation, quality, coverage, and synthesis.",
+			"sectionHash": "#a-data-centric-view-of-ai"
+		},
+		{
+			"id": "q-dedup",
+			"prompt": "Deduplication in training data helps reduce:",
+			"choices": ["Memorization and repeated noise", "API latency only", "Token prices to zero"],
+			"correctIndex": 0,
+			"explanation": "Near-duplicates waste compute and inflate memorization risk.",
+			"sectionHash": "#data-curation"
+		},
+		{
+			"id": "q-coverage",
+			"prompt": "A eval set with only happy-path English emails misses:",
+			"choices": ["Coverage of real failure slices", "GPU drivers", "Markdown syntax"],
+			"correctIndex": 0,
+			"explanation": "Coverage analysis asks which user segments are underrepresented.",
+			"sectionHash": "#data-coverage"
+		},
+		{
+			"id": "q-synth",
+			"prompt": "Synthetic finetuning data should be:",
+			"choices": [
+				"Used without human or real-data checks",
+				"Validated against real distributions and leakage rules",
+				"Always 100× larger than real data only"
+			],
+			"correctIndex": 1,
+			"explanation": "Synthesis can help but needs quality control and contamination checks.",
+			"sectionHash": "#data-augmentation-and-synthesis"
+		},
+		{
+			"id": "q-distill",
+			"prompt": "Distillation typically aims to:",
+			"choices": [
+				"Make a smaller model mimic a larger one on a task",
+				"Remove all eval",
+				"Disable RAG"
+			],
+			"correctIndex": 0,
+			"explanation": "Teacher–student datasets compress capability into cheaper models.",
+			"sectionHash": "#model-distillation"
+		}
+	]
+}

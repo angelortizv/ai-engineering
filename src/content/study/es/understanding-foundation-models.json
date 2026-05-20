@@ -1,0 +1,95 @@
+{
+	"chapterSlug": "understanding-foundation-models",
+	"cards": [
+		{
+			"id": "data-recipe",
+			"front": "«Los datos dictan el destino» significa:",
+			"back": "Capacidades y sesgos vienen de la mezcla de entrenamiento—revisa la receta de datos antes de elegir proveedor o checkpoint.",
+			"sectionHash": "#datos"
+		},
+		{
+			"id": "chinchilla",
+			"front": "Escalado estilo Chinchilla (resumen):",
+			"back": "Con presupuesto FLOPs fijo, equilibra tamaño del modelo y tokens de entrenamiento.",
+			"sectionHash": "#modelado"
+		},
+		{
+			"id": "post-train",
+			"front": "¿SFT + ajuste por preferencias?",
+			"back": "Convierten completado crudo en comportamiento de chat dirigible—también seguridad y formato.",
+			"sectionHash": "#post-entrenamiento"
+		},
+		{
+			"id": "sampling",
+			"front": "Temperatura / top-p afectan:",
+			"back": "Aleatoriedad vs determinismo al decodificar—ajusta según necesidad de consistencia.",
+			"sectionHash": "#muestreo"
+		},
+		{
+			"id": "self-sup",
+			"front": "Autosupervisión en preentrenamiento:",
+			"back": "Etiquetas del propio dato (siguiente token)—permite corpus masivos sin etiquetado manual.",
+			"sectionHash": "#autosupervisión-y-escalado"
+		},
+		{
+			"id": "probabilistic",
+			"front": "¿Por qué diseñar contra alucinaciones?",
+			"back": "Son probabilísticos por construcción—hacen falta eval, recuperación y arquitectura.",
+			"sectionHash": "#ideas-clave"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-data",
+			"prompt": "Antes de elegir API conviene entender:",
+			"choices": ["Solo el logo", "Mezcla de datos y receta de post-entrenamiento", "Color de GPU"],
+			"correctIndex": 1,
+			"explanation": "Cap. 2: idioma, dominios y alineación importan.",
+			"sectionHash": "#datos"
+		},
+		{
+			"id": "q-scale",
+			"prompt": "Las leyes tipo Chinchilla guían sobre todo:",
+			"choices": [
+				"Balance tokens–parámetros con compute fijo",
+				"Tamaño de fuentes UI",
+				"Solo batching"
+			],
+			"correctIndex": 0,
+			"explanation": "Eficiencia de preentrenamiento; economía en serving aparte.",
+			"sectionHash": "#modelado"
+		},
+		{
+			"id": "q-align",
+			"prompt": "Post-entrenamiento mejora principalmente:",
+			"choices": [
+				"Dirigibilidad y usabilidad",
+				"Solo loss de preentrenamiento",
+				"Índices SQL"
+			],
+			"correctIndex": 0,
+			"explanation": "Alineación = asistente usable.",
+			"sectionHash": "#post-entrenamiento"
+		},
+		{
+			"id": "q-sample",
+			"prompt": "Temperatura más alta suele dar:",
+			"choices": ["Salidas más deterministas", "Salidas más diversas", "Ventana más corta"],
+			"correctIndex": 1,
+			"explanation": "Creatividad vs repetibilidad.",
+			"sectionHash": "#muestreo"
+		},
+		{
+			"id": "q-halluc",
+			"prompt": "Las alucinaciones se mitigan con:",
+			"choices": [
+				"Asumir siempre razón",
+				"Eval, RAG y arquitectura",
+				"Solo bajar temperatura"
+			],
+			"correctIndex": 1,
+			"explanation": "Idea clave #5 del capítulo.",
+			"sectionHash": "#ideas-clave"
+		}
+	]
+}

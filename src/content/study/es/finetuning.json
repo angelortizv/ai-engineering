@@ -1,0 +1,91 @@
+{
+	"chapterSlug": "finetuning",
+	"cards": [
+		{
+			"id": "form-facts",
+			"front": "«Finetuning = forma, RAG = hechos»?",
+			"back": "RAG para conocimiento faltante/erróneo; finetuning para comportamiento, formato y estilo.",
+			"sectionHash": "#finetuning-vs-rag-forma-vs-hechos"
+		},
+		{
+			"id": "try-prompt-first",
+			"front": "¿Cuándo finetunear?",
+			"back": "Tras experimentos sistemáticos de prompt/RAG y eval—not como primera palanca.",
+			"sectionHash": "#cuándo-finetunear-y-cuándo-no"
+		},
+		{
+			"id": "lora",
+			"front": "LoRA (resumen):",
+			"back": "Adaptadores de bajo rango sobre pesos congelados—más barato que finetuning completo.",
+			"sectionHash": "#técnicas-de-finetuning"
+		},
+		{
+			"id": "alignment-tax",
+			"front": "«Impuesto de alineación»:",
+			"back": "Ganar en una tarea puede perjudicar otras—finetune todas las tareas críticas o usa adaptadores separados.",
+			"sectionHash": "#razones-para-no-finetunear"
+		},
+		{
+			"id": "memory",
+			"front": "Cuello de botella de memoria:",
+			"back": "Activaciones y optimizador—checkpointing, LoRA, QLoRA, batches más pequeños.",
+			"sectionHash": "#cuellos-de-botella-de-memoria"
+		},
+		{
+			"id": "workflow",
+			"front": "Flujo de adaptación recomendado:",
+			"back": "Prompting → RAG si falta info → RAG avanzado o finetune por modo de fallo → combinar si procede.",
+			"sectionHash": "#flujo-de-trabajo-tras-existir-pipeline-de-eval"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-facts",
+			"prompt": "Respuestas erróneas sobre políticas privadas sugieren:",
+			"choices": ["Solo finetuning de tono", "RAG (o contexto) primero", "Botones más grandes"],
+			"correctIndex": 1,
+			"explanation": "Fallos de información → RAG; de formato → finetuning.",
+			"sectionHash": "#finetuning-vs-rag-forma-vs-hechos"
+		},
+		{
+			"id": "q-xml",
+			"prompt": "Hechos correctos pero XML propietario mal formado sugieren:",
+			"choices": ["Solo RAG", "Finetuning de esquema/formato", "Borrar eval"],
+			"correctIndex": 1,
+			"explanation": "RAG para hechos citables; finetune para esquema.",
+			"sectionHash": "#finetuning-vs-rag-forma-vs-hechos"
+		},
+		{
+			"id": "q-lora",
+			"prompt": "LoRA reduce sobre todo:",
+			"choices": [
+				"Parámetros entrenables y memoria vs finetuning completo",
+				"Necesidad de eval",
+				"Ventana de contexto"
+			],
+			"correctIndex": 0,
+			"explanation": "Finetuning eficiente en parámetros.",
+			"sectionHash": "#técnicas-de-finetuning"
+		},
+		{
+			"id": "q-tax",
+			"prompt": "El impuesto de alineación implica:",
+			"choices": [
+				"Finetuning no afecta otras tareas",
+				"Especializar puede regresar otras capacidades",
+				"RAG deja de funcionar"
+			],
+			"correctIndex": 1,
+			"explanation": "Evalúa todas las tareas que te importan.",
+			"sectionHash": "#razones-para-no-finetunear"
+		},
+		{
+			"id": "q-order",
+			"prompt": "El primer paso del libro es:",
+			"choices": ["Finetune completo desde cero", "Prompting con eval", "Solo comprar GPUs"],
+			"correctIndex": 1,
+			"explanation": "Prompts → RAG → finetune según fallo diagnosticado.",
+			"sectionHash": "#flujo-de-trabajo-tras-existir-pipeline-de-eval"
+		}
+	]
+}

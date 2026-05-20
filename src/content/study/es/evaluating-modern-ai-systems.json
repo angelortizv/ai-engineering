@@ -1,0 +1,99 @@
+{
+	"chapterSlug": "evaluating-modern-ai-systems",
+	"cards": [
+		{
+			"id": "edd",
+			"front": "Desarrollo guiado por evaluación (EDD):",
+			"back": "Eval sets y métricas como timón—iterar prompts/RAG/modelos antes de escalar.",
+			"sectionHash": "#filosofía-central-desarrollo-guiado-por-evaluación"
+		},
+		{
+			"id": "four-pillars",
+			"front": "¿Cuatro pilares de criterios de eval?",
+			"back": "Capacidad de dominio, calidad de generación, seguimiento de instrucciones, coste y latencia.",
+			"sectionHash": "#los-cuatro-pilares-de-criterios-de-evaluación"
+		},
+		{
+			"id": "private-eval",
+			"front": "¿Por qué eval privado custom?",
+			"back": "Refleja prompts, rúbricas y slices reales—benchmarks públicos rara vez coinciden.",
+			"sectionHash": "#pipeline-de-evaluación-visión-general"
+		},
+		{
+			"id": "rag-faith",
+			"front": "Consistencia factual local (RAG):",
+			"back": "¿La respuesta está apoyada en el contexto recuperado?—no solo verdad abierta.",
+			"sectionHash": "#capacidad-de-generación"
+		},
+		{
+			"id": "ifeval",
+			"front": "Benchmarks tipo IFEval miden:",
+			"back": "Formatos verificables automáticamente (JSON, palabras clave, longitud).",
+			"sectionHash": "#capacidad-de-seguimiento-de-instrucciones"
+		},
+		{
+			"id": "latency-filter",
+			"front": "Pilar coste/latencia en selección:",
+			"back": "Filtrar por TTFT/latencia y $/token; optimizar calidad entre supervivientes.",
+			"sectionHash": "#coste-y-latencia"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-edd",
+			"prompt": "EDD implica que debes:",
+			"choices": [
+				"Lanzar demo y no medir",
+				"Construir harness de eval pronto e iterar contra él",
+				"Solo confiar en marketing"
+			],
+			"correctIndex": 1,
+			"explanation": "Cap. 4 operacionaliza métodos del cap. 3.",
+			"sectionHash": "#filosofía-central-desarrollo-guiado-por-evaluación"
+		},
+		{
+			"id": "q-pillar",
+			"prompt": "JSON válido pero hechos médicos erróneos: ¿qué pilar falla?",
+			"choices": ["Seguimiento de instrucciones", "Capacidad de dominio", "Coste y latencia"],
+			"correctIndex": 1,
+			"explanation": "Formato OK ≠ conocimiento de dominio.",
+			"sectionHash": "#los-cuatro-pilares-de-criterios-de-evaluación"
+		},
+		{
+			"id": "q-bench",
+			"prompt": "Benchmarks públicos son arriesgados porque:",
+			"choices": [
+				"Siempre inútiles",
+				"Contaminación y mismatch de distribución",
+				"Solo miden latencia"
+			],
+			"correctIndex": 1,
+			"explanation": "Filtro público → eval privado → producción.",
+			"sectionHash": "#pipeline-de-evaluación-visión-general"
+		},
+		{
+			"id": "q-local",
+			"prompt": "En bots RAG, consistencia factual suele ser:",
+			"choices": [
+				"Solo verdad global",
+				"Respuesta apoyada en contexto dado",
+				"Sin citas nunca"
+			],
+			"correctIndex": 1,
+			"explanation": "Fidelidad a chunks recuperados.",
+			"sectionHash": "#capacidad-de-generación"
+		},
+		{
+			"id": "q-select",
+			"prompt": "Selección de modelo debe optimizar:",
+			"choices": [
+				"El #1 global del leaderboard",
+				"El mejor para tu app bajo tu eval + latencia/coste",
+				"Siempre más parámetros"
+			],
+			"correctIndex": 1,
+			"explanation": "Reevaluar al cambiar prompts, RAG o finetuning.",
+			"sectionHash": "#flujo-de-selección-de-modelo"
+		}
+	]
+}

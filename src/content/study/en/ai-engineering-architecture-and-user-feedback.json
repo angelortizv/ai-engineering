@@ -1,0 +1,103 @@
+{
+	"chapterSlug": "ai-engineering-architecture-and-user-feedback",
+	"cards": [
+		{
+			"id": "flywheel",
+			"front": "User feedback flywheel?",
+			"back": "Collect signals (thumbs, edits, implicit behavior) → label/analyze → improve data, prompts, models → redeploy with monitoring.",
+			"sectionHash": "#user-feedback"
+		},
+		{
+			"id": "obs",
+			"front": "Monitoring vs observability for AI apps?",
+			"back": "Track latency, cost, errors, quality proxies, and slice regressions—not only uptime.",
+			"sectionHash": "#monitoring-and-observability"
+		},
+		{
+			"id": "orchestration",
+			"front": "AI pipeline orchestration?",
+			"back": "Coordinate retrieval, model calls, tools, guardrails, and human steps—often DAG/workflow engines.",
+			"sectionHash": "#ai-pipeline-orchestration"
+		},
+		{
+			"id": "modular",
+			"front": "Modular architecture benefit?",
+			"back": "Swap models, retrievers, or policies without rewriting the whole product—eval each module.",
+			"sectionHash": "#ai-engineering-architecture"
+		},
+		{
+			"id": "guardrails",
+			"front": "Output guardrails role?",
+			"back": "Post-model filters for policy, PII, toxicity—latency cost but catches failures prompts miss.",
+			"sectionHash": "#ai-engineering-architecture"
+		},
+		{
+			"id": "implicit-fb",
+			"front": "Implicit feedback examples?",
+			"back": "Copy button, dwell time, regenerate clicks, accepted edits—often richer than explicit thumbs alone.",
+			"sectionHash": "#user-feedback"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-fly",
+			"prompt": "Closing the feedback loop requires:",
+			"choices": [
+				"Only logging errors",
+				"Turning user signals into labeled data and measurable improvements",
+				"Removing eval"
+			],
+			"correctIndex": 1,
+			"explanation": "Chapter 10 ties product signals to dataset and model iteration.",
+			"sectionHash": "#user-feedback"
+		},
+		{
+			"id": "q-prod",
+			"prompt": "Production monitoring should link to:",
+			"choices": [
+				"Offline eval slices and incident playbooks",
+				"Nothing—dashboards are enough",
+				"Only marketing KPIs"
+			],
+			"correctIndex": 0,
+			"explanation": "Drift detection needs connection to Chapter 4 eval sets.",
+			"sectionHash": "#monitoring-and-observability"
+		},
+		{
+			"id": "q-orch",
+			"prompt": "Orchestration layers help when:",
+			"choices": [
+				"Multiple steps (RAG, tools, human review) must run reliably",
+				"A single zero-shot prompt solves everything",
+				"You never need guardrails"
+			],
+			"correctIndex": 0,
+			"explanation": "Pipelines encode retries, routing, and observability per step.",
+			"sectionHash": "#ai-pipeline-orchestration"
+		},
+		{
+			"id": "q-mod",
+			"prompt": "Modular design makes it easier to:",
+			"choices": [
+				"Swap the retriever without rewriting the UI stack",
+				"Avoid all testing",
+				"Hide latency forever"
+			],
+			"correctIndex": 0,
+			"explanation": "Architecture chapter stresses composable components.",
+			"sectionHash": "#ai-engineering-architecture"
+		},
+		{
+			"id": "q-guard",
+			"prompt": "Guardrails complement prompts because:",
+			"choices": [
+				"Models always follow system prompts",
+				"They catch policy/PII issues post-hoc with measurable block rates",
+				"They replace the need for RAG"
+			],
+			"correctIndex": 1,
+			"explanation": "Defense in depth: model, prompt, and system-level controls.",
+			"sectionHash": "#ai-engineering-architecture"
+		}
+	]
+}

@@ -1,0 +1,127 @@
+{
+	"chapterSlug": "prompt-engineering",
+	"cards": [
+		{
+			"id": "prompt-def",
+			"front": "¿Qué es la ingeniería de prompts (en este libro)?",
+			"back": "Elaborar una instrucción para que un foundation model produzca el resultado deseado sin cambiar los pesos del modelo.",
+			"sectionHash": "#introducción"
+		},
+		{
+			"id": "icl",
+			"front": "¿Qué es el aprendizaje en contexto (ICL)?",
+			"back": "El modelo adapta su comportamiento con ejemplos en el prompt, sin actualizar pesos. Con ejemplos se habla de few-shot.",
+			"sectionHash": "#aprendizaje-en-contexto-icl"
+		},
+		{
+			"id": "zero-few",
+			"front": "¿Zero-shot vs few-shot?",
+			"back": "Zero-shot: sin ejemplos en el prompt. Few-shot: uno o más ejemplos demostrativos antes de la tarea.",
+			"sectionHash": "#aprendizaje-en-contexto-icl"
+		},
+		{
+			"id": "system-user",
+			"front": "¿Prompt de sistema vs prompt de usuario?",
+			"back": "Sistema: reglas, persona y formato definidos por el desarrollador. Usuario: consulta del usuario más contexto recuperado o subido. Las APIs concatenan con una plantilla de chat específica del modelo.",
+			"sectionHash": "#prompt-de-sistema-vs-prompt-de-usuario"
+		},
+		{
+			"id": "niah",
+			"front": "Needle-in-a-haystack (NIAH): ¿dónde suele recordar mejor el modelo?",
+			"back": "Al inicio y al final del contexto largo; a menudo peor en el medio (Liu et al., 2023).",
+			"sectionHash": "#longitud-de-contexto-y-eficiencia"
+		},
+		{
+			"id": "cot",
+			"front": "¿Qué fomenta el prompting chain-of-thought (CoT)?",
+			"back": "Razonar paso a paso antes de la respuesta final (p. ej. “piensa paso a paso”), útil en matemáticas y razonamiento, con más latencia y coste.",
+			"sectionHash": "#dar-tiempo-al-modelo-para-pensar"
+		},
+		{
+			"id": "jailbreak-injection",
+			"front": "¿Jailbreaking vs prompt injection?",
+			"back": "Jailbreaking: eludir políticas de seguridad. Prompt injection: instrucciones maliciosas en contenido de usuario o herramientas. Huyen usa “jailbreaking” de forma amplia para ambos.",
+			"sectionHash": "#jailbreaking-y-prompt-injection"
+		},
+		{
+			"id": "instruction-hierarchy",
+			"front": "¿Jerarquía de instrucciones de OpenAI (orden de prioridad)?",
+			"back": "Sistema > desarrollador > usuario > salida del modelo > salida de herramientas—reduce parte de los ataques por inyección cuando está entrenado.",
+			"sectionHash": "#defensa-enfoque-multicapa"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-icl",
+			"prompt": "El aprendizaje en contexto requiere:",
+			"choices": [
+				"Fine-tuning con nuevos ejemplos",
+				"Ejemplos en el prompt sin cambiar pesos",
+				"Solo una ventana de contexto mayor"
+			],
+			"correctIndex": 1,
+			"explanation": "El ICL (Brown et al., 2020) adapta en inferencia vía el prompt, no con gradientes.",
+			"sectionHash": "#aprendizaje-en-contexto-icl"
+		},
+		{
+			"id": "q-decompose",
+			"prompt": "Descomponer una tarea compleja en prompts más pequeños ayuda sobre todo a:",
+			"choices": [
+				"Eliminar todo el coste de API",
+				"Monitorizar, depurar y paralelizar pasos",
+				"Garantizar exactitud factual"
+			],
+			"correctIndex": 1,
+			"explanation": "Las cadenas intercambian más consultas por depuración y enrutamiento más simple.",
+			"sectionHash": "#descomponer-tareas-complejas"
+		},
+		{
+			"id": "q-structured",
+			"prompt": "El modo JSON garantiza:",
+			"choices": [
+				"Solo sintaxis JSON válida",
+				"Lógica de negocio semánticamente correcta",
+				"Ausencia de prompt injection"
+			],
+			"correctIndex": 0,
+			"explanation": "Sintaxis ≠ semántica; hace falta evaluación y validación.",
+			"sectionHash": "#salidas-estructuradas-comparación"
+		},
+		{
+			"id": "q-niah",
+			"prompt": "En RAG con contexto largo, los hechos críticos suelen colocarse:",
+			"choices": [
+				"Solo en el medio",
+				"En posiciones de alta saliencia (inicio/fin)",
+				"Solo al pie del prompt de sistema"
+			],
+			"correctIndex": 1,
+			"explanation": "NIAH muestra recall en U; estructura prompts y recuperación en consecuencia.",
+			"sectionHash": "#longitud-de-contexto-y-eficiencia"
+		},
+		{
+			"id": "q-indirect",
+			"prompt": "La inyección indirecta de prompt oculta instrucciones en:",
+			"choices": [
+				"Solo los pesos del modelo",
+				"Salidas de herramientas (email, web, documentos RAG)",
+				"El vocabulario del tokenizador"
+			],
+			"correctIndex": 1,
+			"explanation": "Especialmente arriesgada en agentes y RAG donde texto no confiable entra al prompt.",
+			"sectionHash": "#jailbreaking-y-prompt-injection"
+		},
+		{
+			"id": "q-defense",
+			"prompt": "Una defensa realista incluye:",
+			"choices": [
+				"Solo ajustes de prompt",
+				"Entrenamiento del modelo, diseño de prompt y guardrails de sistema",
+				"Rechazar todas las consultas"
+			],
+			"correctIndex": 1,
+			"explanation": "Huyen propone capas: jerarquía de instrucciones, aislamiento, aprobación humana, filtros E/S.",
+			"sectionHash": "#defensa-enfoque-multicapa"
+		}
+	]
+}

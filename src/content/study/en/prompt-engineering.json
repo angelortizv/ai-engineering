@@ -1,0 +1,127 @@
+{
+	"chapterSlug": "prompt-engineering",
+	"cards": [
+		{
+			"id": "prompt-def",
+			"front": "What is prompt engineering (in this book)?",
+			"back": "Crafting an instruction that gets a foundation model to produce the desired output without changing model weights.",
+			"sectionHash": "#introduction"
+		},
+		{
+			"id": "icl",
+			"front": "What is in-context learning (ICL)?",
+			"back": "The model adapts behavior from examples placed in the prompt—no weight updates. Also called few-shot when examples are included.",
+			"sectionHash": "#in-context-learning-icl"
+		},
+		{
+			"id": "zero-few",
+			"front": "Zero-shot vs few-shot?",
+			"back": "Zero-shot: no examples in the prompt. Few-shot: one or more demonstration examples (shots) before the task.",
+			"sectionHash": "#in-context-learning-icl"
+		},
+		{
+			"id": "system-user",
+			"front": "System prompt vs user prompt?",
+			"back": "System: developer-defined rules, persona, format. User: end-user query plus retrieved/uploaded context. APIs concatenate via a model-specific chat template.",
+			"sectionHash": "#system-vs-user-prompts"
+		},
+		{
+			"id": "niah",
+			"front": "Needle-in-a-haystack (NIAH) — where do models often recall best?",
+			"back": "At the start and end of long context; performance is often weaker in the middle (Liu et al., 2023).",
+			"sectionHash": "#context-length-and-efficiency"
+		},
+		{
+			"id": "cot",
+			"front": "What does chain-of-thought (CoT) prompting encourage?",
+			"back": "Step-by-step reasoning before the final answer—e.g. “think step by step”—to improve math and reasoning tasks at higher latency/cost.",
+			"sectionHash": "#give-the-model-time-to-think"
+		},
+		{
+			"id": "jailbreak-injection",
+			"front": "Jailbreaking vs prompt injection?",
+			"back": "Jailbreaking: bypass safety policies. Prompt injection: malicious instructions in user or tool content to hijack behavior. Huyen uses “jailbreaking” broadly for both.",
+			"sectionHash": "#jailbreaking-and-prompt-injection"
+		},
+		{
+			"id": "instruction-hierarchy",
+			"front": "OpenAI instruction hierarchy (priority order)?",
+			"back": "System > developer > user > model output > tool output—reduces some injection success when trained into the model.",
+			"sectionHash": "#defense-a-multi-layered-approach"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-icl",
+			"prompt": "In-context learning requires:",
+			"choices": [
+				"Fine-tuning on new examples",
+				"Examples in the prompt without weight updates",
+				"A larger context window only"
+			],
+			"correctIndex": 1,
+			"explanation": "ICL (Brown et al., 2020) adapts at inference time via the prompt, not gradient updates.",
+			"sectionHash": "#in-context-learning-icl"
+		},
+		{
+			"id": "q-decompose",
+			"prompt": "Decomposing a complex task into smaller prompts mainly helps with:",
+			"choices": [
+				"Eliminating all API cost",
+				"Monitoring, debugging, and parallelizing steps",
+				"Guaranteed factual accuracy"
+			],
+			"correctIndex": 1,
+			"explanation": "Chains trade more queries for easier debugging and routing (e.g. intent → specialized prompts).",
+			"sectionHash": "#decompose-complex-tasks"
+		},
+		{
+			"id": "q-structured",
+			"prompt": "JSON mode guarantees:",
+			"choices": [
+				"Valid JSON syntax only",
+				"Semantically correct business logic",
+				"No prompt injection"
+			],
+			"correctIndex": 0,
+			"explanation": "Syntax ≠ semantics—you still need evaluation and validation.",
+			"sectionHash": "#structured-outputs-comparison"
+		},
+		{
+			"id": "q-niah",
+			"prompt": "For long-context RAG, critical facts are often placed:",
+			"choices": [
+				"Only in the middle",
+				"At high-salience positions (start/end)",
+				"Only in the system prompt footer"
+			],
+			"correctIndex": 1,
+			"explanation": "NIAH shows U-shaped recall; structure prompts and retrieval accordingly.",
+			"sectionHash": "#context-length-and-efficiency"
+		},
+		{
+			"id": "q-indirect",
+			"prompt": "Indirect prompt injection hides instructions in:",
+			"choices": [
+				"Model weights only",
+				"Tool outputs (email, web, RAG documents)",
+				"The tokenizer vocabulary"
+			],
+			"correctIndex": 1,
+			"explanation": "Especially risky for agents and RAG where untrusted text becomes prompt content.",
+			"sectionHash": "#jailbreaking-and-prompt-injection"
+		},
+		{
+			"id": "q-defense",
+			"prompt": "A realistic defense stack includes:",
+			"choices": [
+				"Prompt tweaks only",
+				"Model training, prompt design, and system guardrails",
+				"Refusing all user queries"
+			],
+			"correctIndex": 1,
+			"explanation": "Huyen advocates layers: instruction hierarchy, isolation, human approval, I/O filters—not one silver bullet.",
+			"sectionHash": "#defense-a-multi-layered-approach"
+		}
+	]
+}

@@ -1,0 +1,91 @@
+{
+	"chapterSlug": "finetuning",
+	"cards": [
+		{
+			"id": "form-facts",
+			"front": "“Finetuning is for form, RAG is for facts”?",
+			"back": "RAG for missing/wrong factual knowledge; finetuning for behavior, format, style, and domain-specific patterns.",
+			"sectionHash": "#finetuning-vs-rag-form-vs-facts"
+		},
+		{
+			"id": "try-prompt-first",
+			"front": "When should you try finetuning?",
+			"back": "After systematic prompt/RAG experiments and eval show behavior gaps—not as the first lever.",
+			"sectionHash": "#when-to-finetune-and-when-not"
+		},
+		{
+			"id": "lora",
+			"front": "LoRA (high level)?",
+			"back": "Low-rank adapters train a small delta on top of frozen weights—cheaper than full finetuning.",
+			"sectionHash": "#finetuning-techniques"
+		},
+		{
+			"id": "alignment-tax",
+			"front": "Alignment tax?",
+			"back": "Gains on one task can hurt others—finetune on all tasks you care about or use separate adapters/models.",
+			"sectionHash": "#reasons-not-to-finetune"
+		},
+		{
+			"id": "memory",
+			"front": "Memory bottleneck in finetuning?",
+			"back": "Activations and optimizer states dominate—techniques include gradient checkpointing, LoRA, QLoRA, smaller batches.",
+			"sectionHash": "#memory-bottlenecks"
+		},
+		{
+			"id": "workflow",
+			"front": "Recommended adaptation workflow?",
+			"back": "Prompting → RAG if missing info → advanced RAG or finetune by failure mode → combine if justified.",
+			"sectionHash": "#workflow-after-eval-pipeline-exists"
+		}
+	],
+	"questions": [
+		{
+			"id": "q-facts",
+			"prompt": "Wrong answers about private 2024 policy documents suggest:",
+			"choices": ["Finetuning tone only", "RAG (or context) first", "Bigger UI buttons"],
+			"correctIndex": 1,
+			"explanation": "Information failures lean RAG; format/style failures lean finetuning.",
+			"sectionHash": "#finetuning-vs-rag-form-vs-facts"
+		},
+		{
+			"id": "q-xml",
+			"prompt": "Correct facts but wrong proprietary XML tags suggest:",
+			"choices": ["RAG only", "Finetuning for output form/schema", "Delete the eval set"],
+			"correctIndex": 1,
+			"explanation": "Legal example: RAG for citable facts, finetune for schema.",
+			"sectionHash": "#finetuning-vs-rag-form-vs-facts"
+		},
+		{
+			"id": "q-lora",
+			"prompt": "LoRA mainly reduces:",
+			"choices": [
+				"Trainable parameters and memory vs full finetuning",
+				"Need for any evaluation",
+				"Context window size"
+			],
+			"correctIndex": 0,
+			"explanation": "Parameter-efficient finetuning keeps base weights frozen.",
+			"sectionHash": "#finetuning-techniques"
+		},
+		{
+			"id": "q-tax",
+			"prompt": "Alignment tax implies:",
+			"choices": [
+				"Finetuning never affects other tasks",
+				"Specialization can regress other capabilities",
+				"RAG stops working"
+			],
+			"correctIndex": 1,
+			"explanation": "Evaluate all tasks you care about after finetuning.",
+			"sectionHash": "#reasons-not-to-finetune"
+		},
+		{
+			"id": "q-order",
+			"prompt": "First step in the book’s adaptation path is:",
+			"choices": ["Full finetune from scratch", "Prompting with eval", "Buy new GPUs only"],
+			"correctIndex": 1,
+			"explanation": "Workflow: prompts → RAG → finetune by diagnosed failure mode.",
+			"sectionHash": "#workflow-after-eval-pipeline-exists"
+		}
+	]
+}
