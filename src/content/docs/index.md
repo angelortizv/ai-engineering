@@ -12,6 +12,15 @@ This documentation collects **chapter-oriented summaries and notes** based on:
 
 The goal is a single place to revisit ideas from the book in reading order: what foundation models are, how to evaluate and adapt them, and how to ship reliable applications.
 
+### The book (read this first)
+
+| | |
+| --- | --- |
+| **Author** | [Chip Huyen](https://huyenchip.com/) — writer and ML systems engineer; taught ML systems at Stanford; author of *Designing Machine Learning Systems* (2022). |
+| **Get the book** | [O’Reilly — *AI Engineering*](https://www.oreilly.com/library/view/ai-engineering/9781098166304/) (print, ebook, or subscription). |
+| **Companion repo** | [github.com/chiphuyen/aie-book](https://github.com/chiphuyen/aie-book) — extra materials from the publisher. |
+| **After chapter 10** | [What comes next →](/ai-engineering/docs/epilogue) — practice paths and how this site fits in. |
+
 ### Why I’m building this compendium
 
 I’m **getting started in AI engineering**. This book is how I’m grounding myself: it connects language models and multimodal systems to the practical stack—prompting, retrieval, finetuning, data, inference, and architecture—without skipping **evaluation** or **user feedback**. Writing these notes helps me learn and keeps the material searchable alongside experiments I run in code.

@@ -13,6 +13,15 @@
 	import { renderMermaidIn, rerenderMermaidIn } from '$lib/docs/mermaid.js';
 	import { mode } from 'mode-watcher';
 	import GlossaryFilter from '$lib/components/glossary-filter.svelte';
+	import ReadingProgressPanel from '$lib/components/reading-progress-panel.svelte';
+	import {
+		initReadingProgress,
+		markChapterVisited,
+		toggleChapterCompleted,
+		getReadingProgress
+	} from '$lib/docs/reading-progress.svelte.js';
+	import { isTrackedChapter } from '$lib/docs/reading-progress.js';
+	import CircleCheckIcon from '@lucide/svelte/icons/circle-check';
 
 	let {
 		meta,
@@ -29,6 +38,10 @@
 	} = $props();
 
 	const isGlossary = $derived(slug === 'glossary');
+	const isOverview = $derived(slug === '');
+	const isTracked = $derived(isTrackedChapter(slug));
+	const progress = $derived(getReadingProgress());
+	const chapterDone = $derived(isTracked && progress.data.completed[slug]);
 
 	let readingTime = $derived(rawContent ? calculateReadingTime(rawContent) : '');
 
@@ -37,12 +50,16 @@
 			? {
 					editOnGitHub: 'Editar esta página en GitHub',
 					lastUpdated: 'Última actualización:',
-					dateLocale: 'es'
+					dateLocale: 'es',
+					markComplete: 'Marcar como completado',
+					markIncomplete: 'Quitar completado'
 				}
 			: {
 					editOnGitHub: 'Edit this page on GitHub',
 					lastUpdated: 'Last updated:',
-					dateLocale: 'en-US'
+					dateLocale: 'en-US',
+					markComplete: 'Mark chapter complete',
+					markIncomplete: 'Unmark complete'
 				}
 	);
 
@@ -131,6 +148,14 @@
 	}
 
 	$effect(() => {
+		initReadingProgress(locale);
+	});
+
+	$effect(() => {
+		if (isTracked) markChapterVisited(slug);
+	});
+
+	$effect(() => {
 		void Content;
 
 		const timer = setTimeout(() => {
@@ -181,6 +206,10 @@
 
 	<MobileToc />
 
+	{#if isOverview}
+		<ReadingProgressPanel {locale} />
+	{/if}
+
 	{#if isGlossary}
 		<GlossaryFilter {locale} container={contentEl} />
 	{/if}
@@ -198,8 +227,19 @@
 				</span>
 			</div>
 		{/if}
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-x-4">
+		<div class="flex flex-wrap items-center justify-between gap-3">
+			<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+				{#if isTracked}
+					<button
+						type="button"
+						class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-sm transition-colors"
+						aria-pressed={chapterDone}
+						onclick={() => toggleChapterCompleted(slug)}
+					>
+						<CircleCheckIcon class="size-3.5 {chapterDone ? 'text-primary' : ''}" />
+						{chapterDone ? ui.markIncomplete : ui.markComplete}
+					</button>
+				{/if}
 				{#if editUrl}
 					<a
 						href={editUrl}

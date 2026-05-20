@@ -11,6 +11,9 @@
 	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
 	import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
 	import CheckIcon from "@lucide/svelte/icons/check";
+	import CircleCheckIcon from "@lucide/svelte/icons/circle-check";
+	import { slugFromNavHref } from "$lib/docs/reading-progress.js";
+	import { getReadingProgress, initReadingProgress } from "$lib/docs/reading-progress.svelte.js";
 	import SocialLinks, { type SocialLink } from "$lib/components/nav/social-links.svelte";
 	import SearchCommand from "$lib/components/search/search-command.svelte";
 	import type { ComponentProps } from "svelte";
@@ -29,6 +32,21 @@
 
 	function sectionHasActive(section: NavItem): boolean {
 		return section.items?.some((item) => isActive(item.href)) ?? false;
+	}
+
+	const locale = $derived(
+		page.url.pathname.includes('/docs/es') ? 'es' : 'en'
+	);
+
+	const progress = $derived(getReadingProgress());
+
+	$effect(() => {
+		initReadingProgress(locale);
+	});
+
+	function chapterCompleted(href: string | undefined): boolean {
+		const slug = slugFromNavHref(href);
+		return slug ? !!progress.data.completed[slug] : false;
 	}
 </script>
 
@@ -143,7 +161,13 @@
 										{#if section.icon}
 											<section.icon />
 										{/if}
-										<span>{section.title}</span>
+										<span class="min-w-0 flex-1 truncate">{section.title}</span>
+										{#if chapterCompleted(section.href)}
+											<CircleCheckIcon
+												class="text-primary ms-auto size-3.5 shrink-0"
+												aria-label="Completed"
+											/>
+										{/if}
 									</a>
 								{/snippet}
 							</Sidebar.MenuButton>

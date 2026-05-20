@@ -12,6 +12,15 @@ Esta documentación reúne **resúmenes y apuntes organizados por capítulo** a 
 
 El objetivo es tener un solo lugar para repasar el libro en orden de lectura: qué son los modelos fundacionales, cómo evaluarlos y adaptarlos, y cómo llevar aplicaciones fiables a producción.
 
+### El libro (léelo primero)
+
+| | |
+| --- | --- |
+| **Autora** | [Chip Huyen](https://huyenchip.com/) — escritora e ingeniera de sistemas ML; profesora en Stanford; autora de *Designing Machine Learning Systems* (2022). |
+| **Comprar / leer** | [O’Reilly — *AI Engineering*](https://www.oreilly.com/library/view/ai-engineering/9781098166304/) (impreso, ebook o suscripción). |
+| **Repositorio** | [github.com/chiphuyen/aie-book](https://github.com/chiphuyen/aie-book) — materiales complementarios de la editorial. |
+| **Tras el capítulo 10** | [Qué sigue después →](/ai-engineering/docs/es/epilogue) — rutas de práctica y papel de este sitio. |
+
 ### Por qué armo este compendio
 
 **Estoy empezando en el mundo del AI engineering.** Este libro es mi base: enlaza modelos de lenguaje (y multimodales) con la práctica—*prompts*, recuperación, *finetuning*, datos, inferencia y arquitectura—sin eludir la **evaluación** ni la **retroalimentación de usuarios**. Escribir estas notas me ayuda a aprender y deja el material a mano junto a los experimentos que voy haciendo.
