@@ -36,6 +36,7 @@ El objetivo es tener un solo lugar para repasar el libro en orden de lectura: qu
 | [**Mapa del libro**](/ai-engineering/docs/es/book-map) | Capítulo → temas → herramientas → prerequisitos y rutas sugeridas. |
 | [**Bibliografía**](/ai-engineering/docs/es/bibliography) | Todas las secciones `## References` / `## Referencias` en una página. |
 | [**Glosario**](/ai-engineering/docs/es/glossary) | Definiciones con **caja de búsqueda** en la página del glosario. |
+| [**Bonus entrevistas**](/ai-engineering/docs/es/interview-bonus) | Preguntas y respuestas tipo entrevista y conocimiento general de AI engineering. |
 
 ---
 
@@ -56,4 +57,5 @@ Cada enlace lleva a la página de notas de ese capítulo (mismo orden que en el 
 | 9 | [**Optimización de inferencia**](/ai-engineering/docs/es/inference-optimization) — Inferencia más rápida y barata: *batching*, cuantización, caché, hardware y equilibrios coste–latencia. | [→](/ai-engineering/docs/es/inference-optimization) |
 | 10 | [**Arquitectura de AI Engineering y retroalimentación de usuarios**](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) — Arquitectura en producción, observabilidad y cierre del ciclo con usuarios para mejorar el sistema con seguridad en el tiempo. | [→](/ai-engineering/docs/es/ai-engineering-architecture-and-user-feedback) |
 | — | [**Glosario**](/ai-engineering/docs/es/glossary) — TTFT, PEFT, RAG, *goodput*, *degenerate feedback loop*, etc. | [→](/ai-engineering/docs/es/glossary) |
+| — | [**Bonus entrevistas**](/ai-engineering/docs/es/interview-bonus) — Preguntas de entrevista y diseño de sistemas alineadas al libro. | [→](/ai-engineering/docs/es/interview-bonus) |
 | — | [**Epílogo**](/ai-engineering/docs/es/epilogue) — Cierre del libro (~p. 495) y [repositorio](https://github.com/chiphuyen/aie-book). | [→](/ai-engineering/docs/es/epilogue) |

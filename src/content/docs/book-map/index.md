@@ -27,6 +27,7 @@ Use this page to plan a path through the [chapter notes](/ai-engineering/docs). 
 | 9 | [Inference optimization](/ai-engineering/docs/inference-optimization) | Prefill/decode, KV cache, quantization, serving | vLLM, TensorRT-LLM, llama.cpp, torch.compile | 2, 7 |
 | 10 | [Architecture & feedback](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) | Progressive architecture, guardrails, observability, feedback loops | Gateways (Portkey, etc.), OpenTelemetry, LangSmith | 4, 6, 9 |
 | — | [Glossary](/ai-engineering/docs/glossary) | Terms used across chapters | — | any |
+| — | [Interview bonus](/ai-engineering/docs/interview-bonus) | Interview / system-design Q&A | — | any |
 | — | [Bibliography](/ai-engineering/docs/bibliography) | Aggregated chapter references | — | any |
 | — | [Epilogue](/ai-engineering/docs/epilogue) | Closing notes, book repo | [aie-book](https://github.com/chiphuyen/aie-book) | 10 |
 
@@ -58,6 +59,7 @@ flowchart LR
 - [Overview](/ai-engineering/docs) — short chapter blurbs
 - [Bibliography](/ai-engineering/docs/bibliography) — all `## References` in one place
 - [Glossary](/ai-engineering/docs/glossary) — searchable terms
+- [Interview bonus](/ai-engineering/docs/interview-bonus) — interview Q&A
 
 ---
 

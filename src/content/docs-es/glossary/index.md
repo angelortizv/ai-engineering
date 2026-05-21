@@ -127,6 +127,7 @@ Usa la **caja de búsqueda** sobre la lista para filtrar por término o definici
 ## Relacionado
 
 - [Resumen](/ai-engineering/docs/es) — índice de capítulos
+- [Bonus entrevistas](/ai-engineering/docs/es/interview-bonus) — preguntas tipo entrevista
 - [Epílogo](/ai-engineering/docs/es/epilogue) — cierre y [repositorio del libro](https://github.com/chiphuyen/aie-book)
 - [Optimización de inferencia](/ai-engineering/docs/es/inference-optimization) — TTFT, TPOT, MFU, prefill/decode
 - [Finetuning](/ai-engineering/docs/es/finetuning) — PEFT, LoRA, QLoRA, memoria

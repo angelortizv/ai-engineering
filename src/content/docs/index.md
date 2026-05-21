@@ -36,6 +36,7 @@ I’m **getting started in AI engineering**. This book is how I’m grounding my
 | [**Book map**](/ai-engineering/docs/book-map) | Chapter → themes → tools → prerequisites and suggested reading paths. |
 | [**Bibliography**](/ai-engineering/docs/bibliography) | All chapter `## References` sections in one page. |
 | [**Glossary**](/ai-engineering/docs/glossary) | Searchable definitions (filter box on the glossary page). |
+| [**Interview bonus**](/ai-engineering/docs/interview-bonus) | FAQ-style Q&A for interviews and general AI engineering knowledge. |
 
 ---
 
@@ -56,4 +57,5 @@ Each link opens the notes page for that chapter (same order as in the book).
 | 9 | [**Inference Optimization**](/ai-engineering/docs/inference-optimization) — Making inference faster and cheaper: batching, quantization, caching, hardware, and cost–latency tradeoffs. | [→](/ai-engineering/docs/inference-optimization) |
 | 10 | [**AI Engineering Architecture and User Feedback**](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) — Production architecture, observability, and closing the loop with users so the system improves safely over time. | [→](/ai-engineering/docs/ai-engineering-architecture-and-user-feedback) |
 | — | [**Glossary**](/ai-engineering/docs/glossary) — TTFT, PEFT, RAG, goodput, degenerate feedback loop, and related terms. | [→](/ai-engineering/docs/glossary) |
+| — | [**Interview bonus**](/ai-engineering/docs/interview-bonus) — Interview and system-design Q&A tied to the book themes. | [→](/ai-engineering/docs/interview-bonus) |
 | — | [**Epilogue**](/ai-engineering/docs/epilogue) — Closing notes (~p. 495) and [book repository](https://github.com/chiphuyen/aie-book). | [→](/ai-engineering/docs/epilogue) |

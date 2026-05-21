@@ -12,6 +12,7 @@ import BookOpenIcon from '@lucide/svelte/icons/book-open';
 import BookMarkedIcon from '@lucide/svelte/icons/book-marked';
 import MapIcon from '@lucide/svelte/icons/map';
 import LibraryIcon from '@lucide/svelte/icons/library';
+import SparklesIcon from '@lucide/svelte/icons/sparkles';
 import type { DocsConfig } from './types.js';
 
 export const docsConfig: DocsConfig = {
@@ -44,6 +45,7 @@ export const docsConfig: DocsConfig = {
 		},
 		{ label: 'Bibliography', icon: LibraryIcon, href: '/docs/bibliography' },
 		{ label: 'Glossary', icon: BookOpenIcon, href: '/docs/glossary' },
+		{ label: 'Interview bonus', icon: SparklesIcon, href: '/docs/interview-bonus' },
 		{ label: 'Epilogue', icon: BookMarkedIcon, href: '/docs/epilogue' }
 	],
 	toc: {

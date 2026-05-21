@@ -129,6 +129,7 @@ Use the **search box** above the list to filter by term or definition (also inde
 ## Related
 
 - [Overview](/ai-engineering/docs) — chapter index
+- [Interview bonus](/ai-engineering/docs/interview-bonus) — interview and system-design Q&A
 - [Epilogue](/ai-engineering/docs/epilogue) — closing notes and [book repository](https://github.com/chiphuyen/aie-book)
 - [Inference Optimization](/ai-engineering/docs/inference-optimization) — TTFT, TPOT, MFU, prefill/decode
 - [Finetuning](/ai-engineering/docs/finetuning) — PEFT, LoRA, QLoRA, memory math
